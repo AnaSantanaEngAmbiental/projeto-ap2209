@@ -3,101 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Engenharia - AP 2209</title>
+    <title>Master Plan AP 2209 - Engenharia & Design</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .status-badge { transition: all 0.3s ease; cursor: pointer; }
+        .card-hover { transition: transform 0.2s; }
+        .card-hover:hover { transform: translateY(-5px); }
+    </style>
 </head>
-<body class="bg-slate-100 font-sans">
+<body class="bg-slate-50 font-sans text-slate-900">
 
-    <div class="max-w-5xl mx-auto p-6">
-        <header class="bg-slate-800 text-white p-8 rounded-2xl shadow-lg mb-8">
-            <h1 class="text-3xl font-bold">Projeto AP 2209 - Executivo</h1>
-            <p class="text-slate-400">Equipe Multidisciplinar: Elétrica Trifásica e Hidráulica</p>
-            <div class="mt-4 flex gap-4 text-sm">
-                <span class="bg-blue-600 px-3 py-1 rounded-full text-white">Rede Trifásica (R-S-T)</span>
-                <span class="bg-green-600 px-3 py-1 rounded-full text-white">Status: Em Planejamento</span>
+    <div class="max-w-6xl mx-auto p-4 md:p-8">
+        <header class="bg-gradient-to-r from-slate-800 to-slate-900 text-white p-8 rounded-3xl shadow-2xl mb-10 relative overflow-hidden">
+            <div class="relative z-10">
+                <div class="flex items-center gap-3 mb-2">
+                    <i data-lucide="hard-hat" class="text-yellow-500"></i>
+                    <span class="uppercase tracking-widest text-sm font-semibold text-slate-400">Memorial Descritivo de Obra</span>
+                </div>
+                <h1 class="text-4xl font-extrabold mb-2">Projeto AP 2209</h1>
+                <p class="text-slate-300 max-w-2xl">Gestão Multidisciplinar: Instalações Trifásicas, Hidráulica de Alta Pressão e Design de Interiores.</p>
+                
+                <div class="mt-6 flex flex-wrap gap-3">
+                    <span class="bg-blue-500/20 border border-blue-500/50 px-4 py-1 rounded-full text-xs font-bold text-blue-300">⚡ REDE TRIFÁSICA R-S-T</span>
+                    <span class="bg-emerald-500/20 border border-emerald-500/50 px-4 py-1 rounded-full text-xs font-bold text-emerald-300">💧 HIDRÁULICA SETORIZADA</span>
+                    <span class="bg-yellow-500/20 border border-yellow-500/50 px-4 py-1 rounded-full text-xs font-bold text-yellow-300">🏠 ESTRUTURA ORIGINAL MANTIDA</span>
+                </div>
+            </div>
+            <div class="absolute right-[-50px] top-[-50px] opacity-10">
+                <i data-lucide="layers" size="300"></i>
             </div>
         </header>
 
-        <div class="grid md:grid-cols-2 gap-8">
+        <div class="grid lg:grid-cols-3 gap-8">
             
-            <div class="bg-white p-6 rounded-2xl shadow-md border-t-8 border-yellow-500">
-                <h2 class="text-xl font-bold mb-4 flex items-center">⚡ Planejamento Elétrico</h2>
-                <div class="space-y-4 text-sm" id="lista-eletrica">
-                    <div class="flex justify-between items-center border-b pb-2">
-                        <div>
-                            <p class="font-bold">Quadro de Distribuição (QDC)</p>
-                            <p class="text-gray-500">Geral Trifásico + DPS + IDR</p>
-                        </div>
-                        <span class="bg-red-100 text-red-600 px-2 py-1 rounded text-xs font-bold">PENDENTE</span>
+            <div class="lg:col-span-2 space-y-8">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 card-hover">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold flex items-center gap-2">
+                            <i data-lucide="zap" class="text-yellow-500"></i> Diagrama do Quadro (QDC)
+                        </h2>
+                        <span class="text-xs font-mono text-slate-400 font-bold">POSIÇÃO: ENTRADA PRINCIPAL</span>
                     </div>
-                    <div class="flex justify-between items-center border-b pb-2">
-                        <div>
-                            <p class="font-bold">Fiação Geral (Cores Normatizadas)</p>
-                            <p class="text-gray-500">Preto/Verm/Cinza/Azul/Verde</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="quadro-eletrico">
+                        <div onclick="toggleItem(this)" class="status-badge flex justify-between items-center p-3 bg-slate-50 rounded-xl border border-transparent hover:border-yellow-500">
+                            <div>
+                                <p class="font-bold text-sm">Disjuntor Geral Tripolar 50A</p>
+                                <p class="text-[10px] text-slate-500 italic">Fases R-S-T + Barramento Pente</p>
+                            </div>
+                            <span class="status-text bg-red-100 text-red-600 px-2 py-1 rounded text-[10px] font-bold">PENDENTE</span>
                         </div>
-                        <span class="bg-green-100 text-green-600 px-2 py-1 rounded text-xs font-bold">COMPRADO</span>
+                        <div onclick="toggleItem(this)" class="status-badge flex justify-between items-center p-3 bg-slate-50 rounded-xl border border-transparent hover:border-yellow-500">
+                            <div>
+                                <p class="font-bold text-sm">Proteção: 3x DPS + 1x IDR</p>
+                                <p class="text-[10px] text-slate-500 italic">Obrigatório NBR 5410</p>
+                            </div>
+                            <span class="status-text bg-red-100 text-red-600 px-2 py-1 rounded text-[10px] font-bold">PENDENTE</span>
+                        </div>
+                        <div onclick="toggleItem(this)" class="status-badge flex justify-between items-center p-3 bg-slate-50 rounded-xl border border-transparent hover:border-yellow-500">
+                            <div>
+                                <p class="font-bold text-sm">Circuito Chuveiros (Cabo 6mm²)</p>
+                                <p class="text-[10px] text-slate-500 italic">Fase Dupla + Terra Dedicado</p>
+                            </div>
+                            <span class="status-text bg-emerald-100 text-emerald-600 px-2 py-1 rounded text-[10px] font-bold">COMPRADO</span>
+                        </div>
+                        <div onclick="toggleItem(this)" class="status-badge flex justify-between items-center p-3 bg-slate-50 rounded-xl border border-transparent hover:border-yellow-500">
+                            <div>
+                                <p class="font-bold text-sm">Cozinha/Gourmet (Cabo 4mm²)</p>
+                                <p class="text-[10px] text-slate-500 italic">Forno e Microondas</p>
+                            </div>
+                            <span class="status-text bg-red-100 text-red-600 px-2 py-1 rounded text-[10px] font-bold">PENDENTE</span>
+                        </div>
                     </div>
-                    <div class="p-4 bg-yellow-50 rounded-lg text-xs text-yellow-800 mt-4">
-                        <strong>Nota Técnica:</strong> Passar cabo 6mm² exclusivo para chuveiros e área gourmet.
+
+                    <div class="mt-6 p-4 bg-blue-50 rounded-xl border-l-4 border-blue-500 flex gap-3 items-start">
+                        <i data-lucide="info" class="text-blue-500 mt-1" size="18"></i>
+                        <p class="text-xs text-blue-800 leading-relaxed">
+                            <strong>Nota da Engenharia:</strong> Deixar 2 espaços vazios (reserva) no trilho DIN do quadro para futuras automações ou ar-condicionado extra.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                        <i data-lucide="map-pin" class="text-red-500"></i> Locais Estratégicos (Conforme Planta)
+                    </h2>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="space-y-3">
+                            <h3 class="font-bold text-slate-700 border-b pb-1">Cozinha & Área</h3>
+                            <ul class="text-xs space-y-2 text-slate-600">
+                                <li>• Tomadas 20A acima da pia (1.10m)</li>
+                                <li>• Ponto de água para Filtro e Geladeira</li>
+                                <li>• Fita LED embutida no armário</li>
+                            </ul>
+                        </div>
+                        <div class="space-y-3">
+                            <h3 class="font-bold text-slate-700 border-b pb-1">Sala de Estar</h3>
+                            <ul class="text-xs space-y-2 text-slate-600">
+                                <li>• Bloco de 4 tomadas atrás da TV</li>
+                                <li>• Ponto de rede RJ45 Cat6</li>
+                                <li>• Interruptor Paralelo (Three-Way)</li>
+                            </ul>
+                        </div>
+                        <div class="space-y-3">
+                            <h3 class="font-bold text-slate-700 border-b pb-1">Dormitórios</h3>
+                            <ul class="text-xs space-y-2 text-slate-600">
+                                <li>• Tomadas de cabeceira com USB</li>
+                                <li>• Ponto de espera para Split (Alto)</li>
+                                <li>• Reserva: Tomada para mesa office</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-white p-6 rounded-2xl shadow-md border-t-8 border-blue-500">
-                <h2 class="text-xl font-bold mb-4 flex items-center">💧 Planejamento Hidráulico</h2>
-                <div class="space-y-4 text-sm">
-                    <div class="flex justify-between items-center border-b pb-2">
-                        <div>
-                            <p class="font-bold">Cozinha: Monocomando</p>
-                            <p class="text-gray-500">Ponto de filtro e máquina</p>
+            <div class="space-y-8">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 card-hover border-t-8 border-blue-500">
+                    <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+                        <i data-lucide="droplets" class="text-blue-500"></i> Hidráulica Premium
+                    </h2>
+                    <div class="space-y-4">
+                        <div class="p-3 bg-slate-50 rounded-xl">
+                            <p class="font-bold text-sm">Registros de Manobra</p>
+                            <p class="text-[10px] text-slate-500 italic">Gaveta 3/4 por ambiente (Independente)</p>
                         </div>
-                        <span class="bg-red-100 text-red-600 px-2 py-1 rounded text-xs font-bold">PENDENTE</span>
-                    </div>
-                    <div class="flex justify-between items-center border-b pb-2">
-                        <div>
-                            <p class="font-bold">Banheiros: Registros de Pressão</p>
-                            <p class="text-gray-500">Base Deca/Docol + Acabamento</p>
+                        <div class="p-3 bg-slate-50 rounded-xl">
+                            <p class="font-bold text-sm">Metais Monocomando</p>
+                            <p class="text-[10px] text-slate-500 italic">Cozinha e Banheiro Social</p>
                         </div>
-                        <span class="bg-green-100 text-green-600 px-2 py-1 rounded text-xs font-bold">COMPRADO</span>
-                    </div>
-                    <div class="p-4 bg-blue-50 rounded-lg text-xs text-blue-800 mt-4">
-                        <strong>Nota Técnica:</strong> Instalar ralo linear no box para melhor escoamento.
+                        <div class="p-3 bg-slate-50 rounded-xl">
+                            <p class="font-bold text-sm">Esgoto e Ralos</p>
+                            <p class="text-[10px] text-slate-500 italic">Ralo Linear e Caixa Sifonada 150mm</p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
+                <div class="bg-slate-800 text-white p-6 rounded-2xl shadow-lg">
+                    <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+                        <i data-lucide="shopping-cart" class="text-emerald-400"></i> Lista de Cabos
+                    </h2>
+                    <div class="space-y-3 text-[11px]">
+                        <div class="flex justify-between border-b border-slate-700 pb-1">
+                            <span>Preto (Fase R)</span>
+                            <span class="font-mono">100m</span>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-700 pb-1">
+                            <span>Vermelho (Fase S)</span>
+                            <span class="font-mono">100m</span>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-700 pb-1">
+                            <span>Cinza (Fase T)</span>
+                            <span class="font-mono">100m</span>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-700 pb-1 text-blue-400">
+                            <span>Azul (Neutro)</span>
+                            <span class="font-mono">150m</span>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-700 pb-1 text-emerald-400">
+                            <span>Verde (Terra)</span>
+                            <span class="font-mono">150m</span>
+                        </div>
+                    </div>
+                    <p class="mt-4 text-[9px] text-slate-400 uppercase tracking-tighter text-center">Referência: Cabos Flexíveis 2.5mm²</p>
+                </div>
+            </div>
         </div>
 
-        <div class="mt-8 bg-white p-6 rounded-2xl shadow-md">
-            <h2 class="text-xl font-bold mb-6">📍 Guia de Instalação (Locais Estratégicos)</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="p-4 border rounded-xl bg-slate-50">
-                    <h3 class="font-bold border-b mb-2">Cozinha</h3>
-                    <p class="text-xs text-gray-600 leading-relaxed">
-                        • 3 Tomadas 20A acima da bancada (1.10m).<br>
-                        • Tomada exclusiva geladeira (1.50m).<br>
-                        • Iluminação LED sob armários.
-                    </p>
-                </div>
-                <div class="p-4 border rounded-xl bg-slate-50">
-                    <h3 class="font-bold border-b mb-2">Sala</h3>
-                    <p class="text-xs text-gray-600 leading-relaxed">
-                        • 4 Tomadas atrás da TV (1.30m).<br>
-                        • Ponto de rede RJ45 (Internet).<br>
-                        • Interruptor Three-way na entrada.
-                    </p>
-                </div>
-                <div class="p-4 border rounded-xl bg-slate-50">
-                    <h3 class="font-bold border-b mb-2">Quartos</h3>
-                    <p class="text-xs text-gray-600 leading-relaxed">
-                        • Tomadas duplas em cada cabeceira.<br>
-                        • Ponto de Ar Condicionado no alto.<br>
-                        • Iluminação Central + Spot leitura.
-                    </p>
-                </div>
-            </div>
-        </div>
+        <footer class="mt-12 text-center text-slate-400 text-sm pb-10">
+            <p>© 2026 - Gestão de Obra AP 2209 | Engenharia e Design</p>
+        </footer>
     </div>
 
+    <script>
+        // Inicializa os ícones da biblioteca Lucide
+        lucide.createIcons();
+
+        // Função para alternar o status dos itens ao clicar
+        function toggleItem(element) {
+            const badge = element.querySelector('.status-text');
+            if (badge.innerText === "PENDENTE") {
+                badge.innerText = "COMPRADO";
+                badge.classList.replace("bg-red-100", "bg-emerald-100");
+                badge.classList.replace("text-red-600", "text-emerald-600");
+                element.classList.add("ring-2", "ring-emerald-500", "bg-emerald-50");
+            } else {
+                badge.innerText = "PENDENTE";
+                badge.classList.replace("bg-emerald-100", "bg-red-100");
+                badge.classList.replace("text-emerald-600", "text-red-600");
+                element.classList.remove("ring-2", "ring-emerald-500", "bg-emerald-50");
+            }
+        }
+    </script>
 </body>
 </html>
