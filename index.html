@@ -3,200 +3,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Plan Executivo AP 2209 - Engenharia 2026</title>
+    <title>Master Plan AP 2209 - Engenharia de Alta Performance</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        .input-cell { border: none; background: transparent; width: 100%; font-family: monospace; }
-        .input-cell:focus { outline: 2px solid #2563eb; background: #f8fafc; border-radius: 4px; }
-        .row-comprado { background-color: #f0fdf4 !important; border-left: 8px solid #22c55e; }
-        .row-pendente { border-left: 8px solid #ef4444; }
-        .tab-btn { transition: all 0.3s; border-bottom: 4px solid transparent; opacity: 0.6; }
-        .tab-btn.active { border-bottom-color: #2563eb; opacity: 1; color: #2563eb; }
-        @media print { .no-print { display: none; } }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@500;800&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        
+        .input-cell { border: none; background: transparent; width: 100%; outline: none; transition: all 0.2s; }
+        .input-cell:focus { background: #f1f5f9; border-radius: 4px; padding-left: 4px; }
+        
+        .row-comprado { background-color: #ecfdf5 !important; border-left: 6px solid #10b981; }
+        .row-pendente { border-left: 6px solid #ef4444; }
+        
+        .tab-active { border-bottom: 4px solid #2563eb; color: #2563eb; }
+        .glass-effect { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
+        
+        @media print { .no-print { display: none !important; } }
+        
+        .add-animation { animation: slideIn 0.4s ease-out; }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
-<body class="bg-slate-50 font-sans text-slate-900 pb-20">
+<body class="bg-[#f8fafc] text-slate-900 pb-20">
 
-    <div class="max-w-7xl mx-auto p-4 md:p-8">
-        <header class="bg-slate-900 text-white p-8 rounded-3xl shadow-2xl mb-10 border-b-8 border-blue-600">
-            <div class="flex flex-col md:flex-row justify-between items-center">
+    <div class="max-w-7xl mx-auto p-4 lg:p-10">
+        <header class="bg-slate-900 text-white p-10 rounded-[2.5rem] shadow-2xl mb-12 border-b-[12px] border-blue-600 relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-10 opacity-10">
+                <i data-lucide="zap" class="w-40 h-40"></i>
+            </div>
+            
+            <div class="relative z-10 flex flex-col lg:flex-row justify-between items-center gap-8">
                 <div>
-                    <h1 class="text-4xl font-black italic tracking-tighter text-blue-400">AP 2209 | MASTER PLAN</h1>
-                    <p class="text-slate-400 mt-2 flex items-center gap-2 font-mono text-sm uppercase">
-                        <i data-lucide="shield-check" class="text-emerald-500 w-5 h-5"></i>
-                        Caixas 4x4 | Terminais Ilhós | Prysmian Flexível | 3 Fases (P/V/B)
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="bg-blue-600 text-[10px] font-black px-3 py-1 rounded-full tracking-[0.2em] uppercase">Engenharia 2026</span>
+                    </div>
+                    <h1 class="text-5xl font-black italic tracking-tighter text-blue-400 mb-2">AP 2209 | MASTER PLAN</h1>
+                    <p class="text-slate-400 font-mono text-sm flex items-center gap-3">
+                        <i data-lucide="cpu" class="text-emerald-500"></i>
+                        PADRÃO: CAIXAS 4x4 | TERMINAIS ILHÓS | PRYSMIAN FLEX | FASE T (BRANCO)
                     </p>
                 </div>
-                <div class="mt-6 md:mt-0 bg-slate-800 p-6 rounded-2xl border border-slate-700 text-right shadow-inner">
-                    <p class="text-[10px] font-bold text-blue-400 uppercase mb-1 tracking-widest">Investimento Total Estimado</p>
-                    <p class="text-4xl font-mono font-bold" id="grand-total">R$ 0,00</p>
+                
+                <div class="bg-slate-800/50 backdrop-blur-md p-8 rounded-[2rem] border border-slate-700 text-right min-w-[300px]">
+                    <p class="text-[10px] font-bold text-blue-400 uppercase mb-2 tracking-[0.3em]">Total Geral Investido</p>
+                    <p class="text-5xl font-mono font-extrabold" id="grand-total">R$ 0,00</p>
                 </div>
             </div>
         </header>
 
-        <div class="flex gap-8 mb-8 border-b border-slate-200 no-print">
-            <button onclick="switchTab('compras')" id="tab-compras" class="tab-btn active pb-4 font-bold uppercase text-sm flex items-center gap-2"><i data-lucide="shopping-cart" class="w-4 h-4"></i> Orçamento & Compras</button>
-            <button onclick="switchTab('tecnico')" id="tab-tecnico" class="tab-btn pb-4 font-bold uppercase text-sm flex items-center gap-2"><i data-lucide="settings" class="w-4 h-4"></i> Metragem por Ponto</button>
-        </div>
-
-        <div id="content-compras">
-            <div class="flex flex-wrap gap-4 mb-6 no-print">
-                <button onclick="addRow()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-2xl font-bold flex items-center gap-2 transition shadow-lg transform hover:scale-105">
-                    <i data-lucide="plus-circle"></i> Adicionar no Topo
+        <div class="flex flex-wrap items-center justify-between gap-6 mb-10 no-print">
+            <div class="flex gap-4">
+                <button onclick="switchTab('compras')" id="btn-compras" class="tab-active pb-4 font-black uppercase text-xs tracking-widest flex items-center gap-2 px-4 transition-all hover:text-blue-600">
+                    <i data-lucide="shopping-cart" class="w-4 h-4"></i> Orçamento
+                </button>
+                <button onclick="switchTab('tecnico')" id="btn-tecnico" class="pb-4 font-black uppercase text-xs tracking-widest flex items-center gap-2 px-4 opacity-50 transition-all hover:text-blue-600">
+                    <i data-lucide="layout" class="w-4 h-4"></i> Metragem & Pontos
                 </button>
             </div>
+            
+            <div class="flex gap-4">
+                <button onclick="addRow()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center gap-3 transition-all shadow-xl shadow-blue-500/20 active:scale-95">
+                    <i data-lucide="plus-circle" class="w-5 h-5"></i> Adicionar no Topo
+                </button>
+                <button onclick="window.print()" class="bg-white hover:bg-slate-100 text-slate-900 px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center gap-3 border border-slate-200 transition-all shadow-md">
+                    <i data-lucide="printer" class="w-5 h-5"></i> Relatório
+                </button>
+            </div>
+        </div>
 
-            <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200">
+        <div id="content-compras" class="space-y-10">
+            <div class="bg-white rounded-[2rem] shadow-xl overflow-hidden border border-slate-200">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="bg-slate-800 text-white text-[10px] uppercase tracking-widest">
-                                <th class="p-4">Visual</th>
-                                <th class="p-4">Descrição do Material</th>
-                                <th class="p-4 text-center">Unid</th>
-                                <th class="p-4 text-center">Qtd</th>
-                                <th class="p-4 text-center">R$ Unit.</th>
-                                <th class="p-4 text-center">Subtotal</th>
-                                <th class="p-4 text-center">Status</th>
-                                <th class="p-4 text-center no-print">Ação</th>
+                            <tr class="bg-slate-900 text-white text-[10px] font-black uppercase tracking-[0.2em]">
+                                <th class="p-6">Visual / Referência</th>
+                                <th class="p-6">Especificação Técnica</th>
+                                <th class="p-6 text-center">Unid</th>
+                                <th class="p-6 text-center">Metragem/Qtd</th>
+                                <th class="p-6 text-center">R$ Unit.</th>
+                                <th class="p-6 text-center">Subtotal</th>
+                                <th class="p-6 text-center">Status</th>
+                                <th class="p-6 text-center no-print">Gestão</th>
                             </tr>
                         </thead>
-                        <tbody id="inventory-body">
+                        <tbody id="inventory-body" class="divide-y divide-slate-100">
                             </tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <div id="content-tecnico" class="hidden space-y-8">
-            <div class="bg-blue-900 text-white p-8 rounded-3xl shadow-xl">
-                <h2 class="text-2xl font-bold mb-6 italic">Cálculo de Fiação por Ambiente (Padrão 4x4)</h2>
-                <div class="grid md:grid-cols-3 gap-6">
-                    <div class="bg-blue-800 p-4 rounded-2xl border border-blue-700">
-                        <p class="text-xs font-bold text-blue-300 uppercase">Cozinha / Área</p>
-                        <p class="text-lg font-mono mt-1">Fase T (Branco)</p>
-                        <p class="text-[10px] mt-2 opacity-70">Uso de terminais azuis (2,5mm) e amarelos (6mm)</p>
+        <div id="content-tecnico" class="hidden space-y-12">
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-[2rem] shadow-lg border-t-8 border-blue-600">
+                    <h3 class="text-xl font-black italic mb-6">Divisão de Fases Prysmian</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 bg-slate-900 text-white rounded-2xl">
+                            <span class="text-xs font-bold">FASE R</span>
+                            <span class="mono text-xs">PRETO</span>
+                        </div>
+                        <div class="flex items-center justify-between p-4 bg-red-600 text-white rounded-2xl">
+                            <span class="text-xs font-bold">FASE S</span>
+                            <span class="mono text-xs">VERMELHO</span>
+                        </div>
+                        <div class="flex items-center justify-between p-4 bg-white border-2 border-slate-200 rounded-2xl">
+                            <span class="text-xs font-bold">FASE T</span>
+                            <span class="mono text-xs">BRANCO</span>
+                        </div>
                     </div>
-                    <div class="bg-blue-800 p-4 rounded-2xl border border-blue-700">
-                        <p class="text-xs font-bold text-blue-300 uppercase">Sala / Hall</p>
-                        <p class="text-lg font-mono mt-1">Fase R (Preto)</p>
-                        <p class="text-[10px] mt-2 opacity-70">Pontos de iluminação com terminais vermelhos (1,5mm)</p>
-                    </div>
-                    <div class="bg-blue-800 p-4 rounded-2xl border border-blue-700">
-                        <p class="text-xs font-bold text-blue-300 uppercase">Quartos / Banhos</p>
-                        <p class="text-lg font-mono mt-1">Fase S (Vermelho)</p>
-                        <p class="text-[10px] mt-2 opacity-70">Chuveiros com cabo flexível 6mm²</p>
+                </div>
+
+                <div class="bg-slate-900 text-white p-8 rounded-[2rem] shadow-lg lg:col-span-2">
+                    <h3 class="text-xl font-black italic mb-6 text-blue-400">Guia Técnico de Pontos (Caixas 4x4)</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="border border-slate-700 p-6 rounded-2xl">
+                            <p class="text-xs font-bold text-slate-400 mb-2 uppercase">Iluminação & Tomadas</p>
+                            <p class="text-sm leading-relaxed">Uso obrigatório de terminais ilhós em todos os bornes. A caixa 4x4 garante 40% mais resfriamento dos cabos.</p>
+                        </div>
+                        <div class="border border-slate-700 p-6 rounded-2xl">
+                            <p class="text-xs font-bold text-slate-400 mb-2 uppercase">Hidráulica Setorizada</p>
+                            <p class="text-sm leading-relaxed">Monocomandos Docol instalados com flexíveis de aço inox e registros de gaveta independentes.</p>
+                        </div>
                     </div>
                 </div>
             </div>
-            
-            <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-200">
-                <h3 class="text-xl font-bold mb-4 italic">Guia de Montagem por Ponto</h3>
-                <p class="text-sm text-slate-600 mb-6">Em caixas 4x4, reserve sempre 15cm de cabo para fora da caixa para crimpagem perfeita do terminal ilhós.</p>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="text-center p-4 bg-slate-50 rounded-2xl border">
-                        <img src="https://images.tcdn.com.br/img/editor/up/693630/Caixa4x4Amarela.png" class="w-16 h-16 mx-auto mb-2 object-contain">
-                        <span class="text-[10px] font-bold uppercase">Caixa 4x4</span>
-                    </div>
-                    <div class="text-center p-4 bg-slate-50 rounded-2xl border">
-                        <img src="https://m.media-amazon.com/images/I/61kYyS0hQVL._AC_SL1000_.jpg" class="w-16 h-16 mx-auto mb-2 object-contain">
-                        <span class="text-[10px] font-bold uppercase">Ilhós Tubular</span>
-                    </div>
-                    <div class="text-center p-4 bg-slate-50 rounded-2xl border">
-                        <img src="https://www.prysmian.com/sites/default/files/styles/image_720x405/public/2019-06/superastic_flex_0.png" class="w-16 h-16 mx-auto mb-2 object-contain">
-                        <span class="text-[10px] font-bold uppercase">Flexível Branco</span>
-                    </div>
-                    <div class="text-center p-4 bg-slate-50 rounded-2xl border">
-                        <img src="https://images.tcdn.com.br/img/produtos/g/1/40431/torneira_cozinha_gourmet_monocomando_2028_60.jpg" class="w-16 h-16 mx-auto mb-2 object-contain">
-                        <span class="text-[10px] font-bold uppercase">Docol Gourmet</span>
-                    </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6" id="visual-gallery">
                 </div>
-            </div>
         </div>
     </div>
 
     <script>
-        // BANCO DE DADOS INICIAL - ORDEM DE ENGENHARIA
+        // BANCO DE DADOS CONSOLIDADO
         let inventory = [
             { id: 1, img: "https://www.prysmian.com/sites/default/files/styles/image_720x405/public/2019-06/superastic_flex_0.png", desc: "Cabo Prysmian Flex 2,5mm² BRANCO (Fase T)", unit: "Metros", qty: 100, price: 3.45, status: "Pendente" },
             { id: 2, img: "https://www.prysmian.com/sites/default/files/styles/image_720x405/public/2019-06/superastic_flex_0.png", desc: "Cabo Prysmian Flex 2,5mm² PRETO (Fase R)", unit: "Metros", qty: 100, price: 3.45, status: "Pendente" },
             { id: 3, img: "https://www.prysmian.com/sites/default/files/styles/image_720x405/public/2019-06/superastic_flex_0.png", desc: "Cabo Prysmian Flex 2,5mm² VERMELHO (Fase S)", unit: "Metros", qty: 100, price: 3.45, status: "Pendente" },
-            { id: 4, img: "https://images.tcdn.com.br/img/editor/up/693630/Caixa4x4Amarela.png", desc: "Caixa de Embutir 4x4 Reforçada Amarela", unit: "Unid", qty: 25, price: 6.20, status: "Pendente" },
-            { id: 5, img: "https://m.media-amazon.com/images/I/61kYyS0hQVL._AC_SL1000_.jpg", desc: "Kit Terminais Ilhós Tubular Crimpagem", unit: "Kit", qty: 2, price: 45.00, status: "Pendente" },
-            { id: 6, img: "https://images.tcdn.com.br/img/produtos/g/1/40431/torneira_cozinha_gourmet_monocomando_2028_60.jpg", desc: "Torneira Cozinha Monocomando Gourmet Docol", unit: "Unid", qty: 1, price: 890.00, status: "Pendente" },
-            { id: 7, img: "https://images.tcdn.com.br/img/produtos/g/1/29841/registro_de_gaveta_3_4_deca_1502.jpg", desc: "Registro Gaveta 3/4 Deca", unit: "Unid", qty: 4, price: 145.00, status: "Pendente" }
+            { id: 4, img: "https://images.tcdn.com.br/img/editor/up/693630/Caixa4x4Amarela.png", desc: "Caixa de Embutir 4x4 Reforçada", unit: "Unid", qty: 25, price: 6.20, status: "Pendente" },
+            { id: 5, img: "https://m.media-amazon.com/images/I/61kYyS0hQVL._AC_SL1000_.jpg", desc: "Kit Terminais Ilhós Tubular (Azul/Ver/Am)", unit: "Kit", qty: 2, price: 45.00, status: "Pendente" },
+            { id: 6, img: "https://images.tcdn.com.br/img/produtos/g/1/40431/torneira_cozinha_gourmet_monocomando_2028_60.jpg", desc: "Torneira Gourmet Docol Monocomando", unit: "Unid", qty: 1, price: 890.00, status: "Pendente" }
         ];
 
         function render() {
             const body = document.getElementById('inventory-body');
+            const gallery = document.getElementById('visual-gallery');
             body.innerHTML = '';
-            let total = 0;
+            gallery.innerHTML = '';
+            let grandTotal = 0;
 
             inventory.forEach((item, i) => {
-                const sub = item.qty * item.price;
-                total += sub;
-                const statusClass = item.status === 'Comprado' ? 'row-comprado' : 'row-pendente';
+                const subtotal = item.qty * item.price;
+                grandTotal += subtotal;
+                const statusStyle = item.status === 'Comprado' ? 'row-comprado' : 'row-pendente';
 
+                // Tabela
                 body.innerHTML += `
-                    <tr class="border-b ${statusClass} transition-all duration-300">
-                        <td class="p-4"><img src="${item.img}" class="w-12 h-12 rounded border bg-white object-contain shadow-sm"></td>
-                        <td class="p-4"><input class="input-cell font-bold text-sm" value="${item.desc}" onchange="up(${i}, 'desc', this.value)"></td>
-                        <td class="p-4 text-center text-xs font-mono font-bold text-slate-500">${item.unit}</td>
-                        <td class="p-4"><input type="number" class="input-cell text-center font-bold" value="${item.qty}" onchange="up(${i}, 'qty', this.value)"></td>
-                        <td class="p-4"><input type="number" class="input-cell text-center" value="${item.price}" onchange="up(${i}, 'price', this.value)"></td>
-                        <td class="p-4 text-center font-mono font-black text-blue-700 uppercase">R$ ${sub.toFixed(2)}</td>
-                        <td class="p-4 text-center">
-                            <button onclick="toggle(${i})" class="px-4 py-1 rounded-full text-[10px] font-black tracking-widest shadow-sm transition-all ${item.status === 'Comprado' ? 'bg-emerald-500 text-white' : 'bg-red-500 text-white'}">
+                    <tr class="${statusStyle} transition-all hover:bg-slate-50 group">
+                        <td class="p-6">
+                            <img src="${item.img}" class="w-14 h-14 rounded-xl object-contain border bg-white p-1 shadow-sm group-hover:scale-110 transition-transform">
+                        </td>
+                        <td class="p-6">
+                            <input class="input-cell font-black text-sm text-slate-800" value="${item.desc}" onchange="update(${i}, 'desc', this.value)">
+                        </td>
+                        <td class="p-6 text-center text-[10px] font-bold text-slate-400 uppercase">${item.unit}</td>
+                        <td class="p-6"><input type="number" class="input-cell text-center font-bold mono" value="${item.qty}" onchange="update(${i}, 'qty', this.value)"></td>
+                        <td class="p-6"><input type="number" class="input-cell text-center mono" value="${item.price}" onchange="update(${i}, 'price', this.value)"></td>
+                        <td class="p-6 text-center mono font-black text-blue-600">R$ ${subtotal.toFixed(2)}</td>
+                        <td class="p-6 text-center">
+                            <button onclick="toggleStatus(${i})" class="px-5 py-2 rounded-full text-[9px] font-black tracking-widest transition-all ${item.status === 'Comprado' ? 'bg-emerald-500 text-white' : 'bg-red-500 text-white'} uppercase">
                                 ${item.status}
                             </button>
                         </td>
-                        <td class="p-4 text-center no-print">
-                            <button onclick="removeItem(${i})" class="text-slate-300 hover:text-red-500 transform hover:scale-125 transition-all"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                        <td class="p-6 text-center no-print">
+                            <button onclick="removeRow(${i})" class="text-slate-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
                         </td>
-                    </tr>`;
+                    </tr>
+                `;
+
+                // Galeria
+                gallery.innerHTML += `
+                    <div class="bg-white p-4 rounded-3xl border border-slate-200 text-center shadow-sm">
+                        <img src="${item.img}" class="w-full h-20 object-contain mb-3">
+                        <p class="text-[8px] font-black uppercase text-slate-400 leading-tight">${item.desc}</p>
+                    </div>
+                `;
             });
 
-            document.getElementById('grand-total').innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            document.getElementById('grand-total').innerText = `R$ ${grandTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
             lucide.createIcons();
         }
 
-        // FUNÇÃO DE ADICIONAR NO TOPO (INVERSA)
+        // LÓGICA INVERSA: ADICIONAR NO TOPO
         function addRow() {
             inventory.unshift({ 
                 id: Date.now(), 
-                img: "https://via.placeholder.com/100?text=Engenharia", 
-                desc: "Novo Item de Obra", 
+                img: "https://via.placeholder.com/100?text=REF", 
+                desc: "Novo Item de Engenharia", 
                 unit: "Unid", 
                 qty: 1, 
                 price: 0, 
                 status: "Pendente" 
             });
             render();
+            // Scroll suave para o topo para ver o item novo
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function up(i, k, v) { 
-            inventory[i][k] = k === 'desc' ? v : parseFloat(v || 0); 
-            render(); 
-        }
-
-        function toggle(i) { 
-            inventory[i].status = inventory[i].status === 'Pendente' ? 'Comprado' : 'Pendente'; 
-            render(); 
-        }
-
-        function removeItem(i) {
-            if(confirm("Excelência, confirma a exclusão definitiva deste item?")) {
+        function removeRow(i) {
+            if(confirm("Excelência, confirma a exclusão deste item?")) {
                 inventory.splice(i, 1);
                 render();
             }
         }
 
+        function update(i, key, val) {
+            inventory[i][key] = (key === 'desc') ? val : parseFloat(val || 0);
+            render();
+        }
+
+        function toggleStatus(i) {
+            inventory[i].status = inventory[i].status === 'Pendente' ? 'Comprado' : 'Pendente';
+            render();
+        }
+
         function switchTab(tab) {
             document.getElementById('content-compras').classList.toggle('hidden', tab !== 'compras');
             document.getElementById('content-tecnico').classList.toggle('hidden', tab !== 'tecnico');
-            document.getElementById('tab-compras').classList.toggle('active', tab === 'compras');
-            document.getElementById('tab-tecnico').classList.toggle('active', tab === 'tecnico');
+            document.getElementById('btn-compras').classList.toggle('tab-active', tab === 'compras');
+            document.getElementById('btn-compras').classList.toggle('opacity-50', tab !== 'compras');
+            document.getElementById('btn-tecnico').classList.toggle('tab-active', tab === 'tecnico');
+            document.getElementById('btn-tecnico').classList.toggle('opacity-50', tab !== 'tecnico');
         }
 
         window.onload = render;
