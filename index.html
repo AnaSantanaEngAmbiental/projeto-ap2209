@@ -1,13 +1,159 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Master Plan AP 2209</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engineering Dash - AP 2209</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .logic-inverse { display: flex; flex-direction: column-reverse; }
+    </style>
+</head>
+<body class="bg-slate-100">
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+
+    <script type="text/babel">
+        const { useState, useMemo } = React;
+
+        // Ícones em SVG para evitar erros de biblioteca externa
+        const IconTrash = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>;
+        const IconPlus = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>;
+
+        function App() {
+            const [inventory, setInventory] = useState([
+                { id: 1, desc: "Cabo Prysmian Flex 2,5mm² BRANCO (Fase T)", qty: 100, price: 3.45, cat: "Elétrica" },
+                { id: 2, desc: "Cabo Prysmian Flex 2,5mm² PRETO (Fase R)", qty: 100, price: 3.45, cat: "Elétrica" },
+                { id: 3, desc: "Torneira Cozinha Gourmet Docol", qty: 1, price: 890.00, cat: "Hidráulica" }
+            ]);
+
+            const grandTotal = useMemo(() => {
+                return inventory.reduce((acc, item) => acc + (Number(item.qty) * Number(item.price)), 0);
+            }, [inventory]);
+
+            // LÓGICA INVERSA: Adiciona no início do array
+            const addRow = () => {
+                const newItem = { id: Date.now(), desc: "Novo Item Técnico", qty: 0, price: 0, cat: "Geral" };
+                setInventory([newItem, ...inventory]);
+            };
+
+            const updateItem = (id, key, value) => {
+                setInventory(inventory.map(item => item.id === id ? { ...item, [key]: value } : item));
+            };
+
+            const removeItem = (id) => {
+                setInventory(inventory.filter(item => item.id !== id));
+            };
+
+            return (
+                <div className="min-h-screen p-4 md:p-8">
+                    <div className="max-w-6xl mx-auto">
+                        
+                        {/* HEADER */}
+                        <header className="bg-slate-900 text-white p-8 rounded-[2rem] shadow-2xl mb-8 border-b-8 border-blue-600 flex flex-col md:flex-row justify-between items-center">
+                            <div>
+                                <h1 className="text-4xl font-black italic uppercase tracking-tighter text-blue-400">AP 2209 DASH</h1>
+                                <p className="text-slate-400 font-bold text-[10px] tracking-widest uppercase mt-2">Engenharia e Suprimentos</p>
+                            </div>
+                            <div className="bg-slate-800 p-6 rounded-2xl text-right min-w-[250px] border border-slate-700">
+                                <p className="text-[10px] font-bold text-blue-400 uppercase mb-1">Total Orçado</p>
+                                <p className="text-3xl font-mono font-bold text-white">
+                                    R$ {grandTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                </p>
+                            </div>
+                        </header>
+
+                        {/* TABELA */}
+                        <div className="bg-white rounded-[2.5rem] shadow-xl p-6 md:p-10 border border-slate-200">
+                            <div className="flex justify-between items-center mb-8">
+                                <h2 className="text-xl font-black uppercase text-slate-800 italic">Lista de Materiais</h2>
+                                <button 
+                                    onClick={addRow} 
+                                    className="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold text-[10px] flex items-center gap-2 hover:bg-slate-900 transition-all shadow-md"
+                                >
+                                    <IconPlus /> ADICIONAR NO TOPO
+                                </button>
+                            </div>
+
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left">
+                                    <thead>
+                                        <tr className="text-[10px] font-black uppercase text-slate-400 border-b">
+                                            <th className="p-4">Descrição</th>
+                                            <th className="p-4 text-center">Qtd</th>
+                                            <th className="p-4 text-center">R$ Unit</th>
+                                            <th className="p-4 text-center">Total</th>
+                                            <th className="p-4 text-center">Ação</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {inventory.map((item) => (
+                                            <tr key={item.id} className="border-b border-slate-50 hover:bg-slate-50 transition-colors">
+                                                <td className="p-4">
+                                                    <input 
+                                                        className="font-bold text-sm bg-transparent outline-none w-full text-slate-700 focus:text-blue-600" 
+                                                        value={item.desc} 
+                                                        onChange={(e) => updateItem(item.id, 'desc', e.target.value)} 
+                                                    />
+                                                    <span className="text-[9px] font-bold text-blue-500 uppercase">{item.cat}</span>
+                                                </td>
+                                                <td className="p-4 w-24">
+                                                    <input 
+                                                        type="number" 
+                                                        className="w-full text-center bg-white border border-slate-200 rounded p-1 font-bold" 
+                                                        value={item.qty} 
+                                                        onChange={(e) => updateItem(item.id, 'qty', e.target.value)} 
+                                                    />
+                                                </td>
+                                                <td className="p-4 w-28">
+                                                    <input 
+                                                        type="number" 
+                                                        className="w-full text-center bg-white border border-slate-200 rounded p-1 font-bold" 
+                                                        value={item.price} 
+                                                        onChange={(e) => updateItem(item.id, 'price', e.target.value)} 
+                                                    />
+                                                </td>
+                                                <td className="p-4 text-center font-mono font-black text-slate-900">
+                                                    R$ {(item.qty * item.price).toFixed(2)}
+                                                </td>
+                                                <td className="p-4 text-center">
+                                                    <button onClick={() => removeItem(item.id)} className="text-slate-300 hover:text-red-500">
+                                                        <IconTrash />
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        {/* NOTA TÉCNICA */}
+                        <div className="mt-8 grid md:grid-cols-2 gap-4">
+                            <div className="bg-slate-900 text-white p-6 rounded-3xl border-l-4 border-blue-500">
+                                <h3 className="text-xs font-black uppercase text-blue-400 mb-2">Especificação Elétrica</h3>
+                                <p className="text-[10px] font-bold leading-relaxed text-slate-300">
+                                    Padrão Fase T: Cabo Branco Prysmian. Uso obrigatório de terminais ilhós tubulares para evitar centelhamento.
+                                </p>
+                            </div>
+                            <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                                <h3 className="text-xs font-black uppercase text-slate-400 mb-2">Logística Inversa</h3>
+                                <p className="text-[10px] font-bold leading-relaxed text-slate-500">
+                                    O sistema está configurado para priorizar novos lançamentos no topo da planilha, facilitando o controle de auditoria de compras.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
 </html>
