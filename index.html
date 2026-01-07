@@ -3,55 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão de Engenharia AP 2209 - 2026</title>
+    <title>Master Plan AP 2209 - Engenharia 4x4</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        .input-edit { border: none; background: transparent; width: 100%; }
-        .input-edit:focus { outline: 2px solid #3b82f6; background: white; border-radius: 4px; }
-        .card-eng { transition: all 0.3s ease; }
-        .card-eng:hover { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .input-cell { border: none; background: transparent; width: 100%; font-family: monospace; }
+        .input-cell:focus { outline: 2px solid #2563eb; background: #f8fafc; border-radius: 4px; }
+        .row-comprado { background-color: #f0fdf4 !important; opacity: 0.8; }
+        .tab-btn.active { border-bottom: 4px solid #2563eb; color: #2563eb; }
     </style>
 </head>
-<body class="bg-slate-100 font-sans text-slate-900 pb-20">
+<body class="bg-slate-50 font-sans text-slate-900 pb-20">
 
-    <div class="max-w-6xl mx-auto p-4 md:p-8">
-        <header class="bg-slate-900 text-white p-8 rounded-3xl shadow-xl mb-10 border-b-8 border-blue-600">
+    <div class="max-w-7xl mx-auto p-4 md:p-8">
+        <header class="bg-slate-900 text-white p-8 rounded-3xl shadow-2xl mb-10 border-b-8 border-blue-600">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div>
-                    <h1 class="text-3xl font-black tracking-tighter italic text-blue-400">AP 2209 | MASTER PLAN</h1>
-                    <p class="text-slate-400 flex items-center gap-2">
-                        <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500"></i> 
-                        Rede Trifásica Prysmian (Preto, Vermelho, Branco)
+                    <h1 class="text-4xl font-black italic tracking-tighter text-blue-400 uppercase">AP 2209 | High Performance</h1>
+                    <p class="text-slate-400 mt-2 flex items-center gap-2">
+                        <i data-lucide="check-circle" class="text-emerald-500 w-5 h-5"></i>
+                        Padrão Caixas 4x4 | Terminais Ilhós | Cabos Prysmian Flex
                     </p>
                 </div>
-                <div class="mt-6 md:mt-0 bg-slate-800 p-4 rounded-2xl border border-slate-700 text-right">
+                <div class="mt-6 md:mt-0 bg-slate-800 p-6 rounded-2xl border border-slate-700 text-right">
                     <p class="text-xs font-bold text-blue-400 uppercase mb-1">Total Geral Investido</p>
-                    <p class="text-3xl font-mono font-bold" id="grand-total">R$ 0,00</p>
+                    <p class="text-4xl font-mono font-bold" id="grand-total">R$ 0,00</p>
                 </div>
             </div>
         </header>
 
-        <div class="bg-white rounded-3xl shadow-sm overflow-hidden border border-slate-200 mb-10">
-            <div class="bg-slate-50 p-6 border-b border-slate-200 flex justify-between items-center">
-                <h2 class="text-xl font-bold flex items-center gap-2 italic">
-                    <i data-lucide="list-checks" class="text-blue-600"></i> Planilha de Orçamento Dinâmico
-                </h2>
-                <button onclick="addRow()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition">
-                    <i data-lucide="plus-circle" class="w-4 h-4"></i> Adicionar Item
-                </button>
+        <div class="flex gap-8 mb-6 border-b border-slate-200">
+            <button onclick="switchTab('compras')" id="tab-compras" class="tab-btn active pb-4 font-bold uppercase text-sm">🛒 Lista de Compras</button>
+            <button onclick="switchTab('detalhes')" id="tab-detalhes" class="tab-btn pb-4 font-bold uppercase text-sm">🔍 Detalhes Técnicos</button>
+        </div>
+
+        <div id="content-compras" class="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200">
+            <div class="bg-slate-50 p-6 border-b flex justify-between items-center">
+                <h2 class="text-xl font-bold italic">Planilha Dinâmica de Materiais (2026)</h2>
+                <span class="text-xs font-bold text-red-500 underline uppercase">Atenção: Uso obrigatório de terminais em todos os pontos</span>
             </div>
-            
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-slate-800 text-white text-xs uppercase tracking-wider">
-                            <th class="p-4">Foto/Ref</th>
-                            <th class="p-4">Descrição do Material (Prysmian/Docol)</th>
-                            <th class="p-4">Qtd</th>
-                            <th class="p-4">Unitário (R$)</th>
-                            <th class="p-4">Subtotal</th>
-                            <th class="p-4">Ação</th>
+                <table class="w-full text-left">
+                    <thead class="bg-slate-800 text-white text-[10px] uppercase tracking-widest">
+                        <tr>
+                            <th class="p-4">Ref. Visual</th>
+                            <th class="p-4">Material Especificado</th>
+                            <th class="p-4 text-center">Medida</th>
+                            <th class="p-4 text-center">Qtd</th>
+                            <th class="p-4 text-center">R$ Unit.</th>
+                            <th class="p-4 text-center">Subtotal</th>
+                            <th class="p-4 text-center">Status</th>
                         </tr>
                     </thead>
                     <tbody id="inventory-body">
@@ -60,92 +61,81 @@
             </div>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-8">
-            <div class="bg-slate-800 text-white p-6 rounded-3xl shadow-lg border-l-8 border-white">
-                <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
-                    <i data-lucide="zap" class="text-yellow-400"></i> Padrão de Fases Prysmian
-                </h3>
-                <div class="space-y-3">
-                    <div class="flex items-center gap-3 p-2 bg-slate-700 rounded-lg">
-                        <div class="w-6 h-6 bg-black rounded shadow-inner"></div>
-                        <span class="text-sm font-mono">Fase R: PRETO</span>
+        <div id="content-detalhes" class="hidden grid md:grid-cols-2 gap-8">
+            <div class="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-black">
+                <h3 class="text-2xl font-bold mb-4 italic">Padrão de Conexão</h3>
+                <p class="text-sm text-slate-600 leading-relaxed mb-6">
+                    Para o AP 2209, não aceitamos fios "desfiados" nos bornes. O uso do <strong>Terminal Ilhós Tubular</strong> é indispensável para os cabos flexíveis Prysmian. As <strong>Caixas 4x4</strong> foram escolhidas para garantir que o raio de curvatura dos cabos seja respeitado, evitando aquecimento.
+                </p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="text-center p-4 bg-slate-50 rounded-2xl">
+                        <i data-lucide="box" class="mx-auto mb-2 text-blue-600"></i>
+                        <span class="text-xs font-bold uppercase">Caixas 4x4 Amarelas</span>
                     </div>
-                    <div class="flex items-center gap-3 p-2 bg-slate-700 rounded-lg">
-                        <div class="w-6 h-6 bg-red-600 rounded shadow-inner"></div>
-                        <span class="text-sm font-mono">Fase S: VERMELHO</span>
-                    </div>
-                    <div class="flex items-center gap-3 p-2 bg-white rounded-lg">
-                        <div class="w-6 h-6 bg-slate-200 rounded shadow-inner"></div>
-                        <span class="text-sm font-mono text-slate-800">Fase T: BRANCO (Atualizado)</span>
+                    <div class="text-center p-4 bg-slate-50 rounded-2xl">
+                        <i data-lucide="Zap" class="mx-auto mb-2 text-yellow-500"></i>
+                        <span class="text-xs font-bold uppercase">Prysmian Flexível</span>
                     </div>
                 </div>
             </div>
-
-            <div class="bg-blue-600 text-white p-6 rounded-3xl shadow-lg border-l-8 border-blue-900">
-                <h3 class="font-bold text-lg mb-4 flex items-center gap-2 text-white">
-                    <i data-lucide="droplets"></i> Hidráulica de Precisão
-                </h3>
-                <p class="text-sm leading-relaxed opacity-90">
-                    O orçamento contempla registros de gaveta independentes. Utilize vedação em rosca-fita de alta densidade. 
-                    <strong>Importante:</strong> Manter a estrutura original conforme o modelo .sh3d.
-                </p>
+            <div class="bg-blue-600 text-white p-8 rounded-3xl shadow-lg">
+                <h3 class="text-2xl font-bold mb-4 italic text-white font-mono">Cores de Cabos 2026</h3>
+                <ul class="space-y-4 font-mono">
+                    <li class="flex items-center gap-3"><div class="w-4 h-4 bg-black border border-white"></div> FASE R: PRETO</li>
+                    <li class="flex items-center gap-3"><div class="w-4 h-4 bg-red-600 border border-white"></div> FASE S: VERMELHO</li>
+                    <li class="flex items-center gap-3"><div class="w-4 h-4 bg-white border border-slate-400"></div> FASE T: BRANCO</li>
+                    <li class="flex items-center gap-3"><div class="w-4 h-4 bg-blue-500 border border-white"></div> NEUTRO: AZUL</li>
+                    <li class="flex items-center gap-3"><div class="w-4 h-4 bg-green-500 border border-white"></div> TERRA: VERDE</li>
+                </ul>
             </div>
         </div>
     </div>
 
     <script>
-        // Dados iniciais com fotos reais e cabo BRANCO
         let inventory = [
-            { id: 1, img: "https://images.unsplash.com/photo-1621905231753-1768bcbb4828?w=100", desc: "Cabo Prysmian Flex 2,5mm² BRANCO (Fase T)", qty: 1, price: 345.00 },
-            { id: 2, img: "https://images.unsplash.com/photo-1621905231753-1768bcbb4828?w=100", desc: "Cabo Prysmian Flex 2,5mm² PRETO (Fase R)", qty: 1, price: 345.00 },
-            { id: 3, img: "https://images.unsplash.com/photo-1621905231753-1768bcbb4828?w=100", desc: "Cabo Prysmian Flex 2,5mm² VERMELHO (Fase S)", qty: 1, price: 345.00 },
-            { id: 4, img: "https://images.unsplash.com/photo-1558002038-103792e097df?w=100", desc: "Kit Quadro Trifásico (Schneider/Weg)", qty: 1, price: 760.00 },
-            { id: 5, img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=100", desc: "Torneira Monocomando Gourmet Docol", qty: 1, price: 890.00 }
+            { id: 1, img: "https://images.unsplash.com/photo-1621905231753-1768bcbb4828?w=200", desc: "Cabo Prysmian Flex 2,5mm² PRETO (Fase R)", unit: "Metros", qty: 100, price: 3.45, status: "Pendente" },
+            { id: 2, desc: "Cabo Prysmian Flex 2,5mm² VERMELHO (Fase S)", unit: "Metros", qty: 100, price: 3.45, status: "Pendente" },
+            { id: 3, desc: "Cabo Prysmian Flex 2,5mm² BRANCO (Fase T)", unit: "Metros", qty: 100, price: 3.45, status: "Pendente" },
+            { id: 4, img: "https://images.unsplash.com/photo-1558002038-103792e097df?w=200", desc: "Caixa de Passagem 4x4 Reforçada (Amarela)", unit: "Unid", qty: 25, price: 5.80, status: "Pendente" },
+            { id: 5, img: "https://images.unsplash.com/photo-1558002038-103792e097df?w=200", desc: "Kit Terminais Ilhós Tubular (1.5mm a 6mm)", unit: "Kit", qty: 2, price: 85.00, status: "Pendente" },
+            { id: 6, desc: "Torneira Gourmet Docol Monocomando", unit: "Unid", qty: 1, price: 890.00, status: "Pendente" },
+            { id: 7, desc: "Registro Gaveta 3/4 Deca", unit: "Unid", qty: 4, price: 145.00, status: "Pendente" }
         ];
 
-        function renderTable() {
+        function render() {
             const body = document.getElementById('inventory-body');
             body.innerHTML = '';
-            let totalGeral = 0;
-
-            inventory.forEach((item, index) => {
-                const subtotal = item.qty * item.price;
-                totalGeral += subtotal;
-
+            let total = 0;
+            inventory.forEach((item, i) => {
+                const sub = item.qty * item.price;
+                total += sub;
                 body.innerHTML += `
-                    <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
-                        <td class="p-4"><img src="${item.img}" class="w-12 h-12 rounded shadow-sm object-cover"></td>
-                        <td class="p-4"><input class="input-edit font-semibold" value="${item.desc}" onchange="updateItem(${index}, 'desc', this.value)"></td>
-                        <td class="p-4"><input type="number" class="input-edit w-16" value="${item.qty}" onchange="updateItem(${index}, 'qty', this.value)"></td>
-                        <td class="p-4"><input type="number" class="input-edit w-24" value="${item.price}" onchange="updateItem(${index}, 'price', this.value)"></td>
-                        <td class="p-4 font-mono font-bold text-blue-600">R$ ${subtotal.toFixed(2)}</td>
+                    <tr class="border-b ${item.status === 'Comprado' ? 'row-comprado' : ''}">
+                        <td class="p-4"><img src="${item.img || 'https://via.placeholder.com/60'}" class="w-12 h-12 rounded object-cover border"></td>
+                        <td class="p-4 font-bold text-sm">${item.desc}</td>
+                        <td class="p-4 text-center text-xs italic">${item.unit}</td>
+                        <td class="p-4 text-center font-mono"><input type="number" class="input-cell text-center" value="${item.qty}" onchange="up(${i}, 'qty', this.value)"></td>
+                        <td class="p-4 text-center font-mono">R$ ${item.price.toFixed(2)}</td>
+                        <td class="p-4 text-center font-mono font-black text-blue-700">R$ ${sub.toFixed(2)}</td>
                         <td class="p-4 text-center">
-                            <button onclick="removeItem(${index})" class="text-red-400 hover:text-red-600"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                            <button onclick="toggle(${i})" class="px-4 py-1 rounded-full text-[10px] font-bold ${item.status === 'Comprado' ? 'bg-emerald-600 text-white' : 'bg-red-500 text-white'}">${item.status}</button>
                         </td>
                     </tr>
                 `;
             });
-
-            document.getElementById('grand-total').innerText = `R$ ${totalGeral.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            document.getElementById('grand-total').innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
             lucide.createIcons();
         }
 
-        function updateItem(index, key, value) {
-            inventory[index][key] = key === 'desc' ? value : parseFloat(value);
-            renderTable();
+        function up(i, k, v) { inventory[i][k] = parseFloat(v); render(); }
+        function toggle(i) { inventory[i].status = inventory[i].status === 'Pendente' ? 'Comprado' : 'Pendente'; render(); }
+        function switchTab(t) {
+            document.getElementById('content-compras').classList.toggle('hidden', t !== 'compras');
+            document.getElementById('content-detalhes').classList.toggle('hidden', t !== 'detalhes');
+            document.getElementById('tab-compras').classList.toggle('active', t === 'compras');
+            document.getElementById('tab-detalhes').classList.toggle('active', t === 'detalhes');
         }
-
-        function addRow() {
-            inventory.push({ id: Date.now(), img: "https://via.placeholder.com/100?text=Item", desc: "Novo Material", qty: 1, price: 0 });
-            renderTable();
-        }
-
-        function removeItem(index) {
-            inventory.splice(index, 1);
-            renderTable();
-        }
-
-        window.onload = renderTable;
+        window.onload = render;
     </script>
 </body>
 </html>
