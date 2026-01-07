@@ -9,8 +9,9 @@
     <style>
         .input-cell { border: none; background: transparent; width: 100%; font-family: monospace; }
         .input-cell:focus { outline: 2px solid #2563eb; background: #f8fafc; border-radius: 4px; }
-        .row-comprado { background-color: #f0fdf4 !important; opacity: 0.8; border-left: 8px solid #22c55e; }
+        .row-comprado { background-color: #f0fdf4 !important; border-left: 8px solid #22c55e; }
         .row-pendente { border-left: 8px solid #ef4444; }
+        @media print { .no-print { display: none; } }
     </style>
 </head>
 <body class="bg-slate-50 font-sans text-slate-900 pb-20">
@@ -22,40 +23,43 @@
                     <h1 class="text-4xl font-black italic tracking-tighter text-blue-400">AP 2209 | GESTÃO EXECUTIVA</h1>
                     <p class="text-slate-400 mt-2 flex items-center gap-2 font-mono text-sm">
                         <i data-lucide="layers" class="text-emerald-500 w-5 h-5"></i>
-                        PADRÃO: CAIXAS 4x4 | TERMINAIS ILHÓS | PRYSMIAN FLEX
+                        CAIXAS 4x4 | TERMINAIS ILHÓS | PRYSMIAN FLEX | FASE T (BRANCO)
                     </p>
                 </div>
                 <div class="mt-6 md:mt-0 bg-slate-800 p-6 rounded-2xl border border-slate-700 text-right shadow-inner">
-                    <p class="text-xs font-bold text-blue-400 uppercase mb-1 tracking-widest">Orçamento Estimado Total</p>
+                    <p class="text-xs font-bold text-blue-400 uppercase mb-1 tracking-widest">Orçamento Total Atualizado</p>
                     <p class="text-4xl font-mono font-bold" id="grand-total">R$ 0,00</p>
                 </div>
             </div>
         </header>
 
-        <h2 class="text-2xl font-bold mb-6 flex items-center gap-2 italic">
-            <i data-lucide="shopping-cart" class="text-blue-600"></i> Carrinho de Compras Tecnológico
-        </h2>
-        
-        <div id="cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            </div>
+        <div class="flex flex-wrap gap-4 mb-6 no-print">
+            <button onclick="addRow()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-2xl font-bold flex items-center gap-2 transition shadow-lg">
+                <i data-lucide="plus-circle"></i> Adicionar Novo Item
+            </button>
+            <button onclick="window.print()" class="bg-slate-200 hover:bg-slate-300 px-6 py-3 rounded-2xl font-bold flex items-center gap-2 transition">
+                <i data-lucide="printer"></i> Imprimir Orçamento
+            </button>
+        </div>
 
         <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200">
-            <div class="bg-slate-100 p-6 border-b flex justify-between items-center">
+            <div class="bg-slate-100 p-6 border-b">
                 <h2 class="text-xl font-bold italic flex items-center gap-2">
-                    <i data-lucide="list-checks" class="text-blue-600"></i> Detalhamento por Ponto e Metragem
+                    <i data-lucide="table-properties" class="text-blue-600"></i> Lista de Materiais e Metragens
                 </h2>
-                <button onclick="window.print()" class="bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-slate-700 transition">IMPRIMIR LISTA</button>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-800 text-white text-[10px] uppercase tracking-widest">
-                            <th class="p-4">Material / Ponto</th>
+                            <th class="p-4">Visual</th>
+                            <th class="p-4">Descrição do Material</th>
                             <th class="p-4 text-center">Unid</th>
-                            <th class="p-4 text-center">Qtd (m/un)</th>
+                            <th class="p-4 text-center">Qtd</th>
                             <th class="p-4 text-center">R$ Unit.</th>
                             <th class="p-4 text-center">Subtotal</th>
                             <th class="p-4 text-center">Status</th>
+                            <th class="p-4 text-center no-print">Ação</th>
                         </tr>
                     </thead>
                     <tbody id="inventory-body">
@@ -63,68 +67,106 @@
                 </table>
             </div>
         </div>
+
+        <div class="mt-10 grid md:grid-cols-2 gap-8 no-print">
+            <div class="bg-blue-900 text-white p-8 rounded-3xl shadow-lg border-l-8 border-white">
+                <h3 class="text-xl font-bold mb-4 flex items-center gap-2 italic">
+                    <i data-lucide="info"></i> Mapa de Terminais Ilhós
+                </h3>
+                <ul class="space-y-2 text-sm font-mono">
+                    <li class="flex justify-between border-b border-blue-800 pb-1"><span>Cabo 1,5mm² (Luzes)</span> <span>Terminal Vermelho</span></li>
+                    <li class="flex justify-between border-b border-blue-800 pb-1"><span>Cabo 2,5mm² (Tomadas)</span> <span>Terminal Azul</span></li>
+                    <li class="flex justify-between border-b border-blue-800 pb-1"><span>Cabo 6,0mm² (Chuveiros)</span> <span>Terminal Amarelo</span></li>
+                </ul>
+            </div>
+            <div class="bg-slate-800 text-white p-8 rounded-3xl shadow-lg border-l-8 border-yellow-500">
+                <h3 class="text-xl font-bold mb-4 flex items-center gap-2 italic text-yellow-500">
+                    <i data-lucide="box"></i> Padrão de Caixas 4x4
+                </h3>
+                <p class="text-xs leading-relaxed">
+                    Todas as caixas devem ser 4x4 para permitir a organização dos cabos flexíveis sem compressão. 
+                    Utilize os terminais ilhós para evitar o "esmagamento" do cobre flexível Prysmian.
+                </p>
+            </div>
+        </div>
     </div>
 
     <script>
-        // BANCO DE DADOS DA OBRA
+        // Dados iniciais sugeridos
         let inventory = [
-            { id: 1, img: "https://www.prysmian.com/sites/default/files/styles/image_720x405/public/2019-06/superastic_flex_0.png", desc: "Cabo Prysmian 2,5mm² PRETO (Fase R)", unit: "Metros", qty: 100, price: 3.45, status: "Pendente" },
-            { id: 2, img: "https://www.prysmian.com/sites/default/files/styles/image_720x405/public/2019-06/superastic_flex_0.png", desc: "Cabo Prysmian 2,5mm² VERMELHO (Fase S)", unit: "Metros", qty: 100, price: 3.45, status: "Pendente" },
-            { id: 3, img: "https://www.prysmian.com/sites/default/files/styles/image_720x405/public/2019-06/superastic_flex_0.png", desc: "Cabo Prysmian 2,5mm² BRANCO (Fase T)", unit: "Metros", qty: 100, price: 3.45, status: "Pendente" },
-            { id: 4, img: "https://images.tcdn.com.br/img/editor/up/693630/Caixa4x4Amarela.png", desc: "Caixa de Embutir 4x4 (Espaço Extra)", unit: "Unid", qty: 25, price: 6.20, status: "Pendente" },
-            { id: 5, img: "https://m.media-amazon.com/images/I/61kYyS0hQVL._AC_SL1000_.jpg", desc: "Kit Terminais Ilhós Tubular (Crimpagem)", unit: "Kit", qty: 2, price: 45.00, status: "Pendente" },
-            { id: 6, img: "https://images.tcdn.com.br/img/produtos/g/1/40431/torneira_cozinha_gourmet_monocomando_2028_60.jpg", desc: "Torneira Gourmet Monocomando Docol", unit: "Unid", qty: 1, price: 890.00, status: "Pendente" },
-            { id: 7, img: "https://images.tcdn.com.br/img/produtos/g/1/29841/registro_de_gaveta_3_4_deca_1502.jpg", desc: "Registro Gaveta 3/4 Deca", unit: "Unid", qty: 4, price: 145.00, status: "Pendente" }
+            { id: 1, img: "https://www.prysmian.com/sites/default/files/styles/image_720x405/public/2019-06/superastic_flex_0.png", desc: "Cabo Prysmian Flex 2,5mm² PRETO (Fase R)", unit: "Metros", qty: 100, price: 3.45, status: "Pendente" },
+            { id: 2, img: "https://www.prysmian.com/sites/default/files/styles/image_720x405/public/2019-06/superastic_flex_0.png", desc: "Cabo Prysmian Flex 2,5mm² VERMELHO (Fase S)", unit: "Metros", qty: 100, price: 3.45, status: "Pendente" },
+            { id: 3, img: "https://www.prysmian.com/sites/default/files/styles/image_720x405/public/2019-06/superastic_flex_0.png", desc: "Cabo Prysmian Flex 2,5mm² BRANCO (Fase T)", unit: "Metros", qty: 100, price: 3.45, status: "Pendente" },
+            { id: 4, img: "https://www.prysmian.com/sites/default/files/styles/image_720x405/public/2019-06/superastic_flex_0.png", desc: "Cabo Prysmian Flex 2,5mm² AZUL (Neutro)", unit: "Metros", qty: 150, price: 3.45, status: "Pendente" },
+            { id: 5, img: "https://images.tcdn.com.br/img/editor/up/693630/Caixa4x4Amarela.png", desc: "Caixa de Passagem 4x4 Reforçada", unit: "Unid", qty: 25, price: 6.20, status: "Pendente" },
+            { id: 6, img: "https://m.media-amazon.com/images/I/61kYyS0hQVL._AC_SL1000_.jpg", desc: "Kit Terminais Ilhós Tubular p/ Crimpagem", unit: "Kit", qty: 2, price: 45.00, status: "Pendente" },
+            { id: 7, img: "https://images.tcdn.com.br/img/produtos/g/1/40431/torneira_cozinha_gourmet_monocomando_2028_60.jpg", desc: "Torneira Gourmet Monocomando Docol", unit: "Unid", qty: 1, price: 890.00, status: "Pendente" },
+            { id: 8, img: "https://images.tcdn.com.br/img/produtos/g/1/29841/registro_de_gaveta_3_4_deca_1502.jpg", desc: "Registro Gaveta 3/4 Deca", unit: "Unid", qty: 4, price: 145.00, status: "Pendente" }
         ];
 
         function render() {
             const body = document.getElementById('inventory-body');
-            const cards = document.getElementById('cards-container');
             body.innerHTML = '';
-            cards.innerHTML = '';
             let total = 0;
 
             inventory.forEach((item, i) => {
                 const sub = item.qty * item.price;
                 total += sub;
+                const statusClass = item.status === 'Comprado' ? 'row-comprado' : 'row-pendente';
 
-                // Render Planilha
                 body.innerHTML += `
-                    <tr class="border-b ${item.status === 'Comprado' ? 'row-comprado' : 'row-pendente'}">
-                        <td class="p-4">
-                            <div class="flex items-center gap-3">
-                                <img src="${item.img}" class="w-10 h-10 rounded border object-cover">
-                                <div><p class="font-bold text-sm">${item.desc}</p></div>
-                            </div>
-                        </td>
-                        <td class="p-4 text-center text-xs font-mono italic">${item.unit}</td>
-                        <td class="p-4 text-center"><input type="number" class="input-cell text-center font-bold" value="${item.qty}" onchange="up(${i}, 'qty', this.value)"></td>
-                        <td class="p-4 text-center font-mono text-sm">R$ ${item.price.toFixed(2)}</td>
+                    <tr class="border-b ${statusClass} transition">
+                        <td class="p-4"><img src="${item.img}" class="w-10 h-10 rounded shadow-sm object-cover border bg-white"></td>
+                        <td class="p-4"><input class="input-cell font-bold text-sm" value="${item.desc}" onchange="up(${i}, 'desc', this.value)"></td>
+                        <td class="p-4 text-center text-xs font-mono">${item.unit}</td>
+                        <td class="p-4"><input type="number" class="input-cell text-center font-bold" value="${item.qty}" onchange="up(${i}, 'qty', this.value)"></td>
+                        <td class="p-4"><input type="number" class="input-cell text-center" value="${item.price}" onchange="up(${i}, 'price', this.value)"></td>
                         <td class="p-4 text-center font-mono font-black text-blue-700">R$ ${sub.toFixed(2)}</td>
                         <td class="p-4 text-center">
                             <button onclick="toggle(${i})" class="px-3 py-1 rounded-full text-[10px] font-black tracking-tighter shadow-sm transition ${item.status === 'Comprado' ? 'bg-emerald-500 text-white' : 'bg-red-500 text-white'} uppercase">
                                 ${item.status}
                             </button>
                         </td>
+                        <td class="p-4 text-center no-print">
+                            <button onclick="removeItem(${i})" class="text-slate-300 hover:text-red-500"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                        </td>
                     </tr>`;
-
-                // Render Cards (Visualização rápida)
-                if (i < 4) { // Mostra os 4 primeiros principais
-                    cards.innerHTML += `
-                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
-                            <img src="${item.img}" class="w-full h-32 object-contain mb-4 rounded-lg">
-                            <h3 class="text-xs font-bold uppercase text-slate-500">${item.desc}</h3>
-                        </div>`;
-                }
             });
 
             document.getElementById('grand-total').innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
             lucide.createIcons();
         }
 
-        function up(i, k, v) { inventory[i][k] = parseFloat(v); render(); }
-        function toggle(i) { inventory[i].status = inventory[i].status === 'Pendente' ? 'Comprado' : 'Pendente'; render(); }
-        
+        function up(i, k, v) { 
+            inventory[i][k] = k === 'desc' ? v : parseFloat(v || 0); 
+            render(); 
+        }
+
+        function toggle(i) { 
+            inventory[i].status = inventory[i].status === 'Pendente' ? 'Comprado' : 'Pendente'; 
+            render(); 
+        }
+
+        function addRow() {
+            inventory.push({ 
+                id: Date.now(), 
+                img: "https://via.placeholder.com/100?text=Material", 
+                desc: "Novo Item de Obra", 
+                unit: "Unid", 
+                qty: 1, 
+                price: 0, 
+                status: "Pendente" 
+            });
+            render();
+        }
+
+        function removeItem(i) {
+            if(confirm("Deseja excluir este item do orçamento?")) {
+                inventory.splice(i, 1);
+                render();
+            }
+        }
+
         window.onload = render;
     </script>
 </body>
