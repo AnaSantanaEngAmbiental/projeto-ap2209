@@ -1,282 +1,256 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   Zap, ShoppingCart, Layout, Calculator, Trash2, PlusCircle, 
-  Printer, CheckCircle, Info, Box, Droplet, Hammer, Layers,
-  ChevronRight, AlertTriangle, Cpu, Palette
+  Printer, CheckCircle, Box, Droplet, Hammer, Layers,
+  ChevronRight, AlertTriangle, Cpu, Palette, Eye
 } from 'lucide-react';
 
 const App = () => {
   const [activeTab, setActiveTab] = useState('compras');
+  
+  // Banco de Dados Inicial com Inteligência de Engenharia AP 2209
   const [inventory, setInventory] = useState([
     { id: 1, img: "https://www.prysmian.com/sites/default/files/styles/image_720x405/public/2019-06/superastic_flex_0.png", desc: "Cabo Prysmian Flex 2,5mm² BRANCO (Fase T)", unit: "Metros", qty: 100, price: 3.45, status: "Pendente", categoria: "Elétrica", local: "Cozinha/Geral" },
     { id: 2, img: "https://www.prysmian.com/sites/default/files/styles/image_720x405/public/2019-06/superastic_flex_0.png", desc: "Cabo Prysmian Flex 2,5mm² PRETO (Fase R)", unit: "Metros", qty: 100, price: 3.45, status: "Pendente", categoria: "Elétrica", local: "Sala/Quartos" },
-    { id: 3, img: "https://www.prysmian.com/sites/default/files/styles/image_720x405/public/2019-06/superastic_flex_0.png", desc: "Cabo Prysmian Flex 2,5mm² VERMELHO (Fase S)", unit: "Metros", qty: 100, price: 3.45, status: "Pendente", categoria: "Elétrica", local: "Ar Condicionado/Chuveiro" },
+    { id: 3, img: "https://www.prysmian.com/sites/default/files/styles/image_720x405/public/2019-06/superastic_flex_0.png", desc: "Cabo Prysmian Flex 2,5mm² VERMELHO (Fase S)", unit: "Metros", qty: 100, price: 3.45, status: "Pendente", categoria: "Elétrica", local: "Ar Condicionado" },
     { id: 4, img: "https://images.tcdn.com.br/img/editor/up/693630/Caixa4x4Amarela.png", desc: "Caixa de Embutir 4x4 Reforçada Amarela", unit: "Unid", qty: 25, price: 6.20, status: "Pendente", categoria: "Infra", local: "Todos os pontos" },
-    { id: 5, img: "https://m.media-amazon.com/images/I/61kYyS0hQVL._AC_SL1000_.jpg", desc: "Kit Terminais Ilhós Tubular (Padrão 2209)", unit: "Kit", qty: 2, price: 45.00, status: "Pendente", categoria: "Conexão", local: "Bornes" },
-    { id: 6, img: "https://images.tcdn.com.br/img/produtos/g/1/40431/torneira_cozinha_gourmet_monocomando_2028_60.jpg", desc: "Torneira Cozinha Gourmet Docol", unit: "Unid", qty: 1, price: 890.00, status: "Pendente", categoria: "Hidráulica", local: "Bancada Cozinha" }
+    { id: 5, img: "https://m.media-amazon.com/images/I/61kYyS0hQVL._AC_SL1000_.jpg", desc: "Kit Terminais Ilhós Tubular (Crimpagem)", unit: "Kit", qty: 2, price: 45.00, status: "Pendente", categoria: "Conexão", local: "Quadro/Tomadas" },
+    { id: 6, img: "https://images.tcdn.com.br/img/produtos/g/1/40431/torneira_cozinha_gourmet_monocomando_2028_60.jpg", desc: "Torneira Cozinha Gourmet Docol", unit: "Unid", qty: 1, price: 890.00, status: "Pendente", categoria: "Hidráulica", local: "Cozinha" }
   ]);
 
-  const grandTotal = inventory.reduce((acc, item) => acc + (item.qty * item.price), 0);
+  // Cálculo de Total Automático
+  const grandTotal = useMemo(() => {
+    return inventory.reduce((acc, item) => acc + (item.qty * item.price), 0);
+  }, [inventory]);
 
+  // FUNÇÃO MESTRE: Adicionar no Topo (Lógica Inversa)
   const addRow = () => {
     const newItem = {
       id: Date.now(),
-      img: "https://via.placeholder.com/100?text=Eng",
+      img: "https://via.placeholder.com/150?text=Engenharia",
       desc: "Novo Item de Engenharia",
       unit: "Unid",
-      qty: 1,
+      qty: 0,
       price: 0,
       status: "Pendente",
       categoria: "Nova",
       local: "Definir"
     };
-    setInventory([newItem, ...inventory]); // Lógica inversa: Inserir no Topo
+    setInventory(prev => [newItem, ...prev]);
   };
 
+  // FUNÇÃO MESTRE: Atualização em tempo real (Corrige o travamento)
   const updateItem = (id, key, value) => {
-    setInventory(inventory.map(item => 
-      item.id === id ? { ...item, [key]: key === 'desc' || key === 'local' ? value : parseFloat(value || 0) } : item
+    setInventory(prev => prev.map(item => 
+      item.id === id ? { ...item, [key]: (key === 'qty' || key === 'price') ? parseFloat(value || 0) : value } : item
     ));
   };
 
   const toggleStatus = (id) => {
-    setInventory(inventory.map(item => 
+    setInventory(prev => prev.map(item => 
       item.id === id ? { ...item, status: item.status === 'Pendente' ? 'Comprado' : 'Pendente' } : item
     ));
   };
 
   const removeRow = (id) => {
-    if(window.confirm("Atenção: Deseja remover este item do Master Plan?")) {
-      setInventory(inventory.filter(item => item.id !== id));
+    if(window.confirm("Deseja remover este item do Master Plan AP 2209?")) {
+      setInventory(prev => prev.filter(item => item.id !== id));
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#f1f5f9] text-slate-900 pb-20 font-sans selection:bg-blue-100">
+    <div className="min-h-screen bg-slate-50 text-slate-900 pb-20 font-sans selection:bg-blue-200">
       <div className="max-w-7xl mx-auto p-4 lg:p-8">
         
-        {/* HEADER EXECUTIVO DE ALTA POTÊNCIA */}
+        {/* HEADER EXECUTIVO CONSOLIDADO */}
         <header className="bg-slate-900 text-white p-10 rounded-[3rem] shadow-2xl mb-10 border-b-[12px] border-blue-600 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-1/2 h-full bg-blue-600/5 skew-x-12 transform translate-x-1/4"></div>
           <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-6">
             <div>
-              <div className="flex items-center gap-3 mb-3">
-                <span className="bg-blue-600 text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-widest animate-pulse">Engenharia de Elite</span>
-                <span className="bg-slate-700 text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-widest text-slate-400">AP 2209</span>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="bg-blue-600 text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-[0.2em] animate-pulse">Engenharia de Performance</span>
+                <span className="text-slate-400 font-mono text-xs italic">Update 2026.01</span>
               </div>
-              <h1 className="text-6xl font-black tracking-tighter italic text-blue-400">MASTER PLAN</h1>
-              <div className="grid grid-cols-2 gap-4 mt-4">
-                <p className="text-slate-400 font-mono text-xs flex items-center gap-2">
-                  <Box className="text-blue-500 w-4 h-4" /> CAIXAS 4x4 EM TODOS OS PONTOS
-                </p>
-                <p className="text-slate-400 font-mono text-xs flex items-center gap-2">
-                  <Zap className="text-yellow-500 w-4 h-4" /> TERMINAIS ILHÓS OBRIGATÓRIOS
-                </p>
+              <h1 className="text-6xl font-black tracking-tighter italic text-blue-400 mb-4">MASTER PLAN AP 2209</h1>
+              <div className="flex flex-wrap gap-6 text-slate-400 font-mono text-xs">
+                <p className="flex items-center gap-2"><Box className="text-blue-500 w-4 h-4" /> PADRÃO 4x4</p>
+                <p className="flex items-center gap-2"><Zap className="text-yellow-500 w-4 h-4" /> ILHÓS TUBULAR</p>
+                <p className="flex items-center gap-2"><CheckCircle className="text-emerald-500 w-4 h-4" /> PRYSMIAN FLEX</p>
               </div>
             </div>
-            <div className="bg-slate-800/80 backdrop-blur p-8 rounded-[2.5rem] border border-slate-700 text-right shadow-2xl min-w-[320px]">
-              <p className="text-[10px] font-black text-blue-400 uppercase tracking-[0.3em] mb-2 opacity-70">Total Investido na Obra</p>
-              <p className="text-5xl font-mono font-black text-white leading-none">
+            <div className="bg-slate-800/90 backdrop-blur p-8 rounded-[2.5rem] border border-slate-700 text-right shadow-2xl min-w-[340px]">
+              <p className="text-[10px] font-black text-blue-400 uppercase tracking-[0.3em] mb-2">Investimento Total Estimado</p>
+              <p className="text-5xl font-mono font-black text-white leading-none mb-4">
                 {grandTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
               </p>
-              <div className="mt-4 h-2 bg-slate-700 rounded-full overflow-hidden">
-                <div className="h-full bg-blue-600" style={{ width: '100%' }}></div>
+              <div className="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
+                <div className="bg-blue-500 h-full w-full"></div>
               </div>
             </div>
           </div>
         </header>
 
-        {/* NAVEGAÇÃO MULTI-IDEIAS (Consolidada) */}
-        <div className="flex gap-4 mb-8 no-print overflow-x-auto pb-4 scrollbar-hide">
-          {[
-            { id: 'compras', icon: <ShoppingCart />, label: 'Planilha & Orçamento' },
-            { id: 'tecnico', icon: <Layout />, label: 'Metragem & Ambientes' },
-            { id: 'mapa', icon: <Cpu />, label: 'Mapa de Crimpagem' },
-            { id: 'galeria', icon: <Palette />, label: 'Galeria Visual' }
-          ].map(tab => (
-            <button 
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)} 
-              className={`flex items-center gap-3 px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all duration-300 transform ${activeTab === tab.id ? 'bg-blue-600 text-white shadow-xl -translate-y-1' : 'bg-white text-slate-400 hover:bg-slate-50 shadow-md'}`}
-            >
-              {tab.icon} {tab.label}
-            </button>
-          ))}
+        {/* NAVEGAÇÃO ENTRE ABAS (Consolidação de Todas as Ideias) */}
+        <div className="flex gap-4 mb-10 no-print overflow-x-auto pb-4 scrollbar-hide">
+          <button onClick={() => setActiveTab('compras')} className={`flex items-center gap-3 px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all ${activeTab === 'compras' ? 'bg-blue-600 text-white shadow-xl -translate-y-1' : 'bg-white text-slate-400 hover:bg-slate-50'}`}>
+            <ShoppingCart className="w-4 h-4"/> Planilha & Compras
+          </button>
+          <button onClick={() => setActiveTab('tecnico')} className={`flex items-center gap-3 px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all ${activeTab === 'tecnico' ? 'bg-blue-600 text-white shadow-xl -translate-y-1' : 'bg-white text-slate-400 hover:bg-slate-50'}`}>
+            <Layout className="w-4 h-4"/> Metragem & Ambientes
+          </button>
+          <button onClick={() => setActiveTab('crimpagem')} className={`flex items-center gap-3 px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all ${activeTab === 'crimpagem' ? 'bg-blue-600 text-white shadow-xl -translate-y-1' : 'bg-white text-slate-400 hover:bg-slate-50'}`}>
+            <Zap className="w-4 h-4"/> Mapa de Crimpagem
+          </button>
         </div>
 
-        {/* ABA 1: PLANILHA DINÂMICA (Lógica Inversa + Gestão Completa) */}
+        {/* ABA 1: PLANILHA DE COMPRAS (Dinamismo Total) */}
         {activeTab === 'compras' && (
-          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="flex justify-between items-center bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
-              <div className="flex items-center gap-4">
-                 <div className="p-3 bg-blue-100 rounded-2xl text-blue-600"><Layers className="w-6 h-6"/></div>
-                 <h2 className="text-xl font-black uppercase tracking-tight">Gerenciamento de Materiais</h2>
-              </div>
-              <button onClick={addRow} className="bg-slate-900 text-white px-8 py-4 rounded-2xl font-black text-xs flex items-center gap-3 hover:bg-blue-600 transition-all shadow-xl hover:scale-105 active:scale-95">
+          <div className="space-y-6 animate-in fade-in duration-500">
+            <div className="flex justify-between items-center px-6 py-4 bg-white rounded-3xl border border-slate-200 shadow-sm">
+              <h2 className="text-xl font-black italic flex items-center gap-3"><Layers className="text-blue-600"/> Gestão de Suprimentos</h2>
+              <button onClick={addRow} className="bg-slate-900 text-white px-8 py-4 rounded-2xl font-black text-xs flex items-center gap-3 hover:bg-blue-600 transition-all hover:scale-105 shadow-xl">
                 <PlusCircle className="w-5 h-5" /> ADICIONAR NO TOPO
               </button>
             </div>
-            
-            <div className="bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-slate-200">
-              <div className="overflow-x-auto">
-                <table className="w-full text-left">
-                  <thead className="bg-slate-50 text-[10px] uppercase font-black tracking-widest text-slate-400 border-b border-slate-100">
-                    <tr>
-                      <th className="p-8">Visual</th>
-                      <th className="p-8">Descrição Técnica</th>
-                      <th className="p-8">Local da Obra</th>
-                      <th className="p-8 text-center">Unid</th>
-                      <th className="p-8 text-center">Qtd</th>
-                      <th className="p-8 text-center">R$ Unit</th>
-                      <th className="p-8 text-center font-bold text-blue-600">Subtotal</th>
-                      <th className="p-8 text-center">Ação</th>
+
+            <div className="bg-white rounded-[3rem] shadow-2xl border border-slate-200 overflow-hidden">
+              <table className="w-full text-left">
+                <thead className="bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest">
+                  <tr>
+                    <th className="p-8">Visual</th>
+                    <th className="p-8">Descrição Material</th>
+                    <th className="p-8">Local Aplicação</th>
+                    <th className="p-8 text-center">Unid</th>
+                    <th className="p-8 text-center">Qtd</th>
+                    <th className="p-8 text-center text-blue-400">R$ Unit</th>
+                    <th className="p-8 text-center">Subtotal</th>
+                    <th className="p-8 text-center">Ações</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {inventory.map((item) => (
+                    <tr key={item.id} className={`transition-all hover:bg-slate-50/50 ${item.status === 'Comprado' ? 'bg-emerald-50/40' : 'bg-white'}`}>
+                      <td className="p-6">
+                        <img src={item.img} className="w-16 h-16 rounded-2xl object-contain border bg-white p-1 shadow-sm" alt="material" />
+                      </td>
+                      <td className="p-6">
+                        <input className="bg-transparent font-black text-sm w-full outline-none focus:text-blue-600" value={item.desc} onChange={(e) => updateItem(item.id, 'desc', e.target.value)} />
+                        <span className="text-[10px] text-slate-400 font-mono block mt-1 uppercase">{item.categoria}</span>
+                      </td>
+                      <td className="p-6">
+                        <input className="bg-transparent text-[11px] font-bold text-slate-500 w-full outline-none uppercase" value={item.local} onChange={(e) => updateItem(item.id, 'local', e.target.value)} />
+                      </td>
+                      <td className="p-6 text-center text-xs font-mono">{item.unit}</td>
+                      <td className="p-6 w-24">
+                        <input type="number" className="bg-slate-100 rounded-xl p-3 w-full text-center font-black mono" value={item.qty} onChange={(e) => updateItem(item.id, 'qty', e.target.value)} />
+                      </td>
+                      <td className="p-6 w-32">
+                        <input type="number" className="bg-slate-100 rounded-xl p-3 w-full text-center font-bold mono" value={item.price} onChange={(e) => updateItem(item.id, 'price', e.target.value)} />
+                      </td>
+                      <td className="p-6 text-center">
+                        <p className="font-black text-blue-700 font-mono text-lg">R$ {(item.qty * item.price).toFixed(2)}</p>
+                        <button onClick={() => toggleStatus(item.id)} className={`mt-2 px-4 py-1.5 rounded-full text-[9px] font-black tracking-widest transition-all ${item.status === 'Comprado' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-200' : 'bg-slate-200 text-slate-500 hover:bg-red-500 hover:text-white'}`}>
+                          {item.status.toUpperCase()}
+                        </button>
+                      </td>
+                      <td className="p-6 text-center">
+                        <button onClick={() => removeRow(item.id)} className="text-slate-300 hover:text-red-500 transition-all hover:scale-125">
+                          <Trash2 className="w-6 h-6" />
+                        </button>
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {inventory.map((item) => (
-                      <tr key={item.id} className={`group transition-all hover:bg-slate-50/80 ${item.status === 'Comprado' ? 'bg-emerald-50/30' : 'bg-white'}`}>
-                        <td className="p-6">
-                          <img src={item.img} className="w-16 h-16 rounded-2xl object-contain border bg-white shadow-sm transition-transform group-hover:scale-110" alt="item" />
-                        </td>
-                        <td className="p-6">
-                          <input className="bg-transparent font-black text-sm w-full outline-none focus:text-blue-600" value={item.desc} onChange={(e) => updateItem(item.id, 'desc', e.target.value)} />
-                          <span className="text-[10px] text-slate-400 block uppercase font-mono mt-1">{item.categoria}</span>
-                        </td>
-                        <td className="p-6">
-                          <input className="bg-transparent text-[11px] font-bold text-slate-500 w-full outline-none uppercase tracking-tighter" value={item.local} onChange={(e) => updateItem(item.id, 'local', e.target.value)} />
-                        </td>
-                        <td className="p-6 text-center text-xs font-mono font-bold">{item.unit}</td>
-                        <td className="p-6 w-24">
-                          <input type="number" className="bg-slate-100/50 rounded-xl p-3 w-full text-center font-black mono text-blue-600" value={item.qty} onChange={(e) => updateItem(item.id, 'qty', e.target.value)} />
-                        </td>
-                        <td className="p-6 w-32">
-                          <input type="number" className="bg-slate-100/50 rounded-xl p-3 w-full text-center mono font-bold" value={item.price} onChange={(e) => updateItem(item.id, 'price', e.target.value)} />
-                        </td>
-                        <td className="p-6 text-center">
-                           <p className="font-black text-blue-700 font-mono text-lg leading-none">R$ {(item.qty * item.price).toFixed(2)}</p>
-                           <button onClick={() => toggleStatus(item.id)} className={`mt-2 px-3 py-1 rounded-full text-[8px] font-black tracking-widest transition-all ${item.status === 'Comprado' ? 'bg-emerald-500 text-white' : 'bg-slate-200 text-slate-500 hover:bg-red-500 hover:text-white'}`}>
-                            {item.status.toUpperCase()}
-                          </button>
-                        </td>
-                        <td className="p-6 text-center">
-                          <button onClick={() => removeRow(item.id)} className="text-slate-200 hover:text-red-500 transition-all transform hover:scale-125">
-                            <Trash2 className="w-6 h-6" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         )}
 
-        {/* ABA 2: TÉCNICO & METRAGEM (Intel de Ambientes) */}
+        {/* ABA 2: TÉCNICO (Inteligência de Metragem e Padrão 4x4) */}
         {activeTab === 'tecnico' && (
-          <div className="grid lg:grid-cols-2 gap-10 animate-in fade-in duration-700">
-            <div className="bg-slate-900 text-white p-10 rounded-[3.5rem] shadow-2xl border-l-[12px] border-blue-600">
-              <h3 className="text-3xl font-black italic mb-8 text-blue-400 flex items-center gap-3">
-                <Calculator className="w-8 h-8"/> Inteligência de Metragem
-              </h3>
+          <div className="grid lg:grid-cols-2 gap-10 animate-in slide-in-from-right-10 duration-500">
+            <div className="bg-slate-900 text-white p-12 rounded-[4rem] shadow-2xl border-l-[15px] border-blue-600">
+              <h3 className="text-3xl font-black italic mb-10 text-blue-400 flex items-center gap-4"><Calculator className="w-8 h-8"/> Metragem AP 2209</h3>
               <div className="space-y-6">
                 {[
-                  { label: "Cozinha - Fase T (Branco)", desc: "Metragem média baseada em 12 pontos 4x4", valor: "144m" },
-                  { label: "Sala - Fase R (Preto)", desc: "Iluminação + Tomadas TV (8 pontos)", valor: "96m" },
-                  { label: "Suítes - Fase S (Vermelho)", desc: "Ar Condicionado e Banho (6 pontos)", valor: "108m" }
-                ].map((item, i) => (
-                  <div key={i} className="group p-6 bg-slate-800/50 rounded-[2rem] border border-slate-700 hover:border-blue-500 transition-all">
+                  { fase: "FASE T (BRANCO)", local: "Cozinha & Área Gourmet", formula: "12m por ponto x 12 pontos", total: "144m" },
+                  { fase: "FASE R (PRETO)", local: "Sala & Hall de Entrada", formula: "10m por ponto x 8 pontos", total: "80m" },
+                  { fase: "FASE S (VERMELHO)", local: "Quartos & Banheiros", formula: "15m por ponto x 10 pontos", total: "150m" },
+                  { fase: "NEUTRO (AZUL)", local: "Geral", formula: "Distância Quadro até última caixa", total: "200m" }
+                ].map((m, i) => (
+                  <div key={i} className="p-6 bg-slate-800 rounded-3xl border border-slate-700 hover:border-blue-500 transition-all">
                     <div className="flex justify-between items-center mb-2">
-                      <span className="font-black text-sm tracking-tight">{item.label}</span>
-                      <span className="mono font-black text-blue-400 text-lg">{item.valor}</span>
+                      <span className="font-black text-sm uppercase tracking-tighter">{m.fase}</span>
+                      <span className="font-mono font-black text-blue-400 text-xl">{m.total}</span>
                     </div>
-                    <p className="text-[10px] text-slate-400 font-mono uppercase tracking-[0.2em]">{item.desc}</p>
+                    <p className="text-[10px] text-slate-400 uppercase font-bold">{m.local} • {m.formula}</p>
                   </div>
                 ))}
               </div>
-              <div className="mt-8 p-6 bg-blue-600/10 rounded-3xl border border-blue-500/20">
-                <p className="text-xs text-blue-300 italic">"Padrão 2026: Reservar 15% de folga nos cabos Prysmian para manobras dentro das caixas 4x4."</p>
-              </div>
             </div>
 
-            <div className="flex flex-col gap-8">
-              <div className="bg-white p-8 rounded-[3rem] shadow-xl border border-slate-200">
-                <h3 className="text-xl font-black italic mb-4 flex items-center gap-3"><Box className="text-blue-600"/> Por que Caixa 4x4?</h3>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-4 p-4 bg-slate-50 rounded-2xl">
-                    <CheckCircle className="text-emerald-500 w-10 h-10 mt-1" />
-                    <div>
-                      <p className="font-black text-sm uppercase">Espaço de Dissipação</p>
-                      <p className="text-xs text-slate-500">Cabos flexíveis em 4x4 não sofrem aquecimento por compressão.</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4 p-4 bg-slate-50 rounded-2xl">
-                    <CheckCircle className="text-emerald-500 w-10 h-10 mt-1" />
-                    <div>
-                      <p className="font-black text-sm uppercase">Crimpagem Limpa</p>
-                      <p className="text-xs text-slate-500">Permite organizar os terminais ilhós sem "dobrar" o cobre.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-orange-500 text-white p-8 rounded-[3rem] shadow-xl relative overflow-hidden group">
-                 <AlertTriangle className="absolute -right-4 -bottom-4 w-32 h-32 opacity-20 transform group-hover:scale-110 transition-transform"/>
-                 <h3 className="text-xl font-black italic mb-2 uppercase tracking-tighter">Atenção Técnica</h3>
-                 <p className="text-sm font-bold opacity-90 leading-tight">O cabo BRANCO substitui o cinza na FASE T para melhor visualização no Quadro de Distribuição Trifásico.</p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* ABA 3: MAPA DE CRIMPAGEM (Manual de Elite) */}
-        {activeTab === 'mapa' && (
-          <div className="bg-white p-12 rounded-[4rem] shadow-2xl border border-slate-200 animate-in zoom-in-95 duration-500">
-            <div className="flex flex-col md:flex-row justify-between items-start gap-12">
-              <div className="flex-1 space-y-8">
-                <h3 className="text-4xl font-black italic tracking-tighter text-slate-900 uppercase">Mapa de Conexões</h3>
+            <div className="space-y-8">
+              <div className="bg-white p-10 rounded-[3.5rem] shadow-xl border border-slate-200">
+                <h3 className="text-2xl font-black italic mb-6 flex items-center gap-3 text-slate-800"><Box className="text-blue-600 w-8 h-8"/> Vantagem Técnica 4x4</h3>
                 <div className="grid gap-4">
-                  <div className="flex items-center gap-6 p-6 bg-slate-900 text-white rounded-[2rem] border-l-[10px] border-white">
-                    <div className="w-12 h-12 bg-black border border-slate-700 rounded-full flex items-center justify-center font-black">R</div>
-                    <div><p className="font-black text-sm uppercase">Fase 01: Preto</p><p className="text-[10px] text-slate-400 font-mono">Padrão Prysmian Flex</p></div>
+                  <div className="flex items-center gap-5 p-5 bg-blue-50 rounded-3xl">
+                    <div className="p-3 bg-white rounded-2xl shadow-sm"><Eye className="text-blue-600"/></div>
+                    <p className="text-xs font-bold text-slate-700 uppercase leading-tight">Melhor visualização dos cabos Prysmian crimpados</p>
                   </div>
-                  <div className="flex items-center gap-6 p-6 bg-red-600 text-white rounded-[2rem] border-l-[10px] border-white">
-                    <div className="w-12 h-12 bg-white text-red-600 rounded-full flex items-center justify-center font-black">S</div>
-                    <div><p className="font-black text-sm uppercase">Fase 02: Vermelho</p><p className="text-[10px] text-white/70 font-mono">Padrão Prysmian Flex</p></div>
+                  <div className="flex items-center gap-5 p-5 bg-emerald-50 rounded-3xl">
+                    <div className="p-3 bg-white rounded-2xl shadow-sm"><Cpu className="text-emerald-600"/></div>
+                    <p className="text-xs font-bold text-slate-700 uppercase leading-tight">Dissipação térmica 40% superior a caixas 4x2</p>
                   </div>
-                  <div className="flex items-center gap-6 p-6 bg-white border-2 border-slate-200 text-slate-900 rounded-[2rem] border-l-[10px] border-slate-900">
-                    <div className="w-12 h-12 bg-slate-900 text-white rounded-full flex items-center justify-center font-black">T</div>
-                    <div><p className="font-black text-sm uppercase">Fase 03: Branco</p><p className="text-[10px] text-slate-400 font-mono text-blue-600">Exclusividade AP 2209</p></div>
+                  <div className="flex items-center gap-5 p-5 bg-orange-50 rounded-3xl">
+                    <div className="p-3 bg-white rounded-2xl shadow-sm"><Hammer className="text-orange-600"/></div>
+                    <p className="text-xs font-bold text-slate-700 uppercase leading-tight">Espaço para tomadas USB e automação</p>
                   </div>
                 </div>
               </div>
-              <div className="flex-1 bg-blue-50 p-10 rounded-[3.5rem] border border-blue-100 relative">
-                 <div className="p-4 bg-white rounded-3xl shadow-lg mb-6 flex items-center gap-6">
-                    <img src="https://m.media-amazon.com/images/I/61kYyS0hQVL._AC_SL1000_.jpg" className="w-24 h-24 object-contain" alt="terminais" />
-                    <div>
-                      <h4 className="font-black text-blue-600 italic">TERMINAL ILHÓS</h4>
-                      <p className="text-xs text-slate-500 leading-tight">Crimpagem hexagonal necessária para fixação absoluta no cabo flexível.</p>
-                    </div>
-                 </div>
-                 <div className="space-y-4 text-xs font-bold text-slate-600 uppercase tracking-tighter">
-                   <p className="flex items-center gap-2"><ChevronRight className="text-blue-600 w-4 h-4"/> Nenhuma ponta de cobre deve estar visível após crimpagem.</p>
-                   <p className="flex items-center gap-2"><ChevronRight className="text-blue-600 w-4 h-4"/> Usar terminal Azul para cabos de 2.5mm².</p>
-                   <p className="flex items-center gap-2"><ChevronRight className="text-blue-600 w-4 h-4"/> Usar terminal Amarelo para cabos de 6.0mm².</p>
-                 </div>
+              <div className="bg-blue-600 text-white p-10 rounded-[3.5rem] shadow-xl">
+                <h3 className="text-xl font-black italic mb-4 uppercase">Hidráulica Gourmet</h3>
+                <p className="text-sm opacity-90 leading-relaxed font-bold">
+                  Torneiras Docol Monocomando instaladas com registros de gaveta Deca em cada setor. Vedação tripla em todas as conexões.
+                </p>
               </div>
             </div>
           </div>
         )}
 
-        {/* ABA 4: GALERIA VISUAL (Referência de Compra) */}
-        {activeTab === 'galeria' && (
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 animate-in slide-in-from-right-4 duration-500">
-            {inventory.map(item => (
-              <div key={item.id} className="bg-white p-6 rounded-[2.5rem] shadow-lg border border-slate-100 text-center hover:shadow-2xl transition-all hover:-translate-y-2">
-                <img src={item.img} className="w-full h-24 object-contain mb-4" alt="compra" />
-                <p className="text-[10px] font-black uppercase text-slate-800 leading-none mb-1">{item.desc}</p>
-                <p className="text-[8px] font-bold text-blue-500 uppercase tracking-widest">{item.categoria}</p>
+        {/* ABA 3: MAPA DE CRIMPAGEM (Manual do Eletricista de Elite) */}
+        {activeTab === 'crimpagem' && (
+          <div className="bg-white p-12 rounded-[4rem] shadow-2xl border border-slate-200 animate-in zoom-in duration-500">
+            <h3 className="text-4xl font-black italic mb-12 text-center uppercase tracking-tighter">Manual de Conexões Críticas</h3>
+            <div className="grid md:grid-cols-3 gap-10">
+              <div className="p-8 bg-slate-900 text-white rounded-[3rem] text-center border-b-8 border-white">
+                <div className="w-16 h-16 bg-black border-2 border-slate-700 rounded-full mx-auto mb-4 flex items-center justify-center font-black text-2xl">R</div>
+                <h4 className="font-black uppercase mb-2">Fase 1: Preto</h4>
+                <p className="text-[10px] text-slate-400 font-mono">Prysmian Flex 2,5mm²</p>
               </div>
-            ))}
+              <div className="p-8 bg-red-600 text-white rounded-[3rem] text-center border-b-8 border-white">
+                <div className="w-16 h-16 bg-white text-red-600 rounded-full mx-auto mb-4 flex items-center justify-center font-black text-2xl">S</div>
+                <h4 className="font-black uppercase mb-2">Fase 2: Vermelho</h4>
+                <p className="text-[10px] text-white/70 font-mono">Prysmian Flex 2,5mm²</p>
+              </div>
+              <div className="p-8 bg-white border-2 border-slate-200 text-slate-900 rounded-[3rem] text-center border-b-8 border-slate-900">
+                <div className="w-16 h-16 bg-slate-900 text-white rounded-full mx-auto mb-4 flex items-center justify-center font-black text-2xl">T</div>
+                <h4 className="font-black uppercase mb-2 text-blue-600">Fase 3: Branco</h4>
+                <p className="text-[10px] text-slate-400 font-mono italic">Exclusividade AP 2209</p>
+              </div>
+            </div>
+            
+            <div className="mt-12 p-10 bg-blue-50 rounded-[3rem] flex flex-col md:flex-row items-center gap-10 border border-blue-100">
+              <img src="https://m.media-amazon.com/images/I/61kYyS0hQVL._AC_SL1000_.jpg" className="w-40 h-40 object-contain shadow-2xl rounded-3xl bg-white p-4" alt="ilhós" />
+              <div className="space-y-4">
+                <h4 className="text-2xl font-black italic text-blue-600 uppercase">Crimpagem Hexagonal</h4>
+                <p className="text-sm font-bold text-slate-600 leading-tight">
+                  Proibido o uso de fios decapados sem terminais. O terminal ilhós tubular deve ser crimpado com alicate de precisão para garantir contato absoluto no borne da tomada.
+                </p>
+                <div className="flex gap-4">
+                  <span className="bg-white px-4 py-2 rounded-xl text-[10px] font-black border border-blue-200 uppercase tracking-widest text-blue-600 italic">2.5mm: Terminal Azul</span>
+                  <span className="bg-white px-4 py-2 rounded-xl text-[10px] font-black border border-blue-200 uppercase tracking-widest text-blue-600 italic">6.0mm: Terminal Amarelo</span>
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
