@@ -1,1 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Engenharia - AP 2209</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 font-sans">
 
+    <div class="max-w-5xl mx-auto p-6">
+        <header class="bg-slate-800 text-white p-8 rounded-2xl shadow-lg mb-8">
+            <h1 class="text-3xl font-bold">Projeto AP 2209 - Executivo</h1>
+            <p class="text-slate-400">Equipe Multidisciplinar: Elétrica Trifásica e Hidráulica</p>
+            <div class="mt-4 flex gap-4 text-sm">
+                <span class="bg-blue-600 px-3 py-1 rounded-full text-white">Rede Trifásica (R-S-T)</span>
+                <span class="bg-green-600 px-3 py-1 rounded-full text-white">Status: Em Planejamento</span>
+            </div>
+        </header>
+
+        <div class="grid md:grid-cols-2 gap-8">
+            
+            <div class="bg-white p-6 rounded-2xl shadow-md border-t-8 border-yellow-500">
+                <h2 class="text-xl font-bold mb-4 flex items-center">⚡ Planejamento Elétrico</h2>
+                <div class="space-y-4 text-sm" id="lista-eletrica">
+                    <div class="flex justify-between items-center border-b pb-2">
+                        <div>
+                            <p class="font-bold">Quadro de Distribuição (QDC)</p>
+                            <p class="text-gray-500">Geral Trifásico + DPS + IDR</p>
+                        </div>
+                        <span class="bg-red-100 text-red-600 px-2 py-1 rounded text-xs font-bold">PENDENTE</span>
+                    </div>
+                    <div class="flex justify-between items-center border-b pb-2">
+                        <div>
+                            <p class="font-bold">Fiação Geral (Cores Normatizadas)</p>
+                            <p class="text-gray-500">Preto/Verm/Cinza/Azul/Verde</p>
+                        </div>
+                        <span class="bg-green-100 text-green-600 px-2 py-1 rounded text-xs font-bold">COMPRADO</span>
+                    </div>
+                    <div class="p-4 bg-yellow-50 rounded-lg text-xs text-yellow-800 mt-4">
+                        <strong>Nota Técnica:</strong> Passar cabo 6mm² exclusivo para chuveiros e área gourmet.
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-md border-t-8 border-blue-500">
+                <h2 class="text-xl font-bold mb-4 flex items-center">💧 Planejamento Hidráulico</h2>
+                <div class="space-y-4 text-sm">
+                    <div class="flex justify-between items-center border-b pb-2">
+                        <div>
+                            <p class="font-bold">Cozinha: Monocomando</p>
+                            <p class="text-gray-500">Ponto de filtro e máquina</p>
+                        </div>
+                        <span class="bg-red-100 text-red-600 px-2 py-1 rounded text-xs font-bold">PENDENTE</span>
+                    </div>
+                    <div class="flex justify-between items-center border-b pb-2">
+                        <div>
+                            <p class="font-bold">Banheiros: Registros de Pressão</p>
+                            <p class="text-gray-500">Base Deca/Docol + Acabamento</p>
+                        </div>
+                        <span class="bg-green-100 text-green-600 px-2 py-1 rounded text-xs font-bold">COMPRADO</span>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg text-xs text-blue-800 mt-4">
+                        <strong>Nota Técnica:</strong> Instalar ralo linear no box para melhor escoamento.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="mt-8 bg-white p-6 rounded-2xl shadow-md">
+            <h2 class="text-xl font-bold mb-6">📍 Guia de Instalação (Locais Estratégicos)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="p-4 border rounded-xl bg-slate-50">
+                    <h3 class="font-bold border-b mb-2">Cozinha</h3>
+                    <p class="text-xs text-gray-600 leading-relaxed">
+                        • 3 Tomadas 20A acima da bancada (1.10m).<br>
+                        • Tomada exclusiva geladeira (1.50m).<br>
+                        • Iluminação LED sob armários.
+                    </p>
+                </div>
+                <div class="p-4 border rounded-xl bg-slate-50">
+                    <h3 class="font-bold border-b mb-2">Sala</h3>
+                    <p class="text-xs text-gray-600 leading-relaxed">
+                        • 4 Tomadas atrás da TV (1.30m).<br>
+                        • Ponto de rede RJ45 (Internet).<br>
+                        • Interruptor Three-way na entrada.
+                    </p>
+                </div>
+                <div class="p-4 border rounded-xl bg-slate-50">
+                    <h3 class="font-bold border-b mb-2">Quartos</h3>
+                    <p class="text-xs text-gray-600 leading-relaxed">
+                        • Tomadas duplas em cada cabeceira.<br>
+                        • Ponto de Ar Condicionado no alto.<br>
+                        • Iluminação Central + Spot leitura.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
