@@ -4,169 +4,148 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MASTER PLAN AP 2209 - EXCELÊNCIA</title>
-    
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; }
-        .row-purchased { opacity: 0.4; filter: grayscale(1); text-decoration: line-through; }
-        .tab-active { background: #1e40af !important; color: white !important; transform: translateY(-2px); }
+        .tab-active { background-color: #1e40af !important; color: white !important; }
+        .row-purchased { opacity: 0.4; filter: grayscale(1); }
+        .row-purchased td { text-decoration: line-through; }
         @media print { .no-print { display: none !important; } }
     </style>
 </head>
 <body class="bg-slate-100 min-h-screen">
-    <div id="root">
-        <div class="flex items-center justify-center h-screen">
-            <div class="text-center">
-                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                <p class="text-slate-500 font-bold uppercase tracking-widest text-xs">Carregando Engenharia AP 2209...</p>
+
+    <div class="max-w-6xl mx-auto p-4 md:p-10">
+        <header class="bg-slate-900 text-white p-8 rounded-[2.5rem] shadow-2xl mb-8 border-b-8 border-blue-700 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div>
+                <h1 class="text-4xl font-black italic uppercase tracking-tighter text-blue-400">AP 2209 DASH</h1>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2 italic">Engenharia Trifásica Prysmian • V2026</p>
+            </div>
+            <div class="flex gap-4">
+                <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 text-right">
+                    <p class="text-[8px] font-black text-blue-400 uppercase mb-1">Total Obra</p>
+                    <p id="total-geral" class="text-2xl font-mono font-bold">R$ 0,00</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex flex-col md:flex-row gap-4 mb-8 no-print">
+            <div class="flex bg-white p-2 rounded-2xl shadow-sm flex-1 font-black text-[10px] uppercase tracking-widest">
+                <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 py-4 rounded-xl tab-active transition-all">1. Suprimentos</button>
+                <button onclick="switchTab('eletrica')" id="btn-eletrica" class="flex-1 py-4 rounded-xl text-slate-400 transition-all">2. Memorial Elétrico</button>
+            </div>
+            <button onclick="addItem()" class="bg-blue-600 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase shadow-xl hover:bg-blue-700 transition-all">+ Novo Item (Topo)</button>
+        </div>
+
+        <div id="content" class="bg-white rounded-[3rem] shadow-xl p-6 md:p-12 border border-slate-200">
+            <div id="view-planilha" class="animate-in fade-in">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-separate border-spacing-y-3">
+                        <thead>
+                            <tr class="text-[10px] font-black uppercase text-slate-400 italic">
+                                <th class="px-6">Status</th>
+                                <th class="px-4">Material / Especificação</th>
+                                <th class="px-4 text-center">Qtd</th>
+                                <th className="px-4 text-center">Unit R$</th>
+                                <th class="px-4 text-center text-blue-600">Total</th>
+                                <th class="px-4 text-center">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-body">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="view-eletrica" class="hidden space-y-8 animate-in slide-in-from-bottom-4">
+                <div class="bg-slate-900 text-white p-10 rounded-[2.5rem] border-l-[16px] border-blue-600">
+                    <h3 class="text-2xl font-black italic text-blue-400 mb-4 uppercase">Protocolo de Crimpagem Hexagonal</h3>
+                    <p class="text-sm font-bold text-slate-300 italic">Obrigatório uso de terminais ilhós Prysmian em todos os condutores. Fase T (Branca) exclusiva para circuitos de carga elevada (Cozinha).</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="p-8 bg-slate-50 border-t-8 border-black rounded-3xl text-center font-black uppercase text-[10px]">Fase R: PRETO</div>
+                    <div class="p-8 bg-slate-50 border-t-8 border-red-600 rounded-3xl text-center font-black uppercase text-[10px]">Fase S: VERMELHO</div>
+                    <div class="p-8 bg-blue-50 border-4 border-blue-600 rounded-3xl text-center font-black uppercase text-[10px] italic">Fase T: BRANCO</div>
+                </div>
             </div>
         </div>
     </div>
 
-    <script type="text/babel">
-        const { useState, useMemo } = React;
+    <script>
+        // Banco de Dados Inicial
+        let inventory = [
+            { id: 1, desc: "Cabo Prysmian Flex 2,5mm² BRANCO (Fase T)", qty: 100, price: 3.45, cat: "Elétrica", bought: false },
+            { id: 2, desc: "Cabo Prysmian Flex 2,5mm² PRETO (Fase R)", qty: 100, price: 3.45, cat: "Elétrica", bought: true },
+            { id: 3, desc: "Torneira Cozinha Gourmet Docol", qty: 1, price: 890.00, cat: "Hidráulica", bought: false }
+        ];
 
-        function App() {
-            const [tab, setTab] = useState('planilha');
-            const [filter, setFilter] = useState('Todos');
-            const [inventory, setInventory] = useState([
-                { id: 1, desc: "Cabo Prysmian Flex 2,5mm² BRANCO (Fase T)", qty: 100, price: 3.45, cat: "Elétrica", bought: false },
-                { id: 2, desc: "Cabo Prysmian Flex 2,5mm² PRETO (Fase R)", qty: 100, price: 3.45, cat: "Elétrica", bought: true },
-                { id: 3, desc: "Cabo Prysmian Flex 2,5mm² VERMELHO (Fase S)", qty: 100, price: 3.45, cat: "Elétrica", bought: false },
-                { id: 4, desc: "Caixa de Embutir 4x4 Reforçada Amarela", qty: 25, price: 6.20, cat: "Infra", bought: false },
-                { id: 5, desc: "Torneira Cozinha Gourmet Docol", qty: 1, price: 890.00, cat: "Hidráulica", bought: false }
-            ]);
+        function render() {
+            const body = document.getElementById('inventory-body');
+            body.innerHTML = '';
+            let totalGeral = 0;
 
-            // Funções de Excelência
-            const stats = useMemo(() => {
-                const total = inventory.reduce((acc, i) => acc + (i.qty * i.price), 0);
-                const bought = inventory.filter(i => i.bought).reduce((acc, i) => acc + (i.qty * i.price), 0);
-                const meters = inventory.filter(i => i.cat === 'Elétrica').reduce((acc, i) => acc + Number(i.qty), 0);
-                return { total, bought, meters };
-            }, [inventory]);
+            inventory.forEach((item) => {
+                const subtotal = item.qty * item.price;
+                totalGeral += subtotal;
 
-            const addItem = () => {
-                const newItem = { id: Date.now(), desc: "NOVO ITEM", qty: 0, price: 0, cat: "Geral", bought: false };
-                setInventory([newItem, ...inventory]); // Lógica Inversa
+                const row = document.createElement('tr');
+                row.className = `transition-all ${item.bought ? 'row-purchased' : 'bg-slate-50'}`;
+                row.innerHTML = `
+                    <td class="p-4 rounded-l-2xl">
+                        <input type="checkbox" ${item.bought ? 'checked' : ''} onchange="toggleBought(${item.id})" class="w-6 h-6 rounded cursor-pointer">
+                    </td>
+                    <td class="p-4">
+                        <div class="font-black text-sm uppercase italic text-slate-700">${item.desc}</div>
+                        <span class="text-[8px] font-black text-blue-600 bg-blue-100 px-2 rounded uppercase">${item.cat}</span>
+                    </td>
+                    <td class="p-4 text-center font-bold">${item.qty}</td>
+                    <td class="p-4 text-center font-bold">R$ ${item.price.toFixed(2)}</td>
+                    <td class="p-4 text-center font-mono font-black text-blue-700">R$ ${subtotal.toFixed(2)}</td>
+                    <td class="p-4 rounded-r-2xl text-center">
+                        <button onclick="removeItem(${item.id})" class="text-slate-300 hover:text-red-500 font-black">✕</button>
+                    </td>
+                `;
+                body.appendChild(row);
+            });
+
+            document.getElementById('total-geral').innerText = `R$ ${totalGeral.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        }
+
+        // FUNÇÕES DE EXCELÊNCIA
+        function addItem() {
+            const newItem = {
+                id: Date.now(),
+                desc: "NOVO MATERIAL TÉCNICO",
+                qty: 1,
+                price: 0,
+                cat: "Geral",
+                bought: false
             };
-
-            const filteredItems = inventory.filter(i => filter === 'Todos' || i.cat === f);
-
-            return (
-                <div className="p-4 md:p-10 max-w-6xl mx-auto">
-                    {/* Header Profissional */}
-                    <header className="bg-slate-900 text-white p-8 rounded-[2rem] shadow-2xl mb-8 border-b-8 border-blue-600 flex flex-col md:flex-row justify-between items-center">
-                        <div>
-                            <h1 className="text-4xl font-black italic tracking-tighter text-blue-400">AP 2209 MASTER</h1>
-                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Engenharia Trifásica & Suprimentos</p>
-                        </div>
-                        <div className="flex gap-4 mt-4 md:mt-0">
-                            <div className="bg-slate-800 p-4 rounded-2xl border border-slate-700">
-                                <p className="text-[8px] font-black text-blue-400 uppercase">Investimento</p>
-                                <p className="text-xl font-mono font-bold">R$ {stats.total.toLocaleString('pt-BR')}</p>
-                            </div>
-                            <div className="bg-slate-800 p-4 rounded-2xl border border-emerald-500">
-                                <p className="text-[8px] font-black text-emerald-400 uppercase">Comprado</p>
-                                <p className="text-xl font-mono font-bold text-emerald-400">R$ {stats.bought.toLocaleString('pt-BR')}</p>
-                            </div>
-                        </div>
-                    </header>
-
-                    {/* Navegação */}
-                    <nav className="flex gap-2 mb-8 no-print overflow-x-auto pb-2">
-                        {['planilha', 'eletrica', 'hidraulica'].map(t => (
-                            <button key={t} onClick={() => setTab(t)} className={`flex-1 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all bg-white text-slate-400 shadow-sm ${tab === t ? 'tab-active' : ''}`}>
-                                {t}
-                            </button>
-                        ))}
-                    </nav>
-
-                    {/* Conteúdo Principal */}
-                    <main className="bg-white rounded-[3rem] shadow-xl p-6 md:p-12 border border-slate-200">
-                        {tab === 'planilha' && (
-                            <div className="animate-in fade-in">
-                                <div className="flex justify-between items-center mb-10">
-                                    <h2 className="text-2xl font-black uppercase italic text-slate-800 border-l-8 border-blue-600 pl-4">Suprimentos</h2>
-                                    <div className="flex gap-2 no-print">
-                                        <button onClick={() => window.print()} className="bg-slate-100 text-slate-500 px-4 py-2 rounded-lg font-bold text-[10px] uppercase">PDF</button>
-                                        <button onClick={addItem} className="bg-slate-900 text-white px-6 py-2 rounded-lg font-bold text-[10px] uppercase hover:bg-blue-600 transition-all">+ Novo</button>
-                                    </div>
-                                </div>
-
-                                <table className="w-full text-left border-separate border-spacing-y-2">
-                                    <thead>
-                                        <tr className="text-[10px] font-black uppercase text-slate-400">
-                                            <th className="p-4">Status</th>
-                                            <th className="p-4">Material</th>
-                                            <th className="p-4 text-center">Qtd</th>
-                                            <th className="p-4 text-center">R$ Total</th>
-                                            <th className="p-4 text-center no-print">Ação</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {inventory.map(item => (
-                                            <tr key={item.id} className={`transition-all ${item.bought ? 'row-purchased' : 'bg-slate-50 hover:bg-blue-50'}`}>
-                                                <td className="p-4 rounded-l-2xl">
-                                                    <button onClick={() => setInventory(inventory.map(i => i.id === item.id ? {...i, bought: !i.bought} : i))} className={`w-6 h-6 rounded border-2 ${item.bought ? 'bg-emerald-500 border-emerald-500' : 'bg-white border-slate-300'}`}></button>
-                                                </td>
-                                                <td className="p-4">
-                                                    <input className="font-bold text-sm bg-transparent outline-none w-full" value={item.desc} onChange={(e) => setInventory(inventory.map(i => i.id === item.id ? {...i, desc: e.target.value} : i))} />
-                                                    <p className="text-[8px] font-black text-blue-500 uppercase">{item.cat} {item.cat === 'Elétrica' ? '⚡ REQ. CRIMPER' : ''}</p>
-                                                </td>
-                                                <td className="p-4 text-center font-bold">{item.qty}</td>
-                                                <td className="p-4 text-center font-mono font-black text-blue-700 italic">R$ {(item.qty * item.price).toLocaleString('pt-BR')}</td>
-                                                <td className="p-4 rounded-r-2xl text-center no-print text-slate-300 hover:text-red-500 cursor-pointer" onClick={() => setInventory(inventory.filter(i => i.id !== item.id))}>✕</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        )}
-
-                        {tab === 'eletrica' && (
-                            <div className="space-y-8 animate-in slide-in-from-bottom-4">
-                                <div className="bg-slate-900 text-white p-8 rounded-[2rem] border-b-8 border-blue-600 flex justify-between items-center shadow-lg">
-                                    <h3 className="text-xl font-black italic uppercase text-blue-400">Audit de Metragem</h3>
-                                    <p className="text-3xl font-mono font-bold">{stats.meters}m de Cabos</p>
-                                </div>
-                                
-                                
-                                
-                                <div className="grid md:grid-cols-3 gap-4">
-                                    <div className="p-6 bg-slate-50 border-t-4 border-black rounded-2xl text-center font-black text-[10px] uppercase shadow-sm">Fase R: PRETO</div>
-                                    <div className="p-6 bg-slate-50 border-t-4 border-red-600 rounded-2xl text-center font-black text-[10px] uppercase shadow-sm">Fase S: VERMELHO</div>
-                                    <div className="p-6 bg-blue-50 border-t-4 border-blue-600 rounded-2xl text-center font-black text-[10px] uppercase shadow-md italic">Fase T: BRANCO (PRYSMIAN)</div>
-                                </div>
-
-                                <div className="bg-blue-600 text-white p-8 rounded-[2.5rem] italic font-bold text-sm leading-relaxed">
-                                    Dica Técnica: No AP 2209, a crimpagem hexagonal nos terminais ilhós é mandatória para evitar aquecimento nos barramentos.
-                                </div>
-                            </div>
-                        )}
-
-                        {tab === 'hidraulica' && (
-                            <div className="text-center py-10 animate-in zoom-in">
-                                <h3 className="text-4xl font-black italic text-slate-800 uppercase tracking-tighter mb-4 underline decoration-blue-600">Memorial Docol Gourmet</h3>
-                                <p className="max-w-xl mx-auto text-sm font-bold text-slate-500 leading-relaxed italic">Verificar MCA mínima. Garantia vitalícia vinculada ao uso de vedações originais Docol.</p>
-                            </div>
-                        )}
-                    </main>
-                </div>
-            );
+            inventory = [newItem, ...inventory]; // Lógica Inversa (Topo)
+            render();
         }
 
-        // Renderização segura com Try-Catch interno
-        try {
-            const root = ReactDOM.createRoot(document.getElementById('root'));
-            root.render(<App />);
-        } catch (err) {
-            document.getElementById('root').innerHTML = `<div class="p-10 text-red-500 font-mono">Erro Fatal: \${err.message}</div>`;
+        function toggleBought(id) {
+            const item = inventory.find(i => i.id === id);
+            item.bought = !item.bought;
+            render();
         }
+
+        function removeItem(id) {
+            inventory = inventory.filter(i => i.id !== id);
+            render();
+        }
+
+        function switchTab(tab) {
+            document.getElementById('view-planilha').classList.toggle('hidden', tab !== 'planilha');
+            document.getElementById('view-eletrica').classList.toggle('hidden', tab !== 'eletrica');
+            document.getElementById('btn-planilha').classList.toggle('tab-active', tab === 'planilha');
+            document.getElementById('btn-eletrica').classList.toggle('tab-active', tab === 'eletrica');
+        }
+
+        // Inicialização
+        window.onload = render;
     </script>
 </body>
 </html>
