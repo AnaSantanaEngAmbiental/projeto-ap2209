@@ -3,185 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Plan AP 2209 - Engenharia Consolidada</title>
+    <title>MASTER PLAN AP 2209 - EXCELÊNCIA</title>
+    
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; }
-        .tab-active { background-color: #2563eb; color: white; box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4); }
-        input[type=number]::-webkit-inner-spin-button { display: none; }
+        .row-purchased { opacity: 0.4; filter: grayscale(1); text-decoration: line-through; }
+        .tab-active { background: #1e40af !important; color: white !important; transform: translateY(-2px); }
+        @media print { .no-print { display: none !important; } }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-900">
-    <div id="root"></div>
+<body class="bg-slate-100 min-h-screen">
+    <div id="root">
+        <div class="flex items-center justify-center h-screen">
+            <div class="text-center">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                <p class="text-slate-500 font-bold uppercase tracking-widest text-xs">Carregando Engenharia AP 2209...</p>
+            </div>
+        </div>
+    </div>
 
     <script type="text/babel">
         const { useState, useMemo } = React;
 
-        // Ícones SVG para garantir que apareçam sem bibliotecas extras
-        const IconTrash = () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>;
-        const IconPlus = () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>;
-
         function App() {
-            const [activeTab, setActiveTab] = useState('planilha');
+            const [tab, setTab] = useState('planilha');
+            const [filter, setFilter] = useState('Todos');
             const [inventory, setInventory] = useState([
-                { id: 1, desc: "Cabo Prysmian Flex 2,5mm² BRANCO (Fase T)", qty: 100, price: 3.45, cat: "Elétrica" },
-                { id: 2, desc: "Cabo Prysmian Flex 2,5mm² PRETO (Fase R)", qty: 100, price: 3.45, cat: "Elétrica" },
-                { id: 3, desc: "Cabo Prysmian Flex 2,5mm² VERMELHO (Fase S)", qty: 100, price: 3.45, cat: "Elétrica" },
-                { id: 4, desc: "Caixa de Embutir 4x4 Reforçada Amarela", qty: 25, price: 6.20, cat: "Infra" },
-                { id: 5, desc: "Torneira Cozinha Gourmet Docol", qty: 1, price: 890.00, cat: "Hidráulica" }
+                { id: 1, desc: "Cabo Prysmian Flex 2,5mm² BRANCO (Fase T)", qty: 100, price: 3.45, cat: "Elétrica", bought: false },
+                { id: 2, desc: "Cabo Prysmian Flex 2,5mm² PRETO (Fase R)", qty: 100, price: 3.45, cat: "Elétrica", bought: true },
+                { id: 3, desc: "Cabo Prysmian Flex 2,5mm² VERMELHO (Fase S)", qty: 100, price: 3.45, cat: "Elétrica", bought: false },
+                { id: 4, desc: "Caixa de Embutir 4x4 Reforçada Amarela", qty: 25, price: 6.20, cat: "Infra", bought: false },
+                { id: 5, desc: "Torneira Cozinha Gourmet Docol", qty: 1, price: 890.00, cat: "Hidráulica", bought: false }
             ]);
 
-            const grandTotal = useMemo(() => {
-                return inventory.reduce((acc, item) => acc + (Number(item.qty || 0) * Number(item.price || 0)), 0);
+            // Funções de Excelência
+            const stats = useMemo(() => {
+                const total = inventory.reduce((acc, i) => acc + (i.qty * i.price), 0);
+                const bought = inventory.filter(i => i.bought).reduce((acc, i) => acc + (i.qty * i.price), 0);
+                const meters = inventory.filter(i => i.cat === 'Elétrica').reduce((acc, i) => acc + Number(i.qty), 0);
+                return { total, bought, meters };
             }, [inventory]);
 
-            // Lógica Inversa: Novo item entra sempre no TOPO (index 0)
-            const addRow = () => {
-                const newItem = { id: Date.now(), desc: "Novo Material de Engenharia", qty: 0, price: 0, cat: "Geral" };
-                setInventory([newItem, ...inventory]);
+            const addItem = () => {
+                const newItem = { id: Date.now(), desc: "NOVO ITEM", qty: 0, price: 0, cat: "Geral", bought: false };
+                setInventory([newItem, ...inventory]); // Lógica Inversa
             };
 
-            const updateItem = (id, key, value) => {
-                setInventory(inventory.map(item => item.id === id ? { ...item, [key]: value } : item));
-            };
+            const filteredItems = inventory.filter(i => filter === 'Todos' || i.cat === f);
 
             return (
-                <div className="min-h-screen p-4 md:p-8">
-                    <div className="max-w-6xl mx-auto">
-                        
-                        {/* HEADER DASHBOARD */}
-                        <header className="bg-slate-900 text-white p-8 rounded-[2.5rem] shadow-2xl mb-8 border-b-8 border-blue-600 flex flex-col md:flex-row justify-between items-center gap-6">
-                            <div>
-                                <h1 className="text-4xl font-black italic uppercase tracking-tighter text-blue-400">AP 2209 DASH</h1>
-                                <p className="text-slate-400 font-bold text-[10px] tracking-widest uppercase mt-2 italic text-white underline decoration-blue-600">Engenharia Trifásica Prysmian • Master Plan</p>
-                            </div>
-                            <div className="bg-slate-800 p-6 rounded-2xl border border-slate-700 min-w-[280px] text-right">
-                                <p className="text-[10px] font-bold text-blue-400 uppercase mb-1 tracking-widest underline italic">Investimento Geral 2026</p>
-                                <p className="text-3xl font-mono font-bold">R$ {grandTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</p>
-                            </div>
-                        </header>
-
-                        {/* NAVEGAÇÃO ENTRE ABAS TÉCNICAS */}
-                        <div className="flex gap-2 mb-8 overflow-x-auto pb-2">
-                            {['planilha', 'eletrica', 'hidraulica'].map(t => (
-                                <button 
-                                    key={t}
-                                    onClick={() => setActiveTab(t)}
-                                    className={`flex-1 min-w-[150px] px-6 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all ${activeTab === t ? 'tab-active' : 'bg-white text-slate-400 shadow-sm border border-slate-200'}`}
-                                >
-                                    {t === 'planilha' ? '1. Planilha Dinâmica' : t === 'eletrica' ? '2. Memorial Elétrico' : '3. Memorial Hidráulico'}
-                                </button>
-                            ))}
+                <div className="p-4 md:p-10 max-w-6xl mx-auto">
+                    {/* Header Profissional */}
+                    <header className="bg-slate-900 text-white p-8 rounded-[2rem] shadow-2xl mb-8 border-b-8 border-blue-600 flex flex-col md:flex-row justify-between items-center">
+                        <div>
+                            <h1 className="text-4xl font-black italic tracking-tighter text-blue-400">AP 2209 MASTER</h1>
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Engenharia Trifásica & Suprimentos</p>
                         </div>
-
-                        {/* CONTEÚDO CONSOLIDADO */}
-                        <div className="bg-white rounded-[3rem] shadow-xl p-6 md:p-12 border border-slate-200">
-                            
-                            {activeTab === 'planilha' && (
-                                <div className="animate-in fade-in">
-                                    <div className="flex justify-between items-center mb-10">
-                                        <h2 className="text-2xl font-black uppercase italic text-slate-800 border-l-8 border-blue-600 pl-4">Suprimentos & Logística</h2>
-                                        <button onClick={addRow} className="bg-slate-900 text-white px-8 py-4 rounded-2xl font-black text-[10px] flex items-center gap-3 hover:bg-blue-600 transition-all shadow-xl active:scale-95 uppercase tracking-tighter">
-                                            <IconPlus /> Adicionar no Topo (Lógica Inversa)
-                                        </button>
-                                    </div>
-
-                                    <div className="overflow-x-auto">
-                                        <table className="w-full text-left border-separate border-spacing-y-2">
-                                            <thead>
-                                                <tr className="text-[10px] font-black uppercase text-slate-400 italic">
-                                                    <th className="p-4">Material / Marca Oficial</th>
-                                                    <th className="p-4 text-center">Qtd</th>
-                                                    <th className="p-4 text-center">Valor Unit</th>
-                                                    <th className="p-4 text-center text-blue-600">Subtotal</th>
-                                                    <th className="p-4 text-center">Ações</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {inventory.map((item) => (
-                                                    <tr key={item.id} className="bg-slate-50 hover:bg-white transition-all group shadow-sm">
-                                                        <td className="p-5 rounded-l-2xl border-l-4 border-transparent group-hover:border-blue-600">
-                                                            <input className="font-black text-sm bg-transparent outline-none w-full focus:text-blue-600 uppercase italic tracking-tighter" value={item.desc} onChange={(e) => updateItem(item.id, 'desc', e.target.value)} />
-                                                            <span className="text-[9px] font-black text-white bg-blue-600 px-2 py-0.5 rounded mt-1 inline-block uppercase tracking-widest italic">{item.cat}</span>
-                                                        </td>
-                                                        <td className="p-4 w-24">
-                                                            <input type="number" className="w-full text-center bg-white border border-slate-200 rounded-lg p-2 font-bold shadow-inner" value={item.qty} onChange={(e) => updateItem(item.id, 'qty', e.target.value)} />
-                                                        </td>
-                                                        <td className="p-4 w-28">
-                                                            <input type="number" className="w-full text-center bg-white border border-slate-200 rounded-lg p-2 font-bold shadow-inner" value={item.price} onChange={(e) => updateItem(item.id, 'price', e.target.value)} />
-                                                        </td>
-                                                        <td className="p-4 text-center font-mono font-black text-blue-700 text-lg">
-                                                            R$ {(item.qty * item.price).toLocaleString('pt-BR', {minimumFractionDigits: 2})}
-                                                        </td>
-                                                        <td className="p-4 rounded-r-2xl text-center">
-                                                            <button onClick={() => setInventory(inventory.filter(i => i.id !== item.id))} className="text-slate-300 hover:text-red-500 transition-colors"><IconTrash /></button>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            )}
-
-                            {activeTab === 'eletrica' && (
-                                <div className="space-y-8 animate-in slide-in-from-bottom-4">
-                                    <div className="grid md:grid-cols-3 gap-6">
-                                        <div className="bg-slate-900 text-white p-8 rounded-[2rem] border-l-8 border-black">
-                                            <h3 className="text-xs font-black uppercase text-blue-400 mb-2 tracking-widest italic">Fase R: PRETO</h3>
-                                            <p className="text-[10px] font-bold text-slate-400">Padrão Prysmian - Carga Residencial</p>
-                                        </div>
-                                        <div className="bg-slate-900 text-white p-8 rounded-[2rem] border-l-8 border-red-600">
-                                            <h3 className="text-xs font-black uppercase text-blue-400 mb-2 tracking-widest italic">Fase S: VERMELHO</h3>
-                                            <p className="text-[10px] font-bold text-slate-400">Padrão Prysmian - Chuveiros/HVAC</p>
-                                        </div>
-                                        <div className="bg-white text-slate-900 p-8 rounded-[2rem] border-4 border-blue-600 shadow-xl">
-                                            <h3 className="text-xs font-black uppercase text-blue-600 mb-2 tracking-widest italic underline">Fase T: BRANCO</h3>
-                                            <p className="text-[10px] font-bold text-slate-500 italic uppercase">Uso exclusivo AP 2209 - Cozinha/Ilha</p>
-                                        </div>
-                                    </div>
-
-                                    
-
-                                    <div className="bg-blue-600 text-white p-10 rounded-[2.5rem] shadow-lg">
-                                        <h3 className="text-xl font-black mb-4 italic uppercase underline tracking-tighter decoration-white">Protocolo de Crimpagem Hexagonal</h3>
-                                        <p className="text-sm font-bold leading-relaxed italic opacity-90">
-                                            Obrigatório uso de terminais ilhós tubulares em todas as pontas. A crimpagem deve ser hexagonal para garantir 100% de contato nos bornes Schneider/Prysmian, evitando queda de tensão e aquecimento.
-                                        </p>
-                                    </div>
-                                    <div className="bg-amber-100 p-6 rounded-3xl border-2 border-amber-300">
-                                        <h3 className="text-[10px] font-black uppercase text-amber-700 mb-2">Infraestrutura</h3>
-                                        <p className="text-xs font-bold text-amber-900">Uso exclusivo de Caixas 4x4 Amarelas Reforçadas para acomodar curvatura Prysmian.</p>
-                                    </div>
-                                </div>
-                            )}
-
-                            {activeTab === 'hidraulica' && (
-                                <div className="text-center p-12 bg-slate-50 rounded-[3rem] border-4 border-double border-slate-200 animate-in zoom-in">
-                                    <div className="inline-block bg-slate-900 text-white px-6 py-2 rounded-full text-[10px] font-black uppercase mb-6 tracking-widest italic shadow-lg">Padrão Docol Gourmet 2026</div>
-                                    <h3 className="text-5xl font-black italic text-slate-800 mb-6 uppercase tracking-tighter">Memorial Torneira</h3>
-                                    <p className="max-w-xl mx-auto text-sm font-bold text-slate-500 leading-relaxed mb-10 italic border-y-2 border-slate-200 py-6">
-                                        Instalação monocomando Docol. Obrigatório teste de MCA (Metros de Coluna d'Água). Verificação de vedações em cerâmica e registros reguladores originais.
-                                    </p>
-                                    <div className="flex justify-center gap-4 text-[9px] font-black uppercase tracking-widest">
-                                        <span className="bg-green-100 text-green-700 px-4 py-2 rounded-lg border border-green-200">Garantia Vitalícia</span>
-                                        <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg border border-blue-200">Alta Pressão</span>
-                                    </div>
-                                </div>
-                            )}
-
+                        <div className="flex gap-4 mt-4 md:mt-0">
+                            <div className="bg-slate-800 p-4 rounded-2xl border border-slate-700">
+                                <p className="text-[8px] font-black text-blue-400 uppercase">Investimento</p>
+                                <p className="text-xl font-mono font-bold">R$ {stats.total.toLocaleString('pt-BR')}</p>
+                            </div>
+                            <div className="bg-slate-800 p-4 rounded-2xl border border-emerald-500">
+                                <p className="text-[8px] font-black text-emerald-400 uppercase">Comprado</p>
+                                <p className="text-xl font-mono font-bold text-emerald-400">R$ {stats.bought.toLocaleString('pt-BR')}</p>
+                            </div>
                         </div>
-                    </div>
+                    </header>
+
+                    {/* Navegação */}
+                    <nav className="flex gap-2 mb-8 no-print overflow-x-auto pb-2">
+                        {['planilha', 'eletrica', 'hidraulica'].map(t => (
+                            <button key={t} onClick={() => setTab(t)} className={`flex-1 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all bg-white text-slate-400 shadow-sm ${tab === t ? 'tab-active' : ''}`}>
+                                {t}
+                            </button>
+                        ))}
+                    </nav>
+
+                    {/* Conteúdo Principal */}
+                    <main className="bg-white rounded-[3rem] shadow-xl p-6 md:p-12 border border-slate-200">
+                        {tab === 'planilha' && (
+                            <div className="animate-in fade-in">
+                                <div className="flex justify-between items-center mb-10">
+                                    <h2 className="text-2xl font-black uppercase italic text-slate-800 border-l-8 border-blue-600 pl-4">Suprimentos</h2>
+                                    <div className="flex gap-2 no-print">
+                                        <button onClick={() => window.print()} className="bg-slate-100 text-slate-500 px-4 py-2 rounded-lg font-bold text-[10px] uppercase">PDF</button>
+                                        <button onClick={addItem} className="bg-slate-900 text-white px-6 py-2 rounded-lg font-bold text-[10px] uppercase hover:bg-blue-600 transition-all">+ Novo</button>
+                                    </div>
+                                </div>
+
+                                <table className="w-full text-left border-separate border-spacing-y-2">
+                                    <thead>
+                                        <tr className="text-[10px] font-black uppercase text-slate-400">
+                                            <th className="p-4">Status</th>
+                                            <th className="p-4">Material</th>
+                                            <th className="p-4 text-center">Qtd</th>
+                                            <th className="p-4 text-center">R$ Total</th>
+                                            <th className="p-4 text-center no-print">Ação</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {inventory.map(item => (
+                                            <tr key={item.id} className={`transition-all ${item.bought ? 'row-purchased' : 'bg-slate-50 hover:bg-blue-50'}`}>
+                                                <td className="p-4 rounded-l-2xl">
+                                                    <button onClick={() => setInventory(inventory.map(i => i.id === item.id ? {...i, bought: !i.bought} : i))} className={`w-6 h-6 rounded border-2 ${item.bought ? 'bg-emerald-500 border-emerald-500' : 'bg-white border-slate-300'}`}></button>
+                                                </td>
+                                                <td className="p-4">
+                                                    <input className="font-bold text-sm bg-transparent outline-none w-full" value={item.desc} onChange={(e) => setInventory(inventory.map(i => i.id === item.id ? {...i, desc: e.target.value} : i))} />
+                                                    <p className="text-[8px] font-black text-blue-500 uppercase">{item.cat} {item.cat === 'Elétrica' ? '⚡ REQ. CRIMPER' : ''}</p>
+                                                </td>
+                                                <td className="p-4 text-center font-bold">{item.qty}</td>
+                                                <td className="p-4 text-center font-mono font-black text-blue-700 italic">R$ {(item.qty * item.price).toLocaleString('pt-BR')}</td>
+                                                <td className="p-4 rounded-r-2xl text-center no-print text-slate-300 hover:text-red-500 cursor-pointer" onClick={() => setInventory(inventory.filter(i => i.id !== item.id))}>✕</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+
+                        {tab === 'eletrica' && (
+                            <div className="space-y-8 animate-in slide-in-from-bottom-4">
+                                <div className="bg-slate-900 text-white p-8 rounded-[2rem] border-b-8 border-blue-600 flex justify-between items-center shadow-lg">
+                                    <h3 className="text-xl font-black italic uppercase text-blue-400">Audit de Metragem</h3>
+                                    <p className="text-3xl font-mono font-bold">{stats.meters}m de Cabos</p>
+                                </div>
+                                
+                                
+                                
+                                <div className="grid md:grid-cols-3 gap-4">
+                                    <div className="p-6 bg-slate-50 border-t-4 border-black rounded-2xl text-center font-black text-[10px] uppercase shadow-sm">Fase R: PRETO</div>
+                                    <div className="p-6 bg-slate-50 border-t-4 border-red-600 rounded-2xl text-center font-black text-[10px] uppercase shadow-sm">Fase S: VERMELHO</div>
+                                    <div className="p-6 bg-blue-50 border-t-4 border-blue-600 rounded-2xl text-center font-black text-[10px] uppercase shadow-md italic">Fase T: BRANCO (PRYSMIAN)</div>
+                                </div>
+
+                                <div className="bg-blue-600 text-white p-8 rounded-[2.5rem] italic font-bold text-sm leading-relaxed">
+                                    Dica Técnica: No AP 2209, a crimpagem hexagonal nos terminais ilhós é mandatória para evitar aquecimento nos barramentos.
+                                </div>
+                            </div>
+                        )}
+
+                        {tab === 'hidraulica' && (
+                            <div className="text-center py-10 animate-in zoom-in">
+                                <h3 className="text-4xl font-black italic text-slate-800 uppercase tracking-tighter mb-4 underline decoration-blue-600">Memorial Docol Gourmet</h3>
+                                <p className="max-w-xl mx-auto text-sm font-bold text-slate-500 leading-relaxed italic">Verificar MCA mínima. Garantia vitalícia vinculada ao uso de vedações originais Docol.</p>
+                            </div>
+                        )}
+                    </main>
                 </div>
             );
         }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        // Renderização segura com Try-Catch interno
+        try {
+            const root = ReactDOM.createRoot(document.getElementById('root'));
+            root.render(<App />);
+        } catch (err) {
+            document.getElementById('root').innerHTML = `<div class="p-10 text-red-500 font-mono">Erro Fatal: \${err.message}</div>`;
+        }
     </script>
 </body>
 </html>
