@@ -3,30 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Plan AP 2209 - Engenharia V2.0</title>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <title>MASTER PLAN AP 2209 - EXCELÊNCIA</title>
+    
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .tab-active { background-color: #2563eb; color: white; box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4); }
-        .row-purchased { opacity: 0.6; background-color: #f1f5f9 !important; text-decoration: line-through; }
-        @media print { .no-print { display: none; } }
+        body { font-family: 'Inter', sans-serif; transition: all 0.3s ease; }
+        .row-purchased { opacity: 0.5; filter: grayscale(1); background-color: #f8fafc !important; }
+        .tab-active { background-color: #1e40af; color: white; transform: scale(1.05); shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+        input[type=number]::-webkit-inner-spin-button { display: none; }
+        @media print { .no-print { display: none !important; } body { background: white; } }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-900">
-    <div id="root"></div>
+<body class="bg-slate-100">
+    <div id="root">
+        <div class="flex items-center justify-center min-h-screen">
+            <p class="text-slate-400 font-black animate-pulse uppercase tracking-widest">Iniciando Dashboard de Engenharia...</p>
+        </div>
+    </div>
 
     <script type="text/babel">
-        const { useState, useMemo } = React;
+        const { useState, useMemo, useEffect } = React;
 
+        // --- COMPONENTES DE INTERFACE ---
         const IconTrash = () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>;
-        const IconCheck = () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>;
+        const IconCheck = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>;
 
         function App() {
-            const [activeTab, setActiveTab] = useState('planilha');
+            const [tab, setTab] = useState('planilha');
             const [filter, setFilter] = useState('Todos');
             const [inventory, setInventory] = useState([
                 { id: 1, desc: "Cabo Prysmian Flex 2,5mm² BRANCO (Fase T)", qty: 100, price: 3.45, cat: "Elétrica", purchased: false },
@@ -36,63 +44,67 @@
                 { id: 5, desc: "Torneira Cozinha Gourmet Docol", qty: 1, price: 890.00, cat: "Hidráulica", purchased: false }
             ]);
 
-            const totals = useMemo(() => {
-                const total = inventory.reduce((acc, item) => acc + (Number(item.qty || 0) * Number(item.price || 0)), 0);
-                const purchased = inventory.filter(i => i.purchased).reduce((acc, item) => acc + (Number(item.qty || 0) * Number(item.price || 0)), 0);
-                const electricalMeters = inventory.filter(i => i.cat === 'Elétrica').reduce((acc, item) => acc + Number(item.qty || 0), 0);
-                return { total, purchased, remaining: total - purchased, electricalMeters };
+            // FUNCIONALIDADE: Cálculos de Auditoria (Investimento vs Comprado)
+            const stats = useMemo(() => {
+                const total = inventory.reduce((acc, i) => acc + (i.qty * i.price), 0);
+                const bought = inventory.filter(i => i.purchased).reduce((acc, i) => acc + (i.qty * i.price), 0);
+                const meters = inventory.filter(i => i.cat === 'Elétrica').reduce((acc, i) => acc + Number(i.qty), 0);
+                return { total, bought, pending: total - bought, meters };
             }, [inventory]);
 
-            const filteredInventory = inventory.filter(item => filter === 'Todos' || item.cat === filter);
+            // FUNCIONALIDADE: Filtro Dinâmico
+            const filteredItems = inventory.filter(i => filter === 'Todos' || i.cat === filter);
 
+            // FUNCIONALIDADE: Lógica Inversa (Novo no Topo)
             const addRow = () => {
-                const newItem = { id: Date.now(), desc: "Novo Material", qty: 0, price: 0, cat: "Geral", purchased: false };
+                const newItem = { id: Date.now(), desc: "NOVO ITEM TÉCNICO", qty: 0, price: 0, cat: "Geral", purchased: false };
                 setInventory([newItem, ...inventory]);
             };
 
-            const togglePurchased = (id) => {
+            const updateItem = (id, key, val) => {
+                setInventory(inventory.map(i => i.id === id ? { ...i, [key]: val } : i));
+            };
+
+            const toggleStatus = (id) => {
                 setInventory(inventory.map(i => i.id === id ? { ...i, purchased: !i.purchased } : i));
             };
 
-            const updateItem = (id, key, value) => {
-                setInventory(inventory.map(item => item.id === id ? { ...item, [key]: value } : item));
-            };
-
             return (
-                <div className="min-h-screen p-4 md:p-8">
+                <div className="min-h-screen p-4 md:p-10 animate-in fade-in duration-700">
                     <div className="max-w-6xl mx-auto">
                         
-                        {/* HEADER DASHBOARD */}
-                        <header className="bg-slate-900 text-white p-8 rounded-[2.5rem] shadow-2xl mb-8 border-b-8 border-blue-600 flex flex-col md:flex-row justify-between items-center gap-6">
+                        {/* HEADER EXECUTIVO COM AUDITORIA */}
+                        <header className="bg-slate-900 text-white p-8 rounded-[3rem] shadow-2xl mb-8 border-b-[12px] border-blue-700 flex flex-col md:flex-row justify-between items-center gap-6">
                             <div className="text-center md:text-left">
-                                <h1 className="text-4xl font-black italic uppercase tracking-tighter text-blue-400">AP 2209 DASH V2</h1>
-                                <p className="text-slate-400 font-bold text-[10px] tracking-widest uppercase mt-2">Engenharia Trifásica & Suprimentos</p>
+                                <h1 className="text-5xl font-black italic tracking-tighter text-blue-400 uppercase">AP 2209 MASTER</h1>
+                                <p className="text-slate-400 font-bold text-[10px] tracking-[0.3em] uppercase mt-2">Engenharia Trifásica • Excelência 2026</p>
                             </div>
-                            <div className="flex gap-4 no-print">
-                                <div className="bg-slate-800 p-4 rounded-2xl border border-slate-700 text-right">
-                                    <p className="text-[9px] font-bold text-blue-400 uppercase">Total Geral</p>
-                                    <p className="text-xl font-mono font-bold">R$ {totals.total.toLocaleString('pt-BR')}</p>
+                            <div className="grid grid-cols-2 gap-4 min-w-[320px]">
+                                <div className="bg-slate-800 p-4 rounded-3xl border border-slate-700">
+                                    <p className="text-[8px] font-black text-blue-400 uppercase mb-1">Total Obra</p>
+                                    <p className="text-xl font-mono font-bold">R$ {stats.total.toLocaleString('pt-BR')}</p>
                                 </div>
-                                <div className="bg-slate-800 p-4 rounded-2xl border border-emerald-700 text-right">
-                                    <p className="text-[9px] font-bold text-emerald-400 uppercase">Já Comprado</p>
-                                    <p className="text-xl font-mono font-bold text-emerald-400">R$ {totals.purchased.toLocaleString('pt-BR')}</p>
+                                <div className="bg-slate-800 p-4 rounded-3xl border border-emerald-500/30">
+                                    <p className="text-[8px] font-black text-emerald-400 uppercase mb-1">Status Compras</p>
+                                    <p className="text-xl font-mono font-bold text-emerald-400">R$ {stats.bought.toLocaleString('pt-BR')}</p>
                                 </div>
                             </div>
                         </header>
 
-                        {/* NAV & FILTROS */}
+                        {/* NAV & CONTROLES DE FILTRO (MELHORIA 1 & 2) */}
                         <div className="flex flex-col md:flex-row gap-4 mb-8 no-print">
-                            <div className="flex bg-white p-1 rounded-2xl shadow-sm flex-1">
+                            <div className="flex bg-white p-2 rounded-[1.5rem] shadow-md flex-1">
                                 {['planilha', 'eletrica', 'hidraulica'].map(t => (
-                                    <button key={t} onClick={() => setActiveTab(t)} className={`flex-1 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all ${activeTab === t ? 'tab-active' : 'text-slate-400'}`}>
-                                        {t}
+                                    <button key={t} onClick={() => setTab(t)} className={`flex-1 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all ${tab === t ? 'tab-active' : 'text-slate-400 hover:text-slate-600'}`}>
+                                        {t === 'planilha' ? 'Suprimentos' : t === 'eletrica' ? 'Memorial Elétrico' : 'Memorial Hidráulico'}
                                     </button>
                                 ))}
                             </div>
-                            {activeTab === 'planilha' && (
-                                <div className="flex bg-slate-200 p-1 rounded-2xl gap-1">
+                            {tab === 'planilha' && (
+                                <div className="flex bg-slate-200 p-1.5 rounded-[1.5rem] gap-1 items-center">
+                                    <span className="text-[8px] font-black px-3 text-slate-500 uppercase">Filtro:</span>
                                     {['Todos', 'Elétrica', 'Hidráulica', 'Infra'].map(f => (
-                                        <button key={f} onClick={() => setFilter(f)} className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase transition-all ${filter === f ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500'}`}>
+                                        <button key={f} onClick={() => setFilter(f)} className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase transition-all ${filter === f ? 'bg-white text-blue-700 shadow-sm' : 'text-slate-500 hover:text-blue-600'}`}>
                                             {f}
                                         </button>
                                     ))}
@@ -100,57 +112,62 @@
                             )}
                         </div>
 
-                        {/* CONTEÚDO */}
-                        <div className="bg-white rounded-[3rem] shadow-xl p-6 md:p-12 border border-slate-200">
+                        {/* ÁREA DE TRABALHO */}
+                        <div className="bg-white rounded-[4rem] shadow-2xl p-6 md:p-14 border border-slate-200 relative overflow-hidden">
                             
-                            {activeTab === 'planilha' && (
-                                <div className="animate-in fade-in">
-                                    <div className="flex justify-between items-center mb-8">
-                                        <h2 className="text-2xl font-black uppercase italic text-slate-800 border-l-8 border-blue-600 pl-4">Lista de Suprimentos</h2>
-                                        <div className="flex gap-2">
-                                            <button onClick={() => window.print()} className="bg-slate-200 text-slate-700 px-6 py-4 rounded-2xl font-black text-[10px] uppercase hover:bg-slate-300">Imprimir PDF</button>
-                                            <button onClick={addRow} className="bg-slate-900 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase shadow-xl hover:bg-blue-600 transition-all">+ Adicionar</button>
+                            {tab === 'planilha' && (
+                                <div className="animate-in slide-in-from-top-4 duration-500">
+                                    <div className="flex justify-between items-center mb-10">
+                                        <h2 className="text-3xl font-black uppercase italic text-slate-800 tracking-tighter border-l-[12px] border-blue-600 pl-6">Gestão de Materiais</h2>
+                                        <div className="flex gap-3">
+                                            <button onClick={() => window.print()} className="bg-slate-100 text-slate-600 px-6 py-4 rounded-2xl font-black text-[10px] uppercase hover:bg-slate-200 transition-all no-print">Exportar PDF</button>
+                                            <button onClick={addRow} className="bg-slate-900 text-white px-10 py-4 rounded-2xl font-black text-[10px] uppercase shadow-2xl hover:bg-blue-700 transition-all active:scale-95 no-print tracking-widest">
+                                                + Inserir no Topo
+                                            </button>
                                         </div>
                                     </div>
 
                                     <div className="overflow-x-auto">
-                                        <table className="w-full text-left border-separate border-spacing-y-2">
+                                        <table className="w-full text-left border-separate border-spacing-y-3">
                                             <thead>
-                                                <tr className="text-[10px] font-black uppercase text-slate-400">
-                                                    <th className="p-4">Status</th>
-                                                    <th className="p-4">Material / Marca</th>
-                                                    <th className="p-4 text-center">Qtd</th>
-                                                    <th className="p-4 text-center">Valor</th>
-                                                    <th className="p-4 text-center">Subtotal</th>
-                                                    <th className="p-4 text-center no-print">Ação</th>
+                                                <tr className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">
+                                                    <th className="px-6 py-2">OK</th>
+                                                    <th className="px-4 py-2 text-blue-600">Descrição Técnica / Marca</th>
+                                                    <th className="px-4 py-2 text-center">Qtd</th>
+                                                    <th className="px-4 py-2 text-center">Unit R$</th>
+                                                    <th className="px-4 py-2 text-center text-blue-600">Subtotal</th>
+                                                    <th className="px-4 py-2 text-center no-print">Remover</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {filteredInventory.map((item) => (
-                                                    <tr key={item.id} className={`transition-all group shadow-sm ${item.purchased ? 'row-purchased' : 'bg-slate-50 hover:bg-white'}`}>
-                                                        <td className="p-4 rounded-l-2xl text-center">
-                                                            <button onClick={() => togglePurchased(item.id)} className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all ${item.purchased ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-300 text-transparent hover:border-emerald-500'}`}>
+                                                {filteredItems.map((item) => (
+                                                    <tr key={item.id} className={`group transition-all ${item.purchased ? 'row-purchased' : 'bg-slate-50 hover:bg-blue-50/50 hover:shadow-md'}`}>
+                                                        <td className="px-6 py-4 rounded-l-[2rem]">
+                                                            <button 
+                                                                onClick={() => toggleStatus(item.id)}
+                                                                className={`w-10 h-10 rounded-2xl flex items-center justify-center border-2 transition-all ${item.purchased ? 'bg-emerald-500 border-emerald-500 text-white rotate-12 shadow-lg shadow-emerald-200' : 'bg-white border-slate-200 text-transparent hover:border-emerald-400'}`}
+                                                            >
                                                                 <IconCheck />
                                                             </button>
                                                         </td>
-                                                        <td className="p-4">
-                                                            <input className="font-black text-sm bg-transparent outline-none w-full uppercase italic" value={item.desc} onChange={(e) => updateItem(item.id, 'desc', e.target.value)} />
+                                                        <td className="px-4 py-4">
+                                                            <input className="font-black text-sm bg-transparent outline-none w-full text-slate-700 uppercase tracking-tighter" value={item.desc} onChange={(e) => updateItem(item.id, 'desc', e.target.value)} />
                                                             <div className="flex gap-2 mt-1">
-                                                                <span className="text-[9px] font-black text-blue-600 uppercase">{item.cat}</span>
-                                                                {item.cat === 'Elétrica' && <span className="text-[8px] font-bold text-amber-600 bg-amber-100 px-1 rounded">REQ. TERMINAL ILHÓS</span>}
+                                                                <span className="text-[8px] font-black text-blue-500 bg-blue-100 px-2 py-0.5 rounded uppercase tracking-tighter">{item.cat}</span>
+                                                                {item.cat === 'Elétrica' && <span className="text-[8px] font-black text-amber-600 bg-amber-100 px-2 py-0.5 rounded uppercase flex items-center gap-1">⚠️ Crimpagem Hexa</span>}
                                                             </div>
                                                         </td>
-                                                        <td className="p-4 w-20">
-                                                            <input type="number" className="w-full text-center bg-white border border-slate-200 rounded p-1 font-bold shadow-inner" value={item.qty} onChange={(e) => updateItem(item.id, 'qty', e.target.value)} />
+                                                        <td className="px-4 py-4 w-24">
+                                                            <input type="number" className="w-full text-center bg-white border-2 border-slate-100 rounded-xl p-2 font-bold shadow-inner" value={item.qty} onChange={(e) => updateItem(item.id, 'qty', e.target.value)} />
                                                         </td>
-                                                        <td className="p-4 w-24">
-                                                            <input type="number" className="w-full text-center bg-white border border-slate-200 rounded p-1 font-bold shadow-inner" value={item.price} onChange={(e) => updateItem(item.id, 'price', e.target.value)} />
+                                                        <td className="px-4 py-4 w-32">
+                                                            <input type="number" className="w-full text-center bg-white border-2 border-slate-100 rounded-xl p-2 font-bold shadow-inner" value={item.price} onChange={(e) => updateItem(item.id, 'price', e.target.value)} />
                                                         </td>
-                                                        <td className="p-4 text-center font-mono font-black text-blue-700">
-                                                            R$ {(item.qty * item.price).toLocaleString('pt-BR')}
+                                                        <td className="px-4 py-4 text-center font-mono font-black text-blue-800 text-lg">
+                                                            {(item.qty * item.price).toLocaleString('pt-BR', {minimumFractionDigits: 2})}
                                                         </td>
-                                                        <td className="p-4 rounded-r-2xl text-center no-print">
-                                                            <button onClick={() => setInventory(inventory.filter(i => i.id !== item.id))} className="text-slate-300 hover:text-red-500"><IconTrash /></button>
+                                                        <td className="px-4 py-4 rounded-r-[2rem] text-center no-print">
+                                                            <button onClick={() => setInventory(inventory.filter(i => i.id !== item.id))} className="text-slate-300 hover:text-red-500 transition-transform hover:scale-125"><IconTrash /></button>
                                                         </td>
                                                     </tr>
                                                 ))}
@@ -160,29 +177,88 @@
                                 </div>
                             )}
 
-                            {activeTab === 'eletrica' && (
-                                <div className="space-y-8 animate-in slide-in-from-bottom-4">
-                                    <div className="bg-slate-900 text-white p-8 rounded-[2rem] border-b-8 border-blue-600 flex justify-between items-center">
-                                        <h3 className="text-xl font-black italic uppercase tracking-widest text-blue-400 underline decoration-white">Monitor de Metragem Prysmian</h3>
-                                        <div className="text-right font-mono">
-                                            <p className="text-[10px] text-slate-400 uppercase">Total Acumulado de Cabos</p>
-                                            <p className="text-3xl font-bold">{totals.electricalMeters} Metros</p>
+                            {tab === 'eletrica' && (
+                                <div className="animate-in slide-in-from-right-4 duration-500 space-y-10">
+                                    <div className="bg-slate-900 text-white p-10 rounded-[3rem] border-b-[16px] border-blue-600 flex justify-between items-center shadow-2xl">
+                                        <div>
+                                            <h3 className="text-2xl font-black italic uppercase text-blue-400 mb-2 underline decoration-white underline-offset-8">Audit de Metragem Prysmian</h3>
+                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">Cálculo cumulativo de condutores flexíveis</p>
+                                        </div>
+                                        <div className="bg-slate-800 p-8 rounded-[2rem] text-center border border-slate-700 min-w-[200px]">
+                                            <p className="text-4xl font-mono font-black text-white">{stats.meters}m</p>
+                                            <p className="text-[8px] font-black text-blue-400 mt-2 uppercase tracking-widest">Total Projetado</p>
                                         </div>
                                     </div>
-                                    <div className="grid md:grid-cols-3 gap-6">
-                                        <div className="bg-white border-4 border-slate-900 p-6 rounded-3xl text-center shadow-lg">
-                                            <div className="w-full h-4 bg-slate-900 mb-4 rounded"></div>
-                                            <p className="text-[10px] font-black uppercase">Fase R: PRETO</p>
+
+                                    <div className="grid md:grid-cols-3 gap-8 text-center">
+                                        <div className="bg-slate-50 p-8 rounded-[2.5rem] border-t-8 border-black shadow-lg">
+                                            <div className="w-full h-2 bg-slate-900 mb-6 rounded-full"></div>
+                                            <h4 className="font-black text-xs uppercase mb-2">Fase R: PRETO</h4>
+                                            <p className="text-[10px] font-bold text-slate-400">Ar Condicionado / Tomadas Gerais</p>
                                         </div>
-                                        <div className="bg-white border-4 border-red-600 p-6 rounded-3xl text-center shadow-lg">
-                                            <div className="w-full h-4 bg-red-600 mb-4 rounded"></div>
-                                            <p className="text-[10px] font-black uppercase">Fase S: VERMELHO</p>
+                                        <div className="bg-slate-50 p-8 rounded-[2.5rem] border-t-8 border-red-600 shadow-lg">
+                                            <div className="w-full h-2 bg-red-600 mb-6 rounded-full"></div>
+                                            <h4 className="font-black text-xs uppercase mb-2">Fase S: VERMELHO</h4>
+                                            <p className="text-[10px] font-bold text-slate-400">Chuveiros / Aquecimento</p>
                                         </div>
-                                        <div className="bg-white border-4 border-blue-600 p-6 rounded-3xl text-center shadow-xl">
-                                            <div className="w-full h-4 bg-slate-100 border border-slate-200 mb-4 rounded"></div>
-                                            <p className="text-[10px] font-black uppercase text-blue-600 underline">Fase T: BRANCO (ESPECÍFICO)</p>
+                                        <div className="bg-blue-50 p-8 rounded-[2.5rem] border-t-8 border-blue-600 shadow-xl border-2 border-blue-100">
+                                            <div className="w-full h-2 bg-slate-100 border border-slate-300 mb-6 rounded-full"></div>
+                                            <h4 className="font-black text-xs uppercase mb-2 text-blue-700 italic underline">Fase T: BRANCO (ESPECÍFICO)</h4>
+                                            <p className="text-[10px] font-bold text-blue-400">Cozinha Gourmet / Ilha Técnica</p>
                                         </div>
                                     </div>
+
                                     
-                                    <div className="bg-blue-600 text-white p-10 rounded-[2.5rem] italic font-bold text-sm leading-relaxed border-l-[16px] border-white">
-                                        "A excelência do AP 2209 reside na invisibilidade dos problemas. Use terminais ilhós tubulares com crimpagem hexagonal em cada conexão. O cabo BRANCO (Fase T) deve ser reservado exclusivamente para os
+
+                                    <div className="bg-slate-900 text-white p-12 rounded-[3.5rem] relative overflow-hidden group">
+                                        <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-30 transition-opacity">
+                                            <svg width="100" height="100" viewBox="0 0 24 24" fill="white"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                                        </div>
+                                        <h3 className="text-2xl font-black mb-6 italic uppercase tracking-tighter">Protocolo de Conectividade Hexagonal</h3>
+                                        <p className="text-sm font-bold text-slate-300 leading-relaxed max-w-2xl italic">
+                                            A excelência da infraestrutura Prysmian no AP 2209 exige o uso mandatório de terminais ilhós em 100% das conexões. A crimpagem deve seguir o padrão hexagonal para garantir a integridade do contato elétrico sob carga máxima.
+                                        </p>
+                                        <div className="mt-8 flex gap-4">
+                                            <span className="px-4 py-2 bg-blue-600 rounded-lg text-[9px] font-black uppercase tracking-widest">Prysmian Flex 750V</span>
+                                            <span className="px-4 py-2 bg-slate-800 rounded-lg text-[9px] font-black uppercase tracking-widest border border-slate-700">Norma NBR 5410</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {tab === 'hidraulica' && (
+                                <div className="animate-in zoom-in duration-500 text-center py-10 space-y-12">
+                                    <div className="inline-block bg-slate-900 text-white px-8 py-3 rounded-full text-[11px] font-black uppercase tracking-[0.4em] shadow-2xl italic border-b-4 border-blue-600">
+                                        Padrão Docol Gourmet 2026
+                                    </div>
+                                    <h3 className="text-6xl font-black italic text-slate-800 uppercase tracking-tighter">Memorial Torneira</h3>
+                                    
+                                    <div className="max-w-3xl mx-auto bg-slate-50 p-12 rounded-[4rem] border-4 border-double border-slate-200 shadow-inner">
+                                        <p className="text-lg font-bold text-slate-600 leading-relaxed mb-10 italic">
+                                            "A instalação do monocomando Docol exige verificação de MCA mínima para funcionamento do spray gourmet. Garantia vitalícia vinculada ao uso de vedações originais em cerâmica."
+                                        </p>
+                                        <div className="grid grid-cols-2 gap-6">
+                                            <div className="bg-white p-6 rounded-[2rem] shadow-md border border-slate-100 flex flex-col items-center">
+                                                <span className="text-[9px] font-black uppercase text-blue-500 mb-2">Pressão de Operação</span>
+                                                <span className="text-2xl font-mono font-black text-slate-800 underline italic">MCA OK</span>
+                                            </div>
+                                            <div className="bg-white p-6 rounded-[2rem] shadow-md border border-slate-100 flex flex-col items-center">
+                                                <span className="text-[9px] font-black uppercase text-blue-500 mb-2">Vedação Técnica</span>
+                                                <span className="text-2xl font-mono font-black text-slate-800 underline italic">CERAMIC SEAL</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
