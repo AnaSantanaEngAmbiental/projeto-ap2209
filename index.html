@@ -3,91 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Executivo AP 2209 - 2026</title>
+    <title>Gestão de Engenharia AP 2209 - 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .input-edit { border: none; background: transparent; width: 100%; }
+        .input-edit:focus { outline: 2px solid #3b82f6; background: white; border-radius: 4px; }
+        .card-eng { transition: all 0.3s ease; }
+        .card-eng:hover { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+    </style>
 </head>
-<body class="bg-slate-100 font-sans text-slate-900">
+<body class="bg-slate-100 font-sans text-slate-900 pb-20">
 
     <div class="max-w-6xl mx-auto p-4 md:p-8">
-        <header class="bg-slate-900 text-white p-8 rounded-3xl shadow-xl mb-10 border-b-4 border-yellow-500">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+        <header class="bg-slate-900 text-white p-8 rounded-3xl shadow-xl mb-10 border-b-8 border-blue-600">
+            <div class="flex flex-col md:flex-row justify-between items-center">
                 <div>
-                    <h1 class="text-3xl font-black italic">PROJETO AP 2209</h1>
-                    <p class="text-slate-400">Engenharia Trifásica Prysmian & Hidráulica Setorizada</p>
+                    <h1 class="text-3xl font-black tracking-tighter italic text-blue-400">AP 2209 | MASTER PLAN</h1>
+                    <p class="text-slate-400 flex items-center gap-2">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500"></i> 
+                        Rede Trifásica Prysmian (Preto, Vermelho, Branco)
+                    </p>
                 </div>
-                <div class="mt-4 md:mt-0 text-right">
-                    <p class="text-xs font-bold text-yellow-500 uppercase">Orçamento Atualizado</p>
-                    <p class="text-2xl font-mono">R$ 5.009,00</p>
+                <div class="mt-6 md:mt-0 bg-slate-800 p-4 rounded-2xl border border-slate-700 text-right">
+                    <p class="text-xs font-bold text-blue-400 uppercase mb-1">Total Geral Investido</p>
+                    <p class="text-3xl font-mono font-bold" id="grand-total">R$ 0,00</p>
                 </div>
             </div>
         </header>
 
-        <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
-            <i data-lucide="shopping-basket" class="text-blue-600"></i> Carrinho de Compras de Engenharia
-        </h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-white rounded-3xl shadow-sm overflow-hidden border border-slate-200 mb-10">
+            <div class="bg-slate-50 p-6 border-b border-slate-200 flex justify-between items-center">
+                <h2 class="text-xl font-bold flex items-center gap-2 italic">
+                    <i data-lucide="list-checks" class="text-blue-600"></i> Planilha de Orçamento Dinâmico
+                </h2>
+                <button onclick="addRow()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i> Adicionar Item
+                </button>
+            </div>
             
-            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200">
-                <img src="https://images.unsplash.com/photo-1621905231753-1768bcbb4828?auto=format&fit=crop&w=400&q=80" alt="Cabos Elétricos" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="font-bold text-lg text-slate-800">Kit Cabos Prysmian 2,5mm²</h3>
-                    <p class="text-xs text-slate-500 mb-4 font-semibold">Cores: Preto, Vermelho, Branco (Fases), Azul e Verde</p>
-                    <div class="flex justify-between items-center">
-                        <span class="text-blue-600 font-bold">R$ 2.070,00</span>
-                        <button onclick="this.innerHTML='✓ COMPRADO'; this.className='bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold'" class="bg-slate-800 text-white px-3 py-1 rounded-full text-xs font-bold">MARCAR COMPRA</button>
-                    </div>
-                </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-800 text-white text-xs uppercase tracking-wider">
+                            <th class="p-4">Foto/Ref</th>
+                            <th class="p-4">Descrição do Material (Prysmian/Docol)</th>
+                            <th class="p-4">Qtd</th>
+                            <th class="p-4">Unitário (R$)</th>
+                            <th class="p-4">Subtotal</th>
+                            <th class="p-4">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-body">
+                        </tbody>
+                </table>
             </div>
-
-            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200">
-                <img src="https://images.unsplash.com/photo-1558002038-103792e097df?auto=format&fit=crop&w=400&q=80" alt="Quadro Elétrico" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="font-bold text-lg text-slate-800">Kit Proteção (Schneider)</h3>
-                    <p class="text-xs text-slate-500 mb-4 font-semibold">Geral 50A + 3x DPS + 1x IDR Tetrapolar</p>
-                    <div class="flex justify-between items-center">
-                        <span class="text-blue-600 font-bold">R$ 759,00</span>
-                        <button onclick="this.innerHTML='✓ COMPRADO'; this.className='bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold'" class="bg-slate-800 text-white px-3 py-1 rounded-full text-xs font-bold">MARCAR COMPRA</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200">
-                <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80" alt="Torneira Gourmet" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="font-bold text-lg text-slate-800">Kit Metais e Registros</h3>
-                    <p class="text-xs text-slate-500 mb-4 font-semibold">Torneira Monocomando + Registros Docol</p>
-                    <div class="flex justify-between items-center">
-                        <span class="text-blue-600 font-bold">R$ 1.590,00</span>
-                        <button onclick="this.innerHTML='✓ COMPRADO'; this.className='bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold'" class="bg-slate-800 text-white px-3 py-1 rounded-full text-xs font-bold">MARCAR COMPRA</button>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
-        <div class="mt-10 bg-slate-800 text-white p-6 rounded-3xl">
-            <h3 class="text-xl font-bold mb-4 flex items-center gap-2 text-yellow-500">
-                <i data-lucide="alert-triangle"></i> Atenção na Execução (Fases Prysmian)
-            </h3>
-            <div class="grid md:grid-cols-3 gap-6 text-sm">
-                <div class="bg-slate-700/50 p-4 rounded-xl border-l-4 border-black">
-                    <p class="font-bold">FASE 1 (R): PRETO</p>
-                    <p class="text-slate-400 text-xs">Ar Condicionado e Tomadas Sala</p>
+        <div class="grid md:grid-cols-2 gap-8">
+            <div class="bg-slate-800 text-white p-6 rounded-3xl shadow-lg border-l-8 border-white">
+                <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
+                    <i data-lucide="zap" class="text-yellow-400"></i> Padrão de Fases Prysmian
+                </h3>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3 p-2 bg-slate-700 rounded-lg">
+                        <div class="w-6 h-6 bg-black rounded shadow-inner"></div>
+                        <span class="text-sm font-mono">Fase R: PRETO</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-2 bg-slate-700 rounded-lg">
+                        <div class="w-6 h-6 bg-red-600 rounded shadow-inner"></div>
+                        <span class="text-sm font-mono">Fase S: VERMELHO</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-2 bg-white rounded-lg">
+                        <div class="w-6 h-6 bg-slate-200 rounded shadow-inner"></div>
+                        <span class="text-sm font-mono text-slate-800">Fase T: BRANCO (Atualizado)</span>
+                    </div>
                 </div>
-                <div class="bg-slate-700/50 p-4 rounded-xl border-l-4 border-red-500">
-                    <p class="font-bold">FASE 2 (S): VERMELHO</p>
-                    <p class="text-slate-400 text-xs">Chuveiros e Tomadas Quartos</p>
-                </div>
-                <div class="bg-slate-700/50 p-4 rounded-xl border-l-4 border-white">
-                    <p class="font-bold text-white">FASE 3 (T): BRANCO</p>
-                    <p class="text-slate-400 text-xs text-white">Cozinha e Área de Serviço</p>
-                </div>
+            </div>
+
+            <div class="bg-blue-600 text-white p-6 rounded-3xl shadow-lg border-l-8 border-blue-900">
+                <h3 class="font-bold text-lg mb-4 flex items-center gap-2 text-white">
+                    <i data-lucide="droplets"></i> Hidráulica de Precisão
+                </h3>
+                <p class="text-sm leading-relaxed opacity-90">
+                    O orçamento contempla registros de gaveta independentes. Utilize vedação em rosca-fita de alta densidade. 
+                    <strong>Importante:</strong> Manter a estrutura original conforme o modelo .sh3d.
+                </p>
             </div>
         </div>
     </div>
 
-    <script>lucide.createIcons();</script>
+    <script>
+        // Dados iniciais com fotos reais e cabo BRANCO
+        let inventory = [
+            { id: 1, img: "https://images.unsplash.com/photo-1621905231753-1768bcbb4828?w=100", desc: "Cabo Prysmian Flex 2,5mm² BRANCO (Fase T)", qty: 1, price: 345.00 },
+            { id: 2, img: "https://images.unsplash.com/photo-1621905231753-1768bcbb4828?w=100", desc: "Cabo Prysmian Flex 2,5mm² PRETO (Fase R)", qty: 1, price: 345.00 },
+            { id: 3, img: "https://images.unsplash.com/photo-1621905231753-1768bcbb4828?w=100", desc: "Cabo Prysmian Flex 2,5mm² VERMELHO (Fase S)", qty: 1, price: 345.00 },
+            { id: 4, img: "https://images.unsplash.com/photo-1558002038-103792e097df?w=100", desc: "Kit Quadro Trifásico (Schneider/Weg)", qty: 1, price: 760.00 },
+            { id: 5, img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=100", desc: "Torneira Monocomando Gourmet Docol", qty: 1, price: 890.00 }
+        ];
+
+        function renderTable() {
+            const body = document.getElementById('inventory-body');
+            body.innerHTML = '';
+            let totalGeral = 0;
+
+            inventory.forEach((item, index) => {
+                const subtotal = item.qty * item.price;
+                totalGeral += subtotal;
+
+                body.innerHTML += `
+                    <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
+                        <td class="p-4"><img src="${item.img}" class="w-12 h-12 rounded shadow-sm object-cover"></td>
+                        <td class="p-4"><input class="input-edit font-semibold" value="${item.desc}" onchange="updateItem(${index}, 'desc', this.value)"></td>
+                        <td class="p-4"><input type="number" class="input-edit w-16" value="${item.qty}" onchange="updateItem(${index}, 'qty', this.value)"></td>
+                        <td class="p-4"><input type="number" class="input-edit w-24" value="${item.price}" onchange="updateItem(${index}, 'price', this.value)"></td>
+                        <td class="p-4 font-mono font-bold text-blue-600">R$ ${subtotal.toFixed(2)}</td>
+                        <td class="p-4 text-center">
+                            <button onclick="removeItem(${index})" class="text-red-400 hover:text-red-600"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('grand-total').innerText = `R$ ${totalGeral.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            lucide.createIcons();
+        }
+
+        function updateItem(index, key, value) {
+            inventory[index][key] = key === 'desc' ? value : parseFloat(value);
+            renderTable();
+        }
+
+        function addRow() {
+            inventory.push({ id: Date.now(), img: "https://via.placeholder.com/100?text=Item", desc: "Novo Material", qty: 1, price: 0 });
+            renderTable();
+        }
+
+        function removeItem(index) {
+            inventory.splice(index, 1);
+            renderTable();
+        }
+
+        window.onload = renderTable;
+    </script>
 </body>
 </html>
