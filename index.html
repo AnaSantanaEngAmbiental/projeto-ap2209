@@ -20,6 +20,13 @@
         #qrcode-container { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; padding: 20px; }
         #qrcode { background: white; padding: 25px; border-radius: 24px; box-shadow: 0 0 50px rgba(59, 130, 246, 0.5); }
         .tag-detalhe { font-size: 8px; font-weight: 900; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; margin-right: 4px; }
+
+        /* Estilos Novos para Aba de Plantas */
+        #drop-zone { border: 2px dashed #cbd5e1; transition: all 0.3s; }
+        #drop-zone.dragover { background: #e0f2fe; border-color: #3b82f6; }
+        .file-card { background: white; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; position: relative; }
+        .file-preview { height: 120px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .file-preview img { width: 100%; height: 100%; object-fit: cover; }
     </style>
 </head>
 <body class="pb-24">
@@ -52,9 +59,10 @@
             </button>
         </div>
 
-        <nav class="flex gap-2 mb-6">
-            <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 py-4 rounded-xl font-black text-[9px] uppercase bg-white text-slate-400 tab-active">1. Orçamento</button>
-            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 py-4 rounded-xl font-black text-[9px] uppercase bg-white text-slate-400">2. Mapa de Pontos AP 2209</button>
+        <nav class="flex gap-1 mb-6">
+            <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 py-4 rounded-xl font-black text-[8px] uppercase bg-white text-slate-400 tab-active">1. Orçamento</button>
+            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 py-4 rounded-xl font-black text-[8px] uppercase bg-white text-slate-400">2. Mapa de Pontos</button>
+            <button onclick="switchTab('arquivos')" id="btn-arquivos" class="flex-1 py-4 rounded-xl font-black text-[8px] uppercase bg-white text-slate-400">3. Plantas/Docs</button>
         </nav>
 
         <div id="view-planilha" class="space-y-3">
@@ -74,7 +82,6 @@
         </div>
 
         <div id="view-pontos" class="hidden space-y-4">
-            
             <div class="card-ponto" style="border-left-color: #000;">
                 <h4 class="font-black text-slate-900 uppercase text-xs mb-2">⚡ Centro de Comando (QDC)</h4>
                 <div class="p-3 bg-slate-900 text-white rounded-lg text-[10px]">
@@ -123,7 +130,21 @@
                 - Total de Módulos Tomada: 80 Unidades (60x 110V | 20x 220V)<br>
                 - Condutor Torre Quente: 4,0mm² direto do QDC.
             </div>
+        </div>
 
+        <div id="view-arquivos" class="hidden space-y-4">
+            <div id="drop-zone" class="p-8 rounded-2xl text-center cursor-pointer bg-white" 
+                 onclick="document.getElementById('file-input').click()"
+                 ondragover="event.preventDefault(); this.classList.add('dragover')"
+                 ondragleave="this.classList.remove('dragover')"
+                 ondrop="handleDrop(event)">
+                <p class="text-[10px] font-black text-slate-500 uppercase">📁 Arraste ou clique para upload</p>
+                <p class="text-[8px] text-slate-400 mt-1">JPEG, PNG ou DOCX</p>
+                <input type="file" id="file-input" class="hidden" multiple onchange="handleFiles(this.files)">
+            </div>
+
+            <div id="file-grid" class="grid grid-cols-2 gap-3">
+                </div>
         </div>
     </div>
 
@@ -142,6 +163,7 @@
         ];
 
         let inventory = JSON.parse(localStorage.getItem('ap2209_master_v60')) || defaultInventory;
+        let filesList = JSON.parse(localStorage.getItem('ap2209_files_v60')) || [];
 
         function getSyncURL() {
             const dataStr = btoa(unescape(encodeURIComponent(JSON.stringify(inventory))));
@@ -197,6 +219,58 @@
                 body.appendChild(tr);
             });
             document.getElementById('total-geral').innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            renderFiles();
+        }
+
+        /* Lógica de Arquivos */
+        function handleDrop(e) {
+            e.preventDefault();
+            document.getElementById('drop-zone').classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        }
+
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    filesList.push({
+                        id: Date.now() + Math.random(),
+                        name: file.name,
+                        type: file.type,
+                        data: e.target.result
+                    });
+                    localStorage.setItem('ap2209_files_v60', JSON.stringify(filesList));
+                    renderFiles();
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function renderFiles() {
+            const grid = document.getElementById('file-grid');
+            if(!grid) return;
+            grid.innerHTML = '';
+            filesList.forEach(file => {
+                const isImg = file.type.startsWith('image/');
+                const card = document.createElement('div');
+                card.className = 'file-card';
+                card.innerHTML = `
+                    <div class="file-preview">
+                        ${isImg ? `<img src="${file.data}">` : `<span class="text-2xl">📄</span>`}
+                    </div>
+                    <div class="p-2 flex justify-between items-center">
+                        <div class="truncate pr-2 font-bold text-[8px] uppercase">${file.name}</div>
+                        <button onclick="deleteFile(${file.id})" class="text-red-500 font-black">✕</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function deleteFile(id) {
+            filesList = filesList.filter(f => f.id !== id);
+            localStorage.setItem('ap2209_files_v60', JSON.stringify(filesList));
+            renderFiles();
         }
 
         function toggle(id) {
@@ -218,8 +292,11 @@
         function switchTab(t) {
             document.getElementById('view-planilha').classList.toggle('hidden', t !== 'planilha');
             document.getElementById('view-pontos').classList.toggle('hidden', t !== 'pontos');
+            document.getElementById('view-arquivos').classList.toggle('hidden', t !== 'arquivos');
+            
             document.getElementById('btn-planilha').classList.toggle('tab-active', t === 'planilha');
             document.getElementById('btn-pontos').classList.toggle('tab-active', t === 'pontos');
+            document.getElementById('btn-arquivos').classList.toggle('tab-active', t === 'arquivos');
         }
 
         window.onload = () => {
