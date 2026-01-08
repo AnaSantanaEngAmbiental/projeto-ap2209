@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SISTEMA AP 2209 - MASTER V81</title>
+    <title>SISTEMA AP 2209 - MASTER V82</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -73,7 +73,7 @@
                     <table class="w-full text-left">
                         <thead class="bg-slate-50 border-b border-slate-200">
                             <tr>
-                                <th class="p-4 text-[8px] font-black uppercase text-slate-400">Descrição</th>
+                                <th class="p-4 text-[8px] font-black uppercase text-slate-400">Descrição Técnica</th>
                                 <th class="p-4 text-[8px] font-black uppercase text-slate-400 text-center">Qtd</th>
                                 <th class="p-4 text-[8px] font-black uppercase text-slate-400 text-right">Total</th>
                                 <th class="p-4"></th>
@@ -88,42 +88,73 @@
 
         <section id="view-pontos" class="hidden space-y-4">
             <div class="ponto-card border-slate-900">
-                <h3 class="font-black text-[11px] uppercase text-slate-900 mb-1">⚡ Quadro de Comando (QDC)</h3>
-                <p class="text-[10px] text-slate-600 leading-relaxed italic">Posicionado na entrada. Barramento bifásico 100A. 36 slots DIN para separação total de circuitos (Iluminação, Tomadas, AC, Cozinha).</p>
-                <span class="tag-ponto bg-slate-900 text-white">Centro de Distribuição</span>
+                <h3 class="font-black text-[11px] uppercase text-slate-900 mb-1">⚡ Quadro de Distribuição (QDC)</h3>
+                <p class="text-[10px] text-slate-600 leading-relaxed italic">Entrada bifásica. 36 slots. DR geral + DPS para proteção de surto em todos os circuitos eletrônicos.</p>
+                <span class="tag-ponto bg-slate-900 text-white">Painel Central</span>
             </div>
-            <div class="ponto-card border-red-500">
-                <h3 class="font-black text-[11px] uppercase text-red-600 mb-1">🍳 Cozinha & Torre Quente</h3>
-                <p class="text-[10px] text-slate-600 leading-relaxed">7 pontos 4x4. Cada caixa contém: 3 módulos 110V + 1 módulo 220V dedicado (Fiação 4,0mm² para Forno/Micro). Bancada com tomadas a cada 60cm.</p>
-                <span class="tag-ponto bg-red-100 text-red-600">Alta Potência</span>
+
+            <div class="ponto-card border-orange-500">
+                <h3 class="font-black text-[11px] uppercase text-orange-600 mb-1">🍳 Cozinha & Geladeira</h3>
+                <p class="text-[10px] text-slate-600 leading-relaxed">Circuito exclusivo para Geladeira (2,5mm²). 4 tomadas de bancada 20A para eletroportáteis. Ponto de filtro de água.</p>
+                <span class="tag-ponto bg-orange-100 text-orange-600">Área de Serviço</span>
             </div>
+
+            <div class="ponto-card border-red-600">
+                <h3 class="font-black text-[11px] uppercase text-red-600 mb-1">🔥 Torre Quente & Forno</h3>
+                <p class="text-[10px] text-slate-600 leading-relaxed">Cabo 4,0mm² dedicado. Tomadas 20A industriais Schneider. Disjuntor individual no QDC para suportar carga simultânea de forno e micro.</p>
+                <span class="tag-ponto bg-red-100 text-red-600">Circuito Independente</span>
+            </div>
+
             <div class="ponto-card border-blue-600">
-                <h3 class="font-black text-[11px] uppercase text-blue-600 mb-1">🛋️ Sala & Home Theater</h3>
-                <p class="text-[10px] text-slate-600 leading-relaxed">5 pontos 4x4 ocultos. 8 tomadas 110V + 2x 220V. Infra para HDMI e Rede Cat6 via conduíte de 1".</p>
-                <span class="tag-ponto bg-blue-100 text-blue-600">Multimídia</span>
+                <h3 class="font-black text-[11px] uppercase text-blue-600 mb-1">🛋️ Sala & Automação</h3>
+                <p class="text-[10px] text-slate-600 leading-relaxed">Tomadas comuns para TV/Som. Infraestrutura para automação de cortinas e iluminação dimerizada. Ponto Cat6 para rede estável.</p>
+                <span class="tag-ponto bg-blue-100 text-blue-600">Área Social</span>
+            </div>
+
+            <div class="ponto-card border-emerald-600">
+                <h3 class="font-black text-[11px] uppercase text-emerald-600 mb-1">❄️ Ar Condicionado (Suíte/Quartos)</h3>
+                <p class="text-[10px] text-slate-600 leading-relaxed">Alimentação 220V direta. Cabo 4,0mm² para cada evaporadora. Drenos embutidos na alvenaria.</p>
+                <span class="tag-ponto bg-emerald-100 text-emerald-600">Climatização</span>
+            </div>
+
+            <div class="ponto-card border-cyan-500">
+                <h3 class="font-black text-[11px] uppercase text-cyan-600 mb-1">🚿 Chuveiros Master/Social</h3>
+                <p class="text-[10px] text-slate-600 leading-relaxed">Cabo 6,0mm² Prysmian. Conexão direta via Conector Wago (evita derretimento de fios). Circuito com DR obrigatório.</p>
+                <span class="tag-ponto bg-cyan-100 text-cyan-600">Alta Potência 7500W</span>
             </div>
         </section>
 
         <section id="view-memorial" class="hidden space-y-4">
             <div class="glass-card p-6 rounded-2xl">
-                <h3 class="font-black text-blue-600 uppercase text-xs mb-6 border-b pb-2">Memorial AP 2209</h3>
+                <h3 class="font-black text-blue-600 uppercase text-xs mb-6 border-b pb-2">Especificações de Engenharia</h3>
                 <div class="space-y-6 text-[10px]">
-                    <p><strong>01. Fiação:</strong> Cabos Prysmian Superastic. Azul (N), Verde (T), Preto/Verm (F). Tomadas: 2,5mm² | Potência: 4,0mm²-6,0mm².</p>
-                    <p><strong>02. Módulos:</strong> Schneider Orion (Bianco Polar). Placas UV com acabamento modular.</p>
-                    <p><strong>03. Estrutura:</strong> Caixas Tramontina Amarela e Conectores Wago 221 para emendas seguras (sem fita).</p>
-                    <div class="p-3 bg-blue-50 text-blue-700 font-bold italic rounded-lg">Padrão NBR 5410</div>
+                    <div>
+                        <h4 class="font-black uppercase text-slate-800">01. Condutores</h4>
+                        <p class="text-slate-500 mt-1 leading-relaxed">Padrão Prysmian Superastic. 6,0mm² (Chuveiros), 4,0mm² (Potência), 2,5mm² (Tomadas Gerais), 1,5mm² (Iluminação).</p>
+                    </div>
+                    <div>
+                        <h4 class="font-black uppercase text-slate-800">02. Proteção e Segurança</h4>
+                        <p class="text-slate-500 mt-1 leading-relaxed">Uso obrigatório de DR (Diferencial Residual) para áreas molhadas e DPS (Dispositivo de Proteção contra Surtos) classe II.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-black uppercase text-slate-800">03. Acabamento</h4>
+                        <p class="text-slate-500 mt-1 leading-relaxed">Linha Schneider Orion Bianco. Caixas 4x4 e 4x2 Tramontina reforçadas.</p>
+                    </div>
+                    <div class="p-3 bg-blue-50 text-blue-700 font-bold italic rounded-lg border border-blue-100">Instalação em conformidade total com NBR 5410.</div>
                 </div>
             </div>
         </section>
 
         <section id="view-galeria" class="hidden space-y-4">
             <div class="border-2 border-dashed border-slate-300 rounded-2xl p-8 text-center" onclick="document.getElementById('img-upload').click()">
-                <p class="text-[10px] font-black text-slate-400 uppercase">Subir fotos da obra</p>
+                <p class="text-[10px] font-black text-slate-400 uppercase">Anexar fotos do progresso</p>
                 <input type="file" id="img-upload" class="hidden" multiple accept="image/*" onchange="processFiles(this.files)">
             </div>
             <div id="gallery-grid" class="grid grid-cols-2 gap-3"></div>
         </section>
     </main>
+
+    
 
     <script>
         const INITIAL_DATA = [
@@ -173,7 +204,7 @@
         }
 
         function deleteItem(id) {
-            if(confirm('Excluir?')) {
+            if(confirm('Excluir item?')) {
                 inventory = inventory.filter(i => i.id !== id);
                 render();
             }
@@ -233,7 +264,7 @@
         function copySyncLink() {
             const link = window.location.origin + window.location.pathname + "?v=" + generateSyncData();
             navigator.clipboard.writeText(link).then(() => {
-                alert("Link de sincronia copiado! Cole no navegador de outro celular.");
+                alert("Link de sincronia copiado!");
             });
         }
 
