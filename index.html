@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AP 2209 - MASTER V48</title>
+    <title>AP 2209 - MASTER V50</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -33,7 +33,7 @@
         <div class="max-w-4xl mx-auto flex justify-between items-end">
             <div>
                 <h1 class="text-2xl font-black italic tracking-tighter uppercase leading-none">AP 2209 MASTER</h1>
-                <p class="text-[8px] font-bold uppercase tracking-[0.3em] opacity-70 mt-2">Engenharia Trifásica • V48.0</p>
+                <p class="text-[8px] font-bold uppercase tracking-[0.3em] opacity-70 mt-2">Engenharia Trifásica • V50.0</p>
             </div>
             <div class="text-right">
                 <p class="text-[9px] font-black text-blue-300 uppercase">Investimento Total</p>
@@ -75,70 +75,50 @@
 
         <div id="view-pontos" class="hidden space-y-4">
             
-            <div class="card-ponto" style="border-left-color: #f97316;">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-black text-orange-800 uppercase text-xs">🔥 Cozinha, Torre Quente e Banheiros</h4>
-                    <span class="bg-orange-100 text-orange-800 text-[8px] px-2 py-1 rounded font-bold uppercase">Caixas 4x4</span>
-                </div>
-                <div class="space-y-2 text-[10px]">
-                    <p class="font-bold text-slate-700 underline">Layout por ponto:</p>
-                    <p class="flex items-center"><span class="tag-detalhe bg-blue-500 text-white">110V</span> 01 Tomada (Fase + Neutro + Terra)</p>
-                    <p class="flex items-center"><span class="tag-detalhe bg-red-600 text-white">220V</span> 01 Tomada (Fase + Fase + Terra)</p>
-                    <p class="mt-2 p-2 bg-orange-50 rounded border border-orange-100 italic">Nota: Para a Torre Quente, utilizar condutores de 4,0mm² conforme especificado no orçamento.</p>
-                </div>
-            </div>
-
             <div class="card-ponto" style="border-left-color: #3b82f6;">
                 <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-black text-blue-800 uppercase text-xs">🛋️ Salas e Dormitórios (Híbrido Triplo)</h4>
+                    <h4 class="font-black text-blue-800 uppercase text-xs">🏠 Padrão Geral (Sala, Quartos e Cozinha)</h4>
                     <span class="bg-blue-100 text-blue-800 text-[8px] px-2 py-1 rounded font-bold uppercase">Caixas 4x4</span>
                 </div>
                 <div class="space-y-2 text-[10px]">
-                    <p class="font-bold text-slate-700 underline">Layout por ponto:</p>
-                    <p class="flex items-center"><span class="tag-detalhe bg-blue-500 text-white">110V</span> 03 Tomadas Monofásicas em paralelo</p>
-                    <p class="flex items-center"><span class="tag-detalhe bg-red-600 text-white">220V</span> 01 Tomada Bifásica dedicada</p>
-                    <p class="mt-2 text-slate-500">Uso: Eletrônicos em geral + ar condicionado portátil ou aquecedores.</p>
+                    <p class="font-bold text-slate-700">Configuração Interna por Caixa:</p>
+                    <p class="flex items-center"><span class="tag-detalhe bg-blue-600 text-white">110V</span> 03 Módulos de Tomada (F+N+T)</p>
+                    <p class="flex items-center"><span class="tag-detalhe bg-red-600 text-white">220V</span> 01 Módulo de Tomada (F+F+T)</p>
+                    <p class="mt-2 text-slate-500 italic border-t pt-2">Infra: Utilizar cabo 2,5mm² para tomadas gerais.</p>
+                </div>
+            </div>
+
+            <div class="card-ponto" style="border-left-color: #ef4444;">
+                <div class="flex justify-between items-start mb-2">
+                    <h4 class="font-black text-red-800 uppercase text-xs">🗼 Torre Quente (Alta Performance)</h4>
+                    <span class="bg-red-100 text-red-800 text-[8px] px-2 py-1 rounded font-bold uppercase">4 Caixas em Série</span>
+                </div>
+                <div class="space-y-3 text-[10px]">
+                    <p class="font-bold text-slate-700 underline text-[11px]">Especificação de Montagem:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-dashed border-slate-300">
+                        <p class="mb-1">📏 <strong>Espaçamento:</strong> 60cm entre centros de cada caixa.</p>
+                        <p class="mb-1">🔌 <strong>Cada Caixa (x4):</strong> 3x Tomadas 110V + 1x Tomada 220V.</p>
+                        <p>⚡ <strong>Condutores:</strong> Uso obrigatório de 4,0mm² (Orçamento Item 02).</p>
+                    </div>
                 </div>
             </div>
 
             <div class="card-ponto" style="border-left-color: #0f172a; background: #f8fafc;">
-                <h4 class="font-black text-slate-900 uppercase text-xs mb-4 flex items-center">
-                    📊 Resumo de Materiais para Obra (Sincronizado)
-                </h4>
+                <h4 class="font-black text-slate-900 uppercase text-xs mb-4">📊 Resumo de Materiais (V50)</h4>
                 <div class="grid grid-cols-1 gap-2 text-[9px] font-mono">
-                    <div class="flex justify-between border-b border-slate-200 pb-1">
-                        <span>CABO 6,0mm² (Chuveiro Master)</span> <strong class="text-blue-700">45m</strong>
-                    </div>
-                    <div class="flex justify-between border-b border-slate-200 pb-1">
-                        <span>CABO 4,0mm² (Torre Quente / Especiais)</span> <strong class="text-blue-700">36m</strong>
-                    </div>
-                    <div class="flex justify-between border-b border-slate-200 pb-1">
-                        <span>CABO 2,5mm² (Tomadas Gerais - R/N/T)</span> <strong class="text-blue-700">300m (Total)</strong>
-                    </div>
-                    <div class="flex justify-between border-b border-slate-200 pb-1">
-                        <span>CABO 1,5mm² (Iluminação Retorno/Fase)</span> <strong class="text-blue-700">170m</strong>
-                    </div>
-                    <div class="flex justify-between border-b border-slate-200 pb-1">
-                        <span>CAIXAS 4x4 (Pontos Híbridos)</span> <strong class="text-orange-600">12 Unid.</strong>
-                    </div>
-                    <div class="flex justify-between border-b border-slate-200 pb-1">
-                        <span>CAIXAS 4x2 (Interruptores/Simples)</span> <strong class="text-orange-600">26 Unid.</strong>
-                    </div>
-                    <div class="flex justify-between border-b border-slate-200 pb-1">
-                        <span>MÓDULOS TOMADA (Schneider Orion)</span> <strong class="text-slate-900">35 Unid.</strong>
-                    </div>
-                    <div class="flex justify-between pt-1">
-                        <span>PROTEÇÃO (IDR 40A + 3x DPS + Disj.)</span> <strong class="text-emerald-600">KIT COMPLETO</strong>
-                    </div>
+                    <div class="flex justify-between border-b pb-1"><span>CABO 4,0mm² (Torre Quente)</span> <strong>36m</strong></div>
+                    <div class="flex justify-between border-b pb-1"><span>CABO 2,5mm² (Geral)</span> <strong>300m</strong></div>
+                    <div class="flex justify-between border-b pb-1"><span>CAIXAS 4x4 (Total)</span> <strong>12 Unid.</strong></div>
+                    <div class="flex justify-between border-b pb-1"><span>MÓDULOS TOMADA (Schneider)</span> <strong>35 Unid.</strong></div>
                 </div>
             </div>
+
             
-            
+
         </div>
     </div>
 
     <script>
-        // Manutenção Integral dos Itens do Orçamento
         const defaultInventory = [
             { id: 1, desc: "Cabo Prysmian 6,0mm² (Preto/Verm/Verde)", qty: 45, price: 9.80, bought: false },
             { id: 2, desc: "Cabo Prysmian 4,0mm² (Verm/Branco/Verde)", qty: 36, price: 6.50, bought: false },
@@ -169,12 +149,7 @@
             const qrDiv = document.getElementById("qrcode");
             qrDiv.innerHTML = "";
             container.style.display = "flex";
-            new QRCode(qrDiv, {
-                text: getSyncURL(),
-                width: 250,
-                height: 250,
-                correctLevel: QRCode.CorrectLevel.L
-            });
+            new QRCode(qrDiv, { text: getSyncURL(), width: 250, height: 250, correctLevel: QRCode.CorrectLevel.L });
         }
 
         function copySyncLink() {
@@ -187,7 +162,7 @@
             if(syncData) {
                 try {
                     const decoded = JSON.parse(decodeURIComponent(escape(atob(syncData))));
-                    if(confirm("SINCRONIZAR DISPOSITIVOS?\nIsso atualizará este celular com os dados recebidos.")) {
+                    if(confirm("SINCRONIZAR DISPOSITIVOS?")) {
                         inventory = decoded;
                         saveAndRender();
                         window.history.replaceState({}, document.title, window.location.pathname);
