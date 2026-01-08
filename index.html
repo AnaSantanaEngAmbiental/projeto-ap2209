@@ -3,37 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="AP 2209">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2942/2942544.png">
-    
-    <title>AP 2209 - ENGENHARIA V33</title>
+    <title>AP 2209 - CONSOLIDAÇÃO MASTER</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; font-size: 10px; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; font-size: 10px; }
         .tab-active { background-color: #1e40af !important; color: white !important; transform: scale(1.02); }
         .header-master { background: #0f172a; border-bottom: 4px solid #2563eb; border-radius: 0 0 24px 24px; }
-        .card-ponto { border-left: 6px solid #2563eb; border-radius: 16px; padding: 18px; background: white; margin-bottom: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .row-purchased { opacity: 0.3; filter: grayscale(1); text-decoration: line-through; background-color: #f8fafc !important; }
-        .tag-cor { padding: 4px 10px; border-radius: 6px; color: white; font-weight: 900; font-size: 8px; text-transform: uppercase; border: 1px solid rgba(0,0,0,0.1); display: inline-block; margin: 2px 0; }
+        .card-ponto { border-left: 6px solid #2563eb; border-radius: 16px; padding: 18px; background: white; margin-bottom: 12px; }
+        .row-purchased { opacity: 0.3; filter: grayscale(1); text-decoration: line-through; }
         
-        /* Garantia visual do QR Code */
-        #qrcode { background: white; padding: 10px; border-radius: 12px; display: inline-block; }
-        #qrcode img { display: block !important; margin: 0 auto; }
+        /* QR Code Otimizado */
+        #qrcode { 
+            background: white; 
+            padding: 15px; 
+            border-radius: 20px; 
+            display: inline-block; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        #qrcode img { display: block !important; margin: 0 auto; max-width: 100%; }
 
         @media (min-width: 1280px) {
-            .main-content { margin-right: 320px !important; }
+            .main-content { margin-right: 340px !important; }
             #qr-panel { 
                 display: block !important; position: fixed; top: 20px; right: 20px; 
-                background: white; padding: 20px; border-radius: 24px; 
-                box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 2px solid #1e40af;
-                text-align: center; width: 260px; z-index: 1000;
+                background: white; padding: 25px; border-radius: 28px; 
+                width: 280px; text-align: center; border: 2px solid #1e40af;
             }
         }
         @media (max-width: 1279px) { #qr-panel { display: none; } }
@@ -42,26 +41,27 @@
 <body class="pb-24">
 
     <div id="qr-panel">
-        <p class="font-black text-[10px] uppercase mb-3 text-slate-800 italic">📲 SINCRONIZAR DISPOSITIVO</p>
+        <p class="font-black text-[11px] uppercase mb-4 text-slate-800 italic">📲 SINCRONISMO DINÂMICO</p>
         <div id="qrcode"></div>
-        <button onclick="syncData()" class="w-full bg-emerald-500 text-white py-3 rounded-xl font-black text-[9px] uppercase mt-4 shadow-md active:scale-95">
-            COPIAR LINK WHATSAPP
+        <button onclick="syncData()" class="w-full bg-blue-600 text-white py-4 rounded-xl font-black text-[10px] uppercase mt-4 shadow-lg active:scale-95">
+            COPIAR LINK MASTER
         </button>
+        <p class="text-[8px] text-slate-400 mt-3 font-bold uppercase tracking-widest">Leitura Otimizada V40</p>
     </div>
 
     <header class="header-master text-white p-6 mb-6 shadow-2xl main-content">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <div>
                 <h1 class="text-3xl font-black italic tracking-tighter text-blue-400 uppercase leading-none">AP 2209 MASTER</h1>
-                <p class="text-[8px] font-bold uppercase tracking-[0.4em] opacity-60 mt-3">Engenharia V33.0 • Estável</p>
+                <p class="text-[8px] font-bold uppercase tracking-[0.4em] opacity-60 mt-3">Engenharia Trifásica • Consolidação Integral</p>
             </div>
             <div class="flex gap-4">
                 <div class="text-right border-r border-slate-700 pr-4">
-                    <p class="text-[7px] font-black text-slate-400 uppercase">Investimento</p>
+                    <p class="text-[7px] font-black text-slate-400 uppercase">Total Orçado</p>
                     <p id="total-geral" class="text-lg font-mono font-bold">R$ 0,00</p>
                 </div>
                 <div class="text-right">
-                    <p class="text-[7px] font-black text-emerald-400 uppercase">Pago</p>
+                    <p class="text-[7px] font-black text-emerald-400 uppercase">Total Pago</p>
                     <p id="total-pago" class="text-lg font-mono font-bold text-emerald-400">R$ 0,00</p>
                 </div>
             </div>
@@ -72,13 +72,22 @@
         <nav class="flex gap-2 mb-6 overflow-x-auto pb-2">
             <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 min-w-[100px] py-4 rounded-xl font-black text-[9px] uppercase bg-white text-slate-400 tab-active">1. Orçamento</button>
             <button onclick="switchTab('eletrica')" id="btn-eletrica" class="flex-1 min-w-[100px] py-4 rounded-xl font-black text-[9px] uppercase bg-white text-slate-400">2. Memorial</button>
-            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 min-w-[100px] py-4 rounded-xl font-black text-[9px] uppercase bg-white text-slate-400">3. Mapa</button>
+            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 min-w-[100px] py-4 rounded-xl font-black text-[9px] uppercase bg-white text-slate-400">3. Mapa de Pontos</button>
         </nav>
 
         <div id="view-planilha" class="space-y-4">
-            <button onclick="addItem()" class="w-full bg-blue-600 text-white py-4 rounded-xl font-black text-[10px] uppercase shadow-lg">+ Adicionar Material</button>
+            <button onclick="addItem()" class="w-full bg-blue-600 text-white py-4 rounded-xl font-black text-[10px] uppercase shadow-lg">+ Novo Item</button>
             <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
                 <table class="w-full text-left">
+                    <thead class="bg-slate-50 border-b border-slate-100 text-[8px] uppercase font-black text-slate-400">
+                        <tr>
+                            <th class="p-3">Status</th>
+                            <th class="p-3">Descrição Técnica</th>
+                            <th class="p-3 text-center">Qtd</th>
+                            <th class="p-3 text-right">Subtotal</th>
+                            <th class="p-3 text-center">Ação</th>
+                        </tr>
+                    </thead>
                     <tbody id="inventory-body"></tbody>
                 </table>
             </div>
@@ -86,18 +95,15 @@
 
         <div id="view-eletrica" class="hidden space-y-4">
             <div class="card-ponto" style="border-left-color: #10b981;">
-                <h3 class="font-black text-emerald-700 uppercase text-[11px] mb-2">🌍 Aterramento TN-S</h3>
-                <p class="text-[9px] text-slate-600">Condutor Verde contínuo. Proteção total contra choques via IDR Schneider.</p>
+                <h3 class="font-black text-emerald-700 uppercase text-[11px] mb-2">🌍 Proteção e Aterramento TN-S</h3>
+                <p class="text-[9px] text-slate-600 italic">Sistema com barramento de equipotencialização e condutor PE dedicado (Verde).</p>
                 
             </div>
-            <div class="card-ponto">
-                <h3 class="font-black text-blue-700 uppercase text-[11px] mb-4">⚡ Código de Cores</h3>
-                <div class="grid grid-cols-2 gap-2 text-[8px] font-black uppercase">
-                    <div class="bg-black text-white p-3 rounded-lg text-center">Fase R: Preto</div>
-                    <div class="bg-red-600 text-white p-3 rounded-lg text-center">Fase S: Vermelho</div>
-                    <div class="bg-white border text-slate-900 p-3 rounded-lg text-center">Fase T: Branco</div>
-                    <div class="bg-blue-600 text-white p-3 rounded-lg text-center">Neutro: Azul</div>
-                </div>
+            <div class="grid grid-cols-2 gap-2 text-[8px] font-black uppercase">
+                <div class="bg-black text-white p-4 rounded-xl text-center shadow-md">Fase R: Preto</div>
+                <div class="bg-red-600 text-white p-4 rounded-xl text-center shadow-md">Fase S: Vermelho</div>
+                <div class="bg-white border text-slate-900 p-4 rounded-xl text-center shadow-md">Fase T: Branco</div>
+                <div class="bg-blue-600 text-white p-4 rounded-xl text-center shadow-md">Neutro: Azul</div>
             </div>
         </div>
 
@@ -105,19 +111,23 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="card-ponto" style="border-left-color: #3b82f6;">
                     <p class="font-black text-[11px] text-blue-600 uppercase mb-2">🔌 Tomadas Gerais TUG (127V)</p>
-                    <p class="text-[9px] font-bold">Cabo 2,5mm² (R + N + T) - Total: 60 metros</p>
+                    <p class="text-[9px] font-bold">Cabo 2,5mm²: Fase R + Neutro + Terra</p>
+                    <p class="text-[10px] font-black mt-2">Total: 60 metros</p>
                 </div>
                 <div class="card-ponto" style="border-left-color: #8b5cf6;">
-                    <p class="font-black text-[11px] text-purple-600 uppercase mb-2">❄️ Ar Condicionado (2 Unid - 220V)</p>
-                    <p class="text-[9px] font-bold">Cabo 2,5mm² (S + T + Terra) - Total: 28 metros</p>
+                    <p class="font-black text-[11px] text-purple-600 uppercase mb-2">❄️ Ar Condicionado (02 Unid - 220V)</p>
+                    <p class="text-[9px] font-bold">Cabo 2,5mm²: Fase S + Fase T + Terra</p>
+                    <p class="text-[10px] font-black mt-2">Total: 28 metros</p>
                 </div>
                 <div class="card-ponto" style="border-left-color: #ef4444;">
                     <p class="font-black text-[11px] text-red-600 uppercase mb-2">🚿 Chuveiro Master (220V)</p>
-                    <p class="text-[9px] font-bold">Cabo 6,0mm² (R + S + Terra) - Total: 15 metros</p>
+                    <p class="text-[9px] font-bold">Cabo 6,0mm²: Fase R + Fase S + Terra</p>
+                    <p class="text-[10px] font-black mt-2">Total: 15 metros</p>
                 </div>
                 <div class="card-ponto" style="border-left-color: #fbbf24;">
-                    <p class="font-black text-[11px] text-amber-500 uppercase mb-2">💡 Iluminação</p>
-                    <p class="text-[9px] font-bold">Cabo 1,5mm² (T + Retornos + N) - Total: 170 metros</p>
+                    <p class="font-black text-[11px] text-amber-500 uppercase mb-2">💡 Iluminação Master</p>
+                    <p class="text-[9px] font-bold">Cabo 1,5mm²: Fase T + Retornos + Neutro</p>
+                    <p class="text-[10px] font-black mt-2">Total: 170 metros</p>
                 </div>
             </div>
             
@@ -125,63 +135,69 @@
     </div>
 
     <script>
+        // Consolidação Integral de Itens de Todas as Versões
         const defaultInventory = [
-            { id: 1, desc: "Cabo Prysmian 6,0mm² (Preto/Verm/Verde)", qty: 45, price: 9.80, bought: false },
-            { id: 2, desc: "Cabo Prysmian 4,0mm² (Verm/Branco/Verde)", qty: 36, price: 6.50, bought: false },
+            { id: 1, desc: "Cabo Prysmian 6,0mm² (Fases R/S/Verde)", qty: 45, price: 9.80, bought: false },
+            { id: 2, desc: "Cabo Prysmian 4,0mm² (Fases S/T/Verde)", qty: 36, price: 6.50, bought: false },
             { id: 3, desc: "Cabo Prysmian 2,5mm² VERDE (Terra)", qty: 100, price: 4.50, bought: true },
             { id: 4, desc: "Cabo Prysmian 2,5mm² PRETO (Fase R)", qty: 100, price: 4.20, bought: false },
             { id: 5, desc: "Cabo Prysmian 2,5mm² AZUL (Neutro)", qty: 100, price: 4.20, bought: false },
-            { id: 6, desc: "Cabo Prysmian 1,5mm² (Amarelo/Branco/Azul)", qty: 120, price: 2.80, bought: false },
+            { id: 6, desc: "Cabo Prysmian 1,5mm² (Iluminação)", qty: 120, price: 2.80, bought: false },
             { id: 7, desc: "IDR Schneider 4P 40A 30mA", qty: 1, price: 295.00, bought: false },
             { id: 8, desc: "DPS Schneider 20kA 275V", qty: 3, price: 145.00, bought: false },
-            { id: 9, desc: "Disjuntor Bipolar 40A Schneider", qty: 1, price: 72.00, bought: false },
+            { id: 9, desc: "Disjuntor Bipolar 40A Schneider (Chuveiro)", qty: 1, price: 72.00, bought: false },
             { id: 10, desc: "Módulo Tomada 10A Schneider Orion (x35)", qty: 35, price: 18.90, bought: false },
             { id: 11, desc: "Caixa 4x4 Amarela Reforçada (x12)", qty: 12, price: 7.80, bought: true },
             { id: 12, desc: "Caixa 4x2 Amarela Reforçada (x26)", qty: 26, price: 4.80, bought: true },
             { id: 13, desc: "Torneira Cozinha Gourmet Docol", qty: 1, price: 920.00, bought: false },
-            { id: 14, desc: "Conector Wago 221-612 (Original)", qty: 10, price: 8.50, bought: false },
+            { id: 14, desc: "Conector Wago 221-612 Original (x10)", qty: 10, price: 8.50, bought: false },
             { id: 15, desc: "Quadro Schneider 36 DIN Completo", qty: 1, price: 310.00, bought: false }
         ];
 
-        let inventory = JSON.parse(localStorage.getItem('ap2209_data')) || defaultInventory;
+        let inventory = JSON.parse(localStorage.getItem('ap2209_consolidado')) || defaultInventory;
 
+        // Refinamento de QR Code e Sincronismo
         function updateQRCode() {
-            const dataStr = btoa(unescape(encodeURIComponent(JSON.stringify(inventory))));
-            const syncUrl = window.location.origin + window.location.pathname + '?data=' + dataStr;
+            // Minificação de dados para reduzir tamanho do QR Code
+            const compactData = inventory.map(i => [i.id, i.qty, i.price, i.bought ? 1 : 0, i.desc]);
+            const dataStr = btoa(unescape(encodeURIComponent(JSON.stringify(compactData))));
+            const syncUrl = window.location.origin + window.location.pathname + '?d=' + dataStr;
+            
             const qrContainer = document.getElementById("qrcode");
             qrContainer.innerHTML = '';
-            
-            // Gerando QR Code com ECC Level L (Baixa correção = Menos pontos = Melhor leitura de câmera)
             new QRCode(qrContainer, {
                 text: syncUrl,
                 width: 200, height: 200,
                 colorDark : "#0f172a",
                 colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.L
+                correctLevel : QRCode.CorrectLevel.M // Médio: Ideal para foco de câmera
             });
         }
 
         function syncData() {
-            const dataStr = btoa(unescape(encodeURIComponent(JSON.stringify(inventory))));
-            const syncUrl = window.location.origin + window.location.pathname + '?data=' + dataStr;
-            navigator.clipboard.writeText(syncUrl).then(() => {
-                alert("✅ LINK COPIADO!\nEnvie pelo WhatsApp.");
-            });
+            const compactData = inventory.map(i => [i.id, i.qty, i.price, i.bought ? 1 : 0, i.desc]);
+            const dataStr = btoa(unescape(encodeURIComponent(JSON.stringify(compactData))));
+            const syncUrl = window.location.origin + window.location.pathname + '?d=' + dataStr;
+            navigator.clipboard.writeText(syncUrl).then(() => alert("✅ Link Master Copiado!"));
         }
 
         function checkUrlUpdates() {
             const params = new URLSearchParams(window.location.search);
-            const raw = params.get('data');
-            if(raw) {
+            const d = params.get('d');
+            if(d) {
                 try {
-                    const decoded = JSON.parse(decodeURIComponent(escape(atob(raw))));
-                    if(confirm("Importar novos dados?")) {
+                    const raw = JSON.parse(decodeURIComponent(escape(atob(d))));
+                    // Remapeamento dos dados compactos para o formato original
+                    const decoded = raw.map(item => ({
+                        id: item[0], qty: item[1], price: item[2], bought: item[3] === 1, desc: item[4]
+                    }));
+                    if(confirm("Deseja sincronizar e atualizar este dispositivo?")) {
                         inventory = decoded;
-                        localStorage.setItem('ap2209_data', JSON.stringify(inventory));
+                        localStorage.setItem('ap2209_consolidado', JSON.stringify(inventory));
                         window.history.replaceState({}, document.title, window.location.pathname);
                         render();
                     }
-                } catch(e) { console.error("Erro no Sync"); }
+                } catch(e) { console.error("Erro no sincronismo"); }
             }
         }
 
@@ -193,26 +209,24 @@
                 const sub = item.qty * item.price;
                 totalG += sub; if(item.bought) totalP += sub;
                 const row = document.createElement('tr');
-                row.className = `border-b border-slate-100 ${item.bought ? 'row-purchased' : 'bg-white'}`;
+                row.className = `border-b border-slate-50 ${item.bought ? 'row-purchased' : 'bg-white'}`;
                 row.innerHTML = `
-                    <td class="p-3 w-10 text-center"><input type="checkbox" ${item.bought?'checked':''} onchange="toggle(${item.id})" class="w-6 h-6"></td>
-                    <td class="p-3">
-                        <div class="font-black text-[10px] uppercase text-slate-800">${item.desc}</div>
-                    </td>
-                    <td class="p-3 text-center font-black">${item.qty}</td>
-                    <td class="p-3 text-right font-mono font-black">R$ ${sub.toFixed(2)}</td>
-                    <td class="p-3 text-center"><button onclick="remove(${item.id})" class="text-slate-300 font-black">✕</button></td>
+                    <td class="p-4 w-12 text-center"><input type="checkbox" ${item.bought?'checked':''} onchange="toggle(${item.id})" class="w-6 h-6 rounded-lg accent-blue-600"></td>
+                    <td class="p-4 font-black uppercase text-slate-700">${item.desc}</td>
+                    <td class="p-4 text-center font-black">${item.qty}</td>
+                    <td class="p-4 text-right font-mono font-bold text-blue-900">R$ ${sub.toFixed(2)}</td>
+                    <td class="p-4 text-center"><button onclick="remove(${item.id})" class="text-slate-300 hover:text-red-500 font-bold">✕</button></td>
                 `;
                 body.appendChild(row);
             });
             document.getElementById('total-geral').innerText = `R$ ${totalG.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
             document.getElementById('total-pago').innerText = `R$ ${totalP.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-            localStorage.setItem('ap2209_data', JSON.stringify(inventory));
+            localStorage.setItem('ap2209_consolidado', JSON.stringify(inventory));
             updateQRCode();
         }
 
         function toggle(id) { const i = inventory.find(x => x.id === id); i.bought = !i.bought; render(); }
-        function remove(id) { if(confirm("Excluir?")) { inventory = inventory.filter(x => x.id !== id); render(); } }
+        function remove(id) { if(confirm("Remover?")) { inventory = inventory.filter(x => x.id !== id); render(); } }
         function addItem() {
             const d = prompt("Material:"); if(!d) return;
             const q = parseFloat(prompt("Qtd:", "1"));
@@ -228,10 +242,7 @@
             });
         }
 
-        window.onload = () => {
-            checkUrlUpdates();
-            render();
-        };
+        window.onload = () => { checkUrlUpdates(); render(); };
     </script>
 </body>
 </html>
