@@ -3,143 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AP 2209 - ENGENHARIA AVANÇADA</title>
+    <title>AP 2209 - ENGENHARIA DETALHADA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; font-size: 10px; }
         .tab-active { background-color: #1e40af !important; color: white !important; }
-        .row-purchased { opacity: 0.4; filter: grayscale(1); background-color: #f8fafc !important; text-decoration: line-through; }
-        .card-memorial { border-left: 4px solid #1e40af; background: #f1f5f9; padding: 10px; border-radius: 8px; margin-bottom: 8px; }
-        .tag-alert { background: #fee2e2; color: #991b1b; padding: 2px 5px; border-radius: 4px; font-weight: 900; text-transform: uppercase; font-size: 7px; }
+        .card-ponto { border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px; margin-bottom: 6px; background: white; }
+        .tag-medida { background: #dcfce7; color: #166534; padding: 1px 4px; border-radius: 3px; font-weight: 800; }
+        @media print { .no-print { display: none !important; } }
     </style>
 </head>
-<body class="bg-slate-100 min-h-screen text-slate-800">
+<body class="bg-slate-100 min-h-screen">
 
     <div class="max-w-4xl mx-auto p-2">
         <header class="bg-slate-900 text-white p-4 rounded-xl shadow-lg mb-2 flex justify-between items-center">
             <div>
-                <h1 class="text-lg font-black italic text-blue-400 uppercase leading-none">AP 2209 DASH</h1>
-                <p class="text-[7px] font-bold text-slate-400 uppercase tracking-widest mt-1">Master Plan 2026 • Engenharia & Suprimentos</p>
+                <h1 class="text-lg font-black italic text-blue-400 uppercase leading-none">AP 2209 MASTER</h1>
+                <p class="text-[7px] font-bold text-slate-400 uppercase tracking-widest mt-1">Cálculo de Pontos e Metragens</p>
             </div>
             <div class="text-right">
-                <p class="text-[6px] font-black text-blue-400 uppercase">Investimento Estimado</p>
+                <p class="text-[6px] font-black text-blue-400 uppercase">Status Orçamento</p>
                 <p id="total-geral" class="text-sm font-mono font-bold text-white">R$ 0,00</p>
             </div>
         </header>
 
-        <div class="flex gap-1 mb-2">
-            <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 py-2 rounded-lg font-black text-[8px] uppercase tab-active">1. Orçamento</button>
-            <button onclick="switchTab('eletrica')" id="btn-eletrica" class="flex-1 py-2 rounded-lg font-black text-[8px] uppercase bg-white text-slate-400">2. Memorial Técnico</button>
-            <button onclick="addItem()" class="px-3 bg-blue-600 text-white rounded-lg font-black text-[12px] shadow-md">+</button>
+        <div class="flex gap-1 mb-2 no-print">
+            <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 py-2 rounded-lg font-black text-[7px] uppercase tab-active">1. Orçamento</button>
+            <button onclick="switchTab('eletrica')" id="btn-eletrica" class="flex-1 py-2 rounded-lg font-black text-[7px] uppercase bg-white text-slate-400">2. Memorial</button>
+            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 py-2 rounded-lg font-black text-[7px] uppercase bg-white text-slate-400">3. Mapa de Pontos</button>
         </div>
 
-        <div id="content" class="bg-white rounded-xl shadow-md p-2 border border-slate-200">
+        <div class="bg-white rounded-xl shadow-md p-3 border border-slate-200">
             
             <div id="view-planilha">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left">
-                        <thead>
-                            <tr class="text-[7px] font-black uppercase text-slate-400 border-b">
-                                <th class="p-1">OK</th>
-                                <th class="p-1">Item / Especificação Técnica</th>
-                                <th class="p-1 text-center">Qtd</th>
-                                <th class="p-1 text-right text-blue-600">Total</th>
-                            </tr>
-                        </thead>
                         <tbody id="inventory-body"></tbody>
                     </table>
                 </div>
             </div>
 
-            <div id="view-eletrica" class="hidden space-y-3 p-2">
-                <h2 class="text-[10px] font-black uppercase border-b-2 border-blue-600 pb-1">Diretrizes de Execução Técnica</h2>
-                
-                <div class="card-memorial">
-                    <h3 class="font-black text-blue-700 uppercase mb-1 flex justify-between">⚡ Elétrica: Condutores Prysmian <span class="tag-alert">Urgente</span></h3>
-                    <p class="leading-tight text-slate-600 mb-2">Padrão de cores NBR 5410. Proibido inverter cores para evitar acidentes futuros:</p>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-1 text-[8px] font-bold uppercase">
-                        <div class="bg-black text-white p-1 rounded text-center">Fase R: Preto</div>
-                        <div class="bg-red-600 text-white p-1 rounded text-center">Fase S: Vermelho</div>
-                        <div class="bg-white border border-blue-600 text-blue-600 p-1 rounded text-center">Fase T: Branco</div>
-                        <div class="bg-blue-600 text-white p-1 rounded text-center">Neutro: Azul</div>
-                        <div class="bg-emerald-600 text-white p-1 rounded text-center">Terra: Verde</div>
-                        <div class="bg-orange-500 text-white p-1 rounded text-center">Retorno: Amarelo</div>
-                    </div>
-                </div>
-
-                <div class="card-memorial" style="border-left-color: #059669;">
-                    <h3 class="font-black text-emerald-700 uppercase mb-1">🌱 Sistema de Aterramento (Equipotencialização)</h3>
-                    <p class="leading-tight text-slate-600">O <strong>Cabo Verde (Prysmian 2,5mm² ou 4mm²)</strong> deve estar presente em todas as tomadas. No quadro, utilizar <strong>Barramento de Terra</strong> dedicado. Verificar a continuidade da malha de aterramento do prédio antes da conexão final.</p>
-                </div>
-
-                <div class="card-memorial" style="border-left-color: #dc2626;">
-                    <h3 class="font-black text-red-700 uppercase mb-1">🛡️ Proteção do Quadro (QDC)</h3>
-                    <p class="leading-tight text-slate-600">Instalação obrigatória de <strong>DR (Interruptor Diferencial)</strong> para proteção contra choques e <strong>DPS (Dispositivo contra Surtos)</strong> Schneider em cada fase para proteger eletrônicos (Smart TV, Geladeira, PC) contra raios.</p>
-                </div>
-
-                <div class="card-memorial" style="border-left-color: #000;">
-                    <h3 class="font-black uppercase mb-1">🛠️ Conectividade de Alta Performance</h3>
-                    <p class="leading-tight text-slate-600">Utilizar <strong>terminais ilhós</strong> em 100% das pontas dos cabos. A compressão deve ser <strong>Hexagonal</strong>. Conexões de derivação devem usar conectores <strong>Wago série 221</strong> (proibido fita isolante em emendas de teto).</p>
-                </div>
-
-                <div class="card-memorial" style="border-left-color: #0ea5e9;">
-                    <h3 class="font-black text-sky-700 uppercase mb-1">🚰 Hidráulica: Padrão Docol</h3>
-                    <p class="leading-tight text-slate-600">Monocomandos Docol Gourmet. Garantia vitalícia depende da instalação técnica: Limpeza de tubulação antes de colocar os reparos cerâmicos.</p>
+            <div id="view-eletrica" class="hidden space-y-2 p-1">
+                <div class="p-3 bg-slate-900 text-white rounded-lg">
+                    <p class="font-black text-blue-400 uppercase text-[8px]">Regra de Ouro AP 2209:</p>
+                    <p class="text-[9px] italic">"Conexões em Wago 221 e terminais ilhós com crimpagem hexagonal em todo o sistema."</p>
                 </div>
             </div>
+
+            <div id="view-pontos" class="hidden animate-in fade-in">
+                <h2 class="text-[10px] font-black uppercase border-b-2 border-blue-600 pb-1 mb-3">Detalhamento de Consumo por Ponto</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    <div class="card-ponto">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="font-black text-blue-700">PONTO TUE (Carga Pesada)</span>
+                            <span class="tag-medida">Distância Média: 12m</span>
+                        </div>
+                        <p class="text-[8px] text-slate-500 mb-2 leading-tight italic">Inclui: Máquina Lava-louça, Forno e Micro-ondas.</p>
+                        <ul class="space-y-1 font-bold text-[8px] border-t pt-2">
+                            <li class="flex justify-between"><span>Cabo Prysmian 4,0mm² (Fase T + N + T):</span> <span>36 metros</span></li>
+                            <li class="flex justify-between text-blue-600"><span>Caixa 4x4 Amarela:</span> <span>1 Unidade</span></li>
+                            <li class="flex justify-between"><span>Módulo Tomada 20A Schneider:</span> <span>1 Unidade</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="card-ponto">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="font-black text-slate-700">PONTO TUG (Geral x10)</span>
+                            <span class="tag-medida">Distância Média: 8m</span>
+                        </div>
+                        <ul class="space-y-1 font-bold text-[8px] border-t pt-2">
+                            <li class="flex justify-between"><span>Cabo Prysmian 2,5mm² (Fase + N + T):</span> <span>24 metros/ponto</span></li>
+                            <li class="flex justify-between text-blue-600"><span>Caixa 4x2 Amarela:</span> <span>1 Unidade</span></li>
+                            <li class="flex justify-between"><span>Módulo Tomada 10A Schneider:</span> <span>2 Unidades</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="card-ponto">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="font-black text-amber-600">PONTO LUZ/INTERRUPTOR</span>
+                            <span class="tag-medida">Distância Média: 6m</span>
+                        </div>
+                        <ul class="space-y-1 font-bold text-[8px] border-t pt-2">
+                            <li class="flex justify-between"><span>Cabo 1,5mm² (Fase + Retorno):</span> <span>12 metros</span></li>
+                            <li class="flex justify-between text-blue-600"><span>Interruptor Simples/Paralelo:</span> <span>1 Unidade</span></li>
+                            <li class="flex justify-between"><span>Caixa Octogonal Teto:</span> <span>1 Unidade</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="card-ponto bg-blue-50 border-blue-200">
+                        <span class="font-black text-blue-800 uppercase text-[9px]">Resumo de Hardware (Projeto Total)</span>
+                        <div class="mt-2 grid grid-cols-2 gap-2 text-[8px]">
+                            <div class="bg-white p-2 rounded border border-blue-100">
+                                <p class="text-slate-400">Caixas 4x4:</p>
+                                <p class="text-sm font-black text-blue-600">12 un</p>
+                            </div>
+                            <div class="bg-white p-2 rounded border border-blue-100">
+                                <p class="text-slate-400">Caixas 4x2:</p>
+                                <p class="text-sm font-black text-blue-600">22 un</p>
+                            </div>
+                            <div class="bg-white p-2 rounded border border-blue-100">
+                                <p class="text-slate-400">Módulos Tomada:</p>
+                                <p class="text-sm font-black text-blue-600">45 un</p>
+                            </div>
+                            <div class="bg-white p-2 rounded border border-blue-100">
+                                <p class="text-slate-400">Placas/Espelhos:</p>
+                                <p class="text-sm font-black text-blue-600">30 un</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+
+                <div class="mt-4 p-3 bg-amber-50 border-l-4 border-amber-500 rounded text-[9px] font-bold text-amber-800 italic">
+                    Nota técnica: As metragens calculam o trajeto ida/volta pelo eletroduto + 30cm de sobra em cada caixa para a crimpagem hexagonal dos terminais.
+                </div>
+            </div>
+
         </div>
     </div>
 
     <script>
         let inventory = [
-            { id: 1, desc: "Cabo Prysmian 2,5mm² VERDE (Terra/Aterramento)", qty: 100, price: 4.50, cat: "Elet" },
+            { id: 1, desc: "Cabo Prysmian 2,5mm² VERDE (Terra)", qty: 100, price: 4.50, cat: "Elet" },
             { id: 2, desc: "Cabo Prysmian 2,5mm² BRANCO (Fase T)", qty: 100, price: 4.20, cat: "Elet" },
             { id: 3, desc: "Cabo Prysmian 2,5mm² PRETO (Fase R)", qty: 100, price: 4.20, cat: "Elet" },
             { id: 4, desc: "Cabo Prysmian 2,5mm² VERMELHO (Fase S)", qty: 100, price: 4.20, cat: "Elet" },
             { id: 5, desc: "Cabo Prysmian 2,5mm² AZUL (Neutro)", qty: 100, price: 4.20, cat: "Elet" },
-            { id: 6, desc: "DPS Schneider Electric 20kA 275V", qty: 3, price: 145.00, cat: "Elet" },
-            { id: 7, desc: "IDR Schneider Easy9 4P 40A 30mA", qty: 1, price: 285.00, cat: "Elet" },
-            { id: 8, desc: "Torneira Cozinha Gourmet Docol", qty: 1, price: 980.00, cat: "Hidr" },
-            { id: 9, desc: "Caixa 4x4 Reforçada Amarela", qty: 15, price: 6.80, cat: "Infra" },
-            { id: 10, desc: "Terminal Ilhós Tubular (Pack 100)", qty: 2, price: 25.00, cat: "Elet" },
-            { id: 11, desc: "Barramento de Terra/Neutro isolado", qty: 2, price: 35.00, cat: "Elet" },
+            { id: 6, desc: "Caixa 4x4 Reforçada Amarela", qty: 12, price: 7.50, cat: "Infra" },
+            { id: 7, desc: "Caixa 4x2 Reforçada Amarela", qty: 22, price: 4.80, cat: "Infra" },
+            { id: 8, desc: "Módulo Tomada 10A Schneider Orion", qty: 45, price: 18.90, cat: "Elet" },
+            { id: 9, desc: "Placa 4x2 1 Posto Schneider Orion", qty: 22, price: 12.50, cat: "Elet" },
+            { id: 10, desc: "Interruptor Simples Schneider Orion", qty: 10, price: 22.00, cat: "Elet" },
+            { id: 11, desc: "Terminal Ilhós Tubular (Pack 100)", qty: 3, price: 25.00, cat: "Elet" },
             { id: 12, desc: "Conector Wago 221-413 (50un)", qty: 1, price: 115.00, cat: "Elet" },
             { id: 13, desc: "Quadro Schneider 36 DIN", qty: 1, price: 295.00, cat: "Infra" },
             { id: 14, desc: "Misturador Banheiro Docol", qty: 2, price: 450.00, cat: "Hidr" },
-            { id: 15, desc: "Eletroduto Corrugado 3/4", qty: 1, price: 98.00, cat: "Infra" }
+            { id: 15, desc: "Torneira Cozinha Gourmet Docol", qty: 1, price: 980.00, cat: "Hidr" }
         ].map(i => ({...i, bought: false}));
 
         function render() {
             const body = document.getElementById('inventory-body');
-            body.innerHTML = '';
+            body.innerHTML = '<thead><tr class="text-[7px] font-black uppercase text-slate-400 border-b"><th class="p-1">OK</th><th class="p-1">Material</th><th class="p-1 text-center">Qtd</th><th class="p-1 text-right text-blue-600">Total</th></tr></thead>';
             let total = 0;
             inventory.forEach(item => {
                 const sub = item.qty * item.price;
                 total += sub;
                 const row = document.createElement('tr');
-                row.className = `border-b border-slate-50 ${item.bought ? 'row-purchased' : ''}`;
-                row.innerHTML = `
-                    <td class="p-2"><input type="checkbox" ${item.bought?'checked':''} onchange="toggle(${item.id})" class="w-4 h-4"></td>
-                    <td class="p-1">
-                        <div class="font-bold text-[9px] uppercase leading-tight">${item.desc}</div>
-                        <span class="text-[6px] font-black text-blue-500 uppercase">${item.cat}</span>
-                    </td>
-                    <td class="p-1 text-center font-bold">${item.qty}</td>
-                    <td class="p-1 text-right font-mono font-black text-blue-700 text-[10px]">R$ ${sub.toFixed(2)}</td>
-                `;
+                row.className = `border-b border-slate-50 ${item.bought ? 'opacity-40 grayscale line-through' : ''}`;
+                row.innerHTML = `<td class="p-2"><input type="checkbox" ${item.bought?'checked':''} onchange="toggle(${item.id})" class="w-3 h-3"></td><td class="p-1"><div class="font-bold text-[8px] uppercase leading-tight">${item.desc}</div><span class="text-[5px] font-black text-blue-500 uppercase">${item.cat}</span></td><td class="p-1 text-center font-bold">${item.qty}</td><td class="p-1 text-right font-mono font-black text-blue-700 text-[9px]">R$ ${sub.toFixed(2)}</td>`;
                 body.appendChild(row);
             });
             document.getElementById('total-geral').innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
         }
 
         function toggle(id) { const i = inventory.find(x => x.id === id); i.bought = !i.bought; render(); }
-        function addItem() { inventory = [{id: Date.now(), desc: "NOVO ITEM TÉCNICO", qty: 1, price: 0, cat: "Geral", bought: false}, ...inventory]; render(); }
         function switchTab(t) {
-            document.getElementById('view-planilha').classList.toggle('hidden', t !== 'planilha');
-            document.getElementById('view-eletrica').classList.toggle('hidden', t !== 'eletrica');
-            document.getElementById('btn-planilha').classList.toggle('tab-active', t === 'planilha');
-            document.getElementById('btn-eletrica').classList.toggle('tab-active', t === 'eletrica');
+            ['planilha', 'eletrica', 'pontos'].forEach(tab => {
+                document.getElementById('view-' + tab).classList.toggle('hidden', t !== tab);
+                document.getElementById('btn-' + tab).classList.toggle('tab-active', t === tab);
+                if(t !== tab) document.getElementById('btn-' + tab).classList.add('bg-white', 'text-slate-400');
+            });
         }
         window.onload = render;
     </script>
