@@ -65,7 +65,8 @@
         <nav class="flex gap-1 mb-6 bg-slate-200/50 p-1 rounded-2xl">
             <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 py-4 rounded-xl font-black text-[8px] uppercase transition-all tab-active">1. Orçamento</button>
             <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 py-4 rounded-xl font-black text-[8px] uppercase transition-all bg-transparent text-slate-500">2. Mapa de Pontos</button>
-            <button onclick="switchTab('arquivos')" id="btn-arquivos" class="flex-1 py-4 rounded-xl font-black text-[8px] uppercase transition-all bg-transparent text-slate-500">3. Plantas/Docs</button>
+            <button onclick="switchTab('memorial')" id="btn-memorial" class="flex-1 py-4 rounded-xl font-black text-[8px] uppercase transition-all bg-transparent text-slate-500">3. Memorial</button>
+            <button onclick="switchTab('arquivos')" id="btn-arquivos" class="flex-1 py-4 rounded-xl font-black text-[8px] uppercase transition-all bg-transparent text-slate-500">4. Galeria</button>
         </nav>
 
         <div id="view-planilha" class="space-y-3">
@@ -113,9 +114,28 @@
                     <p class="tag-detalhe bg-blue-100 text-blue-600">Total: 5 Pontos 4x4</p>
                 </div>
             </div>
+        </div>
 
-            <div class="p-4 bg-amber-50 border border-amber-200 rounded-2xl text-[9px] font-bold text-amber-800">
-                ⚠️ DICA: Ao copiar o link, certifique-se que o item "comprado" está marcado para economizar espaço no link do WhatsApp.
+        <div id="view-memorial" class="hidden space-y-4">
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                <h3 class="font-black text-blue-600 uppercase text-[10px] mb-4">📋 Especificações Técnicas</h3>
+                
+                <div class="space-y-4 text-[10px]">
+                    <div class="pb-3 border-b border-slate-100">
+                        <p class="font-black text-slate-800 uppercase">Fiação e Proteção</p>
+                        <p class="text-slate-500 mt-1 italic">Uso exclusivo de cabos Prysmian (Norma NBR 5410). Barramento de cobre dimensionado para carga total.</p>
+                    </div>
+
+                    <div class="pb-3 border-b border-slate-100">
+                        <p class="font-black text-slate-800 uppercase">Acabamentos (Linha Orion)</p>
+                        <p class="text-slate-500 mt-1 italic">Módulos Schneider Orion na cor Branco Polar. Placas 4x4 e 4x2 com proteção UV.</p>
+                    </div>
+
+                    <div class="pb-3 border-b border-slate-100">
+                        <p class="font-black text-slate-800 uppercase">Infraestrutura</p>
+                        <p class="text-slate-500 mt-1 italic">Caixas 4x4 Amarelas Tramontina (Reforçadas). Conectores Wago 221 para derivações seguras (sem fita isolante nos pontos principais).</p>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -135,7 +155,7 @@
     </div>
 
     <script>
-        // Dados Iniciais
+        // Dados Iniciais (Sincronizados com a versão V60)
         const defaultInventory = [
             { id: 1, desc: "Cabo Prysmian 6,0mm² (Chuveiros)", qty: 50, price: 9.80, bought: false },
             { id: 2, desc: "Cabo Prysmian 4,0mm² (Torre Quente)", qty: 60, price: 6.50, bought: false },
@@ -152,10 +172,8 @@
         let inventory = JSON.parse(localStorage.getItem('ap2209_master_v60')) || defaultInventory;
         let filesList = JSON.parse(localStorage.getItem('ap2209_files_v60')) || [];
 
-        // --- FUNÇÕES DE SINCRONIZAÇÃO (CORRIGIDAS PARA WHATSAPP) ---
-        
+        // FUNÇÕES DE SINCRONIZAÇÃO
         function getSyncURL() {
-            // Otimização: Enviamos apenas o necessário para o link não ficar gigante
             const minimalData = inventory.map(item => [item.id, item.qty, item.price, item.bought ? 1 : 0, item.desc]);
             const dataStr = btoa(unescape(encodeURIComponent(JSON.stringify(minimalData))));
             return window.location.origin + window.location.pathname + '?sync=' + dataStr;
@@ -166,23 +184,16 @@
             const qrDiv = document.getElementById("qrcode");
             qrDiv.innerHTML = "";
             container.style.display = "flex";
-            
             try {
-                new QRCode(qrDiv, { 
-                    text: getSyncURL(), 
-                    width: 220, 
-                    height: 220, 
-                    correctLevel: QRCode.CorrectLevel.M 
-                });
+                new QRCode(qrDiv, { text: getSyncURL(), width: 220, height: 220, correctLevel: QRCode.CorrectLevel.M });
             } catch (e) {
-                qrDiv.innerHTML = "<p class='p-4 text-red-500'>Erro ao gerar QR. Link muito longo.</p>";
+                qrDiv.innerHTML = "<p class='p-4 text-red-500'>Erro no QR. Link longo.</p>";
             }
         }
 
         function copySyncLink() {
-            const url = getSyncURL();
-            navigator.clipboard.writeText(url).then(() => {
-                alert("✅ LINK COPIADO!\n\nAgora cole no WhatsApp. O destinatário conseguirá ver todo o seu orçamento ao clicar.");
+            navigator.clipboard.writeText(getSyncURL()).then(() => {
+                alert("✅ LINK COPIADO! Envie pelo WhatsApp para sincronizar.");
             });
         }
 
@@ -192,24 +203,19 @@
             if(syncData) {
                 try {
                     const decoded = JSON.parse(decodeURIComponent(escape(atob(syncData))));
-                    // Se for o formato otimizado (array de arrays)
                     const importedInvemtory = decoded.map(item => ({
                         id: item[0], qty: item[1], price: item[2], bought: item[3] === 1, desc: item[4]
                     }));
-
-                    if(confirm("DETECTADO: Novos dados da Planta AP 2209. Deseja atualizar sua lista?")) {
+                    if(confirm("DETECTADO: Novos dados. Deseja atualizar sua lista?")) {
                         inventory = importedInvemtory;
                         saveAndRender();
                         window.history.replaceState({}, document.title, window.location.pathname);
                     }
-                } catch(e) { 
-                    console.error("Erro na decodificação."); 
-                }
+                } catch(e) { console.error("Erro na decodificação."); }
             }
         }
 
-        // --- GESTÃO DE INTERFACE ---
-
+        // GESTÃO DE INTERFACE
         function saveAndRender() {
             localStorage.setItem('ap2209_master_v60', JSON.stringify(inventory));
             const body = document.getElementById('inventory-body');
@@ -234,13 +240,11 @@
                 `;
                 body.appendChild(tr);
             });
-            
             document.getElementById('total-geral').innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
             renderFiles();
         }
 
-        // --- GESTÃO DE ARQUIVOS (VISUALIZAÇÃO MELHORADA) ---
-
+        // GESTÃO DE ARQUIVOS
         function handleDrop(e) {
             e.preventDefault();
             document.getElementById('drop-zone').classList.remove('dragover');
@@ -249,21 +253,11 @@
 
         function handleFiles(files) {
             Array.from(files).forEach(file => {
-                if(!file.type.startsWith('image/')) {
-                    alert("Por favor, envie apenas fotos (JPEG/PNG)");
-                    return;
-                }
+                if(!file.type.startsWith('image/')) return;
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    filesList.unshift({
-                        id: Date.now() + Math.random(),
-                        name: file.name,
-                        type: file.type,
-                        data: e.target.result
-                    });
-                    // Limite de segurança para não travar o navegador (max 10 fotos)
+                    filesList.unshift({ id: Date.now() + Math.random(), name: file.name, data: e.target.result });
                     if(filesList.length > 10) filesList.pop();
-                    
                     localStorage.setItem('ap2209_files_v60', JSON.stringify(filesList));
                     renderFiles();
                 };
@@ -275,13 +269,12 @@
             const grid = document.getElementById('file-grid');
             if(!grid) return;
             grid.innerHTML = '';
-            
             filesList.forEach(file => {
                 const card = document.createElement('div');
                 card.className = 'file-card shadow-md';
                 card.innerHTML = `
                     <div class="file-preview" onclick="window.open('${file.data}')">
-                        <img src="${file.data}" alt="Anexo">
+                        <img src="${file.data}">
                     </div>
                     <div class="p-2 bg-white flex justify-between items-center border-t border-slate-100">
                         <div class="truncate font-bold text-[7px] uppercase text-slate-500 w-20">${file.name}</div>
@@ -314,26 +307,21 @@
         }
 
         function addItem() {
-            const d = prompt("Descrição do Material:");
+            const d = prompt("Descrição:");
             if(!d) return;
             const q = parseFloat(prompt("Quantidade:", "1")) || 1;
-            const p = parseFloat(prompt("Preço Unitário:", "0")) || 0;
-            
+            const p = parseFloat(prompt("Preço:", "0")) || 0;
             inventory.unshift({id: Date.now(), desc: d, qty: q, price: p, bought: false});
             saveAndRender();
         }
 
         function switchTab(t) {
-            document.getElementById('view-planilha').classList.toggle('hidden', t !== 'planilha');
-            document.getElementById('view-pontos').classList.toggle('hidden', t !== 'pontos');
-            document.getElementById('view-arquivos').classList.toggle('hidden', t !== 'arquivos');
-            
-            document.getElementById('btn-planilha').classList.toggle('tab-active', t === 'planilha');
-            document.getElementById('btn-pontos').classList.toggle('tab-active', t === 'pontos');
-            document.getElementById('btn-arquivos').classList.toggle('tab-active', t === 'arquivos');
-            
-            // Estilo inativo
-            if(t !== 'planilha') document.getElementById('btn-planilha').classList.replace('tab-active', 'bg-transparent');
+            const tabs = ['planilha', 'pontos', 'memorial', 'arquivos'];
+            tabs.forEach(tab => {
+                document.getElementById(`view-${tab}`).classList.toggle('hidden', tab !== t);
+                document.getElementById(`btn-${tab}`).classList.toggle('tab-active', tab === t);
+                if(tab !== t) document.getElementById(`btn-${tab}`).classList.replace('tab-active', 'bg-transparent');
+            });
         }
 
         window.onload = () => {
