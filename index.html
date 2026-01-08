@@ -22,12 +22,11 @@
         #qrcode img { margin: 0 auto; }
         .tag-detalhe { font-size: 8px; font-weight: 900; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; margin-right: 4px; }
 
-        /* Estilos de Arquivos */
+        /* Estilos de Galeria */
         #drop-zone { border: 2px dashed #cbd5e1; transition: all 0.3s; background: #ffffff; }
         #drop-zone.dragover { background: #e0f2fe; border-color: #3b82f6; }
         .file-card { background: white; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; display: flex; flex-direction: column; transition: transform 0.2s; }
-        .file-card:active { transform: scale(0.98); }
-        .file-preview { height: 160px; background: #1e293b; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .file-preview { height: 140px; background: #1e293b; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
         .file-preview img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
     </style>
 </head>
@@ -39,7 +38,7 @@
         <span class="text-blue-400 text-sm font-medium italic">Toque em qualquer lugar para fechar</span></p>
     </div>
 
-    <header class="header-eng text-white p-6 shadow-xl mb-4">
+    <header class="header-eng text-white p-6 shadow-xl mb-4 sticky top-0 z-40">
         <div class="max-w-4xl mx-auto flex justify-between items-end">
             <div>
                 <h1 class="text-2xl font-black italic tracking-tighter uppercase leading-none">AP 2209 MASTER</h1>
@@ -62,28 +61,26 @@
             </button>
         </div>
 
-        <nav class="flex gap-1 mb-6 bg-slate-200/50 p-1 rounded-2xl">
-            <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 py-4 rounded-xl font-black text-[8px] uppercase transition-all tab-active">1. Orçamento</button>
-            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 py-4 rounded-xl font-black text-[8px] uppercase transition-all bg-transparent text-slate-500">2. Mapa de Pontos</button>
-            <button onclick="switchTab('memorial')" id="btn-memorial" class="flex-1 py-4 rounded-xl font-black text-[8px] uppercase transition-all bg-transparent text-slate-500">3. Memorial</button>
-            <button onclick="switchTab('arquivos')" id="btn-arquivos" class="flex-1 py-4 rounded-xl font-black text-[8px] uppercase transition-all bg-transparent text-slate-500">4. Galeria</button>
+        <nav class="flex gap-1 mb-6 bg-slate-200/50 p-1 rounded-2xl overflow-x-auto">
+            <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 min-w-[80px] py-4 rounded-xl font-black text-[8px] uppercase transition-all tab-active">1. Orçamento</button>
+            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 min-w-[80px] py-4 rounded-xl font-black text-[8px] uppercase transition-all bg-transparent text-slate-500">2. Mapa Pontos</button>
+            <button onclick="switchTab('memorial')" id="btn-memorial" class="flex-1 min-w-[80px] py-4 rounded-xl font-black text-[8px] uppercase transition-all bg-transparent text-slate-500">3. Memorial</button>
+            <button onclick="switchTab('arquivos')" id="btn-arquivos" class="flex-1 min-w-[80px] py-4 rounded-xl font-black text-[8px] uppercase transition-all bg-transparent text-slate-500">4. Galeria</button>
         </nav>
 
         <div id="view-planilha" class="space-y-3">
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead class="bg-slate-50 text-[8px] uppercase font-black text-slate-500">
-                            <tr>
-                                <th class="p-4">Descrição</th>
-                                <th class="p-4 text-center">Qtd</th>
-                                <th class="p-4 text-right">Subtotal</th>
-                                <th class="p-4 text-center"></th>
-                            </tr>
-                        </thead>
-                        <tbody id="inventory-body"></tbody>
-                    </table>
-                </div>
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-slate-50 text-[8px] uppercase font-black text-slate-500 border-b border-slate-100">
+                        <tr>
+                            <th class="p-4">Descrição</th>
+                            <th class="p-4 text-center">Qtd</th>
+                            <th class="p-4 text-right">Subtotal</th>
+                            <th class="p-4 text-center w-10"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-body"></tbody>
+                </table>
             </div>
             <button onclick="addItem()" class="w-full bg-blue-50 text-blue-600 py-4 rounded-xl font-black text-[10px] uppercase border-2 border-dashed border-blue-200 hover:bg-blue-100 transition-all">
                 + Adicionar Novo Item
@@ -94,46 +91,40 @@
             <div class="card-ponto" style="border-left-color: #000;">
                 <h4 class="font-black text-slate-900 uppercase text-xs mb-2">⚡ Centro de Comando (QDC)</h4>
                 <div class="p-3 bg-slate-900 text-white rounded-lg text-[10px]">
-                    <p>📌 <strong>Localização:</strong> Entrada principal da sala, parede à esquerda.</p>
+                    <p>📌 <strong>Localização:</strong> Entrada principal da sala.</p>
                     <p>🔋 <strong>Capacidade:</strong> Barramento para 36 DIN.</p>
                 </div>
             </div>
-
             <div class="card-ponto" style="border-left-color: #ef4444;">
                 <h4 class="font-black text-red-800 uppercase text-xs mb-2">🍳 Cozinha & Torre Quente</h4>
-                <div class="space-y-2 text-[10px]">
-                    <p><strong>Torre Quente:</strong> 4 caixas 4x4 (3x 110V + 1x 220V cada).</p>
-                    <p class="tag-detalhe bg-red-100 text-red-600">Total: 7 Pontos 4x4</p>
+                <p class="text-[10px] mb-2 text-slate-600 italic">Infraestrutura reforçada para eletrodomésticos de alta potência.</p>
+                <div class="flex gap-2">
+                    <span class="tag-detalhe bg-red-100 text-red-600">7 Pontos 4x4</span>
+                    <span class="tag-detalhe bg-red-100 text-red-600">Cabo 4.0mm²</span>
                 </div>
             </div>
-
             <div class="card-ponto" style="border-left-color: #3b82f6;">
                 <h4 class="font-black text-blue-800 uppercase text-xs mb-2">🛋️ Sala de Estar e Jantar</h4>
-                <div class="space-y-2 text-[10px]">
-                    <p><strong>Painel TV:</strong> 2 pontos 4x4 (6x 110V + 2x 220V).</p>
-                    <p class="tag-detalhe bg-blue-100 text-blue-600">Total: 5 Pontos 4x4</p>
-                </div>
+                <p class="text-[10px] mb-2 text-slate-600 italic">Pontos estratégicos para automação e entretenimento.</p>
+                <span class="tag-detalhe bg-blue-100 text-blue-600">5 Pontos 4x4</span>
             </div>
         </div>
 
         <div id="view-memorial" class="hidden space-y-4">
             <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                <h3 class="font-black text-blue-600 uppercase text-[10px] mb-4">📋 Especificações Técnicas</h3>
-                
+                <h3 class="font-black text-blue-600 uppercase text-[10px] mb-4 tracking-widest">📋 Especificações Técnicas</h3>
                 <div class="space-y-4 text-[10px]">
                     <div class="pb-3 border-b border-slate-100">
-                        <p class="font-black text-slate-800 uppercase">Fiação e Proteção</p>
-                        <p class="text-slate-500 mt-1 italic">Uso exclusivo de cabos Prysmian (Norma NBR 5410). Barramento de cobre dimensionado para carga total.</p>
+                        <p class="font-black text-slate-800 uppercase italic">Fiação e Proteção</p>
+                        <p class="text-slate-500 mt-1">Uso exclusivo de cabos Prysmian (NBR 5410). Barramento de cobre dimensionado.</p>
                     </div>
-
                     <div class="pb-3 border-b border-slate-100">
-                        <p class="font-black text-slate-800 uppercase">Acabamentos (Linha Orion)</p>
-                        <p class="text-slate-500 mt-1 italic">Módulos Schneider Orion na cor Branco Polar. Placas 4x4 e 4x2 com proteção UV.</p>
+                        <p class="font-black text-slate-800 uppercase italic">Acabamentos (Orion)</p>
+                        <p class="text-slate-500 mt-1">Módulos Schneider Orion Branco Polar. Placas com proteção UV.</p>
                     </div>
-
-                    <div class="pb-3 border-b border-slate-100">
-                        <p class="font-black text-slate-800 uppercase">Infraestrutura</p>
-                        <p class="text-slate-500 mt-1 italic">Caixas 4x4 Amarelas Tramontina (Reforçadas). Conectores Wago 221 para derivações seguras (sem fita isolante nos pontos principais).</p>
+                    <div>
+                        <p class="font-black text-slate-800 uppercase italic">Conexões</p>
+                        <p class="text-slate-500 mt-1">Conectores Wago 221 para derivações seguras e manutenção rápida.</p>
                     </div>
                 </div>
             </div>
@@ -145,17 +136,15 @@
                  ondragover="event.preventDefault(); this.classList.add('dragover')"
                  ondragleave="this.classList.remove('dragover')"
                  ondrop="handleDrop(event)">
-                <p class="text-[10px] font-black text-slate-500 uppercase">📁 Arraste Fotos ou clique aqui</p>
-                <p class="text-[8px] text-slate-400 mt-1">Imagens aparecem instantaneamente abaixo</p>
+                <p class="text-[10px] font-black text-slate-500 uppercase">📁 Arraste Plantas ou Fotos aqui</p>
                 <input type="file" id="file-input" class="hidden" multiple accept="image/*" onchange="handleFiles(this.files)">
             </div>
-
             <div id="file-grid" class="grid grid-cols-2 gap-3"></div>
         </div>
     </div>
 
     <script>
-        // Dados Iniciais (Sincronizados com a versão V60)
+        // Dados Padrão (V60)
         const defaultInventory = [
             { id: 1, desc: "Cabo Prysmian 6,0mm² (Chuveiros)", qty: 50, price: 9.80, bought: false },
             { id: 2, desc: "Cabo Prysmian 4,0mm² (Torre Quente)", qty: 60, price: 6.50, bought: false },
@@ -164,7 +153,6 @@
             { id: 5, desc: "Cabo Prysmian 2,5mm² AZUL (Neutro)", qty: 200, price: 4.20, bought: false },
             { id: 10, desc: "Módulo Tomada Schneider Orion (x80)", qty: 80, price: 18.90, bought: false },
             { id: 11, desc: "Caixa 4x4 Amarela Reforçada (x20)", qty: 20, price: 7.80, bought: false },
-            { id: 15, desc: "Quadro Schneider 36 DIN (Entrada Sala)", qty: 1, price: 310.00, bought: false },
             { id: 14, desc: "Conector Wago 221-413 (Caixa 50un)", qty: 2, price: 125.00, bought: false },
             { id: 16, desc: "Placa 4x4 p/ 4 Módulos Schneider", qty: 20, price: 12.50, bought: false }
         ];
@@ -172,7 +160,7 @@
         let inventory = JSON.parse(localStorage.getItem('ap2209_master_v60')) || defaultInventory;
         let filesList = JSON.parse(localStorage.getItem('ap2209_files_v60')) || [];
 
-        // FUNÇÕES DE SINCRONIZAÇÃO
+        // --- SINCRONIZAÇÃO ---
         function getSyncURL() {
             const minimalData = inventory.map(item => [item.id, item.qty, item.price, item.bought ? 1 : 0, item.desc]);
             const dataStr = btoa(unescape(encodeURIComponent(JSON.stringify(minimalData))));
@@ -185,15 +173,14 @@
             qrDiv.innerHTML = "";
             container.style.display = "flex";
             try {
-                new QRCode(qrDiv, { text: getSyncURL(), width: 220, height: 220, correctLevel: QRCode.CorrectLevel.M });
-            } catch (e) {
-                qrDiv.innerHTML = "<p class='p-4 text-red-500'>Erro no QR. Link longo.</p>";
-            }
+                new QRCode(qrDiv, { text: getSyncURL(), width: 220, height: 220 });
+            } catch (e) { alert("Erro ao gerar QR Code."); }
         }
 
         function copySyncLink() {
-            navigator.clipboard.writeText(getSyncURL()).then(() => {
-                alert("✅ LINK COPIADO! Envie pelo WhatsApp para sincronizar.");
+            const url = getSyncURL();
+            navigator.clipboard.writeText(url).then(() => {
+                alert("✅ LINK COPIADO! Envie para o WhatsApp do cliente ou técnico.");
             });
         }
 
@@ -203,19 +190,19 @@
             if(syncData) {
                 try {
                     const decoded = JSON.parse(decodeURIComponent(escape(atob(syncData))));
-                    const importedInvemtory = decoded.map(item => ({
+                    const imported = decoded.map(item => ({
                         id: item[0], qty: item[1], price: item[2], bought: item[3] === 1, desc: item[4]
                     }));
-                    if(confirm("DETECTADO: Novos dados. Deseja atualizar sua lista?")) {
-                        inventory = importedInvemtory;
+                    if(confirm("Importar novos dados de orçamento? Isso substituirá sua lista atual.")) {
+                        inventory = imported;
                         saveAndRender();
                         window.history.replaceState({}, document.title, window.location.pathname);
                     }
-                } catch(e) { console.error("Erro na decodificação."); }
+                } catch(e) { console.error("Erro na sincronização"); }
             }
         }
 
-        // GESTÃO DE INTERFACE
+        // --- INTERFACE E LOGICA ---
         function saveAndRender() {
             localStorage.setItem('ap2209_master_v60', JSON.stringify(inventory));
             const body = document.getElementById('inventory-body');
@@ -229,13 +216,12 @@
                 tr.className = `item-row ${item.bought ? 'item-bought' : ''}`;
                 tr.innerHTML = `
                     <td class="p-4 cursor-pointer" onclick="toggle(${item.id})">
-                        <div class="font-black uppercase text-[10px] ${item.bought ? 'text-slate-400' : 'text-slate-800'}">${item.desc}</div>
-                        <div class="text-[7px] text-slate-400 uppercase tracking-widest">Original Engenharia</div>
+                        <div class="font-black uppercase text-[9px] ${item.bought ? 'text-slate-400' : 'text-slate-800'}">${item.desc}</div>
                     </td>
                     <td class="p-4 text-center font-black">${item.qty}</td>
                     <td class="p-4 text-right font-mono font-black text-blue-900">R$ ${sub.toFixed(2)}</td>
                     <td class="p-4 text-center">
-                        <button onclick="removeItem(${item.id})" class="text-slate-300 hover:text-red-500 text-xs">✕</button>
+                        <button onclick="removeItem(${item.id})" class="text-slate-300 hover:text-red-500">✕</button>
                     </td>
                 `;
                 body.appendChild(tr);
@@ -244,20 +230,42 @@
             renderFiles();
         }
 
-        // GESTÃO DE ARQUIVOS
-        function handleDrop(e) {
-            e.preventDefault();
-            document.getElementById('drop-zone').classList.remove('dragover');
-            handleFiles(e.dataTransfer.files);
+        function toggle(id) {
+            const item = inventory.find(x => x.id === id);
+            if(item) { item.bought = !item.bought; saveAndRender(); }
         }
 
+        function removeItem(id) {
+            if(confirm("Remover este item?")) {
+                inventory = inventory.filter(i => i.id !== id);
+                saveAndRender();
+            }
+        }
+
+        function addItem() {
+            const d = prompt("Nome do Item:");
+            if(!d) return;
+            const q = parseFloat(prompt("Quantidade:", "1")) || 1;
+            const p = parseFloat(prompt("Preço Unitário:", "0")) || 0;
+            inventory.unshift({id: Date.now(), desc: d, qty: q, price: p, bought: false});
+            saveAndRender();
+        }
+
+        function switchTab(t) {
+            ['planilha', 'pontos', 'memorial', 'arquivos'].forEach(tab => {
+                document.getElementById(`view-${tab}`).classList.toggle('hidden', tab !== t);
+                document.getElementById(`btn-${tab}`).classList.toggle('tab-active', tab === t);
+            });
+        }
+
+        // --- GESTÃO DE ARQUIVOS ---
         function handleFiles(files) {
             Array.from(files).forEach(file => {
                 if(!file.type.startsWith('image/')) return;
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     filesList.unshift({ id: Date.now() + Math.random(), name: file.name, data: e.target.result });
-                    if(filesList.length > 10) filesList.pop();
+                    if(filesList.length > 8) filesList.pop(); // Limite de 8 imagens no storage
                     localStorage.setItem('ap2209_files_v60', JSON.stringify(filesList));
                     renderFiles();
                 };
@@ -271,14 +279,14 @@
             grid.innerHTML = '';
             filesList.forEach(file => {
                 const card = document.createElement('div');
-                card.className = 'file-card shadow-md';
+                card.className = 'file-card shadow-sm';
                 card.innerHTML = `
                     <div class="file-preview" onclick="window.open('${file.data}')">
                         <img src="${file.data}">
                     </div>
-                    <div class="p-2 bg-white flex justify-between items-center border-t border-slate-100">
-                        <div class="truncate font-bold text-[7px] uppercase text-slate-500 w-20">${file.name}</div>
-                        <button onclick="deleteFile(${file.id})" class="text-red-500 font-black text-[8px] bg-red-50 px-2 py-1 rounded">EXCLUIR</button>
+                    <div class="p-2 flex justify-between items-center bg-white border-t border-slate-100">
+                        <div class="truncate text-[7px] font-bold text-slate-400 uppercase w-2/3">${file.name}</div>
+                        <button onclick="deleteFile(${file.id})" class="text-red-500 font-black text-[7px]">EXCLUIR</button>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -286,48 +294,12 @@
         }
 
         function deleteFile(id) {
-            if(confirm("Excluir foto?")) {
-                filesList = filesList.filter(f => f.id !== id);
-                localStorage.setItem('ap2209_files_v60', JSON.stringify(filesList));
-                renderFiles();
-            }
+            filesList = filesList.filter(f => f.id !== id);
+            localStorage.setItem('ap2209_files_v60', JSON.stringify(filesList));
+            renderFiles();
         }
 
-        function removeItem(id) {
-            if(confirm("Remover item?")) {
-                inventory = inventory.filter(item => item.id !== id);
-                saveAndRender();
-            }
-        }
-
-        function toggle(id) {
-            const item = inventory.find(x => x.id === id);
-            item.bought = !item.bought;
-            saveAndRender();
-        }
-
-        function addItem() {
-            const d = prompt("Descrição:");
-            if(!d) return;
-            const q = parseFloat(prompt("Quantidade:", "1")) || 1;
-            const p = parseFloat(prompt("Preço:", "0")) || 0;
-            inventory.unshift({id: Date.now(), desc: d, qty: q, price: p, bought: false});
-            saveAndRender();
-        }
-
-        function switchTab(t) {
-            const tabs = ['planilha', 'pontos', 'memorial', 'arquivos'];
-            tabs.forEach(tab => {
-                document.getElementById(`view-${tab}`).classList.toggle('hidden', tab !== t);
-                document.getElementById(`btn-${tab}`).classList.toggle('tab-active', tab === t);
-                if(tab !== t) document.getElementById(`btn-${tab}`).classList.replace('tab-active', 'bg-transparent');
-            });
-        }
-
-        window.onload = () => {
-            checkSync();
-            saveAndRender();
-        };
+        window.onload = () => { checkSync(); saveAndRender(); };
     </script>
 </body>
 </html>
