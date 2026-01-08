@@ -9,57 +9,64 @@
     <meta name="apple-mobile-web-app-title" content="AP 2209">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2942/2942544.png">
     
-    <title>AP 2209 - ENGENHARIA MASTER V17</title>
+    <title>AP 2209 - MASTER V18</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; font-size: 10px; -webkit-tap-highlight-color: transparent; }
-        .tab-active { background-color: #1e40af !important; color: white !important; transform: scale(1.02); box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3); }
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; font-size: 10px; }
+        .tab-active { background-color: #1e40af !important; color: white !important; transform: scale(1.02); }
         .header-master { background: #0f172a; border-bottom: 4px solid #2563eb; border-radius: 0 0 24px 24px; }
         .card-ponto { border-left: 6px solid #2563eb; border-radius: 16px; padding: 18px; background: white; margin-bottom: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .row-purchased { opacity: 0.3; filter: grayscale(1); text-decoration: line-through; background-color: #f8fafc !important; }
-        .memorial-section { border-left: 5px solid #1e40af; background: white; padding: 20px; border-radius: 16px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .tag-cor { padding: 4px 10px; border-radius: 6px; color: white; font-weight: 900; font-size: 8px; text-transform: uppercase; border: 1px solid rgba(0,0,0,0.1); display: inline-block; margin: 2px 0; }
+        .memorial-section { border-left: 5px solid #1e40af; background: white; padding: 20px; border-radius: 16px; margin-bottom: 15px; }
+        .tag-cor { padding: 4px 10px; border-radius: 6px; color: white; font-weight: 900; font-size: 8px; text-transform: uppercase; border: 1px solid rgba(0,0,0,0.1); display: inline-block; }
         
-        /* QR Code flutuante (Apenas telas grandes) */
-        #qr-container { display: none; }
-        @media (min-width: 1024px) {
-            #qr-container { 
-                display: block; position: fixed; bottom: 30px; right: 30px; 
-                background: white; padding: 25px; border-radius: 24px; 
-                box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4); border: 4px solid #1e40af;
-                text-align: center; z-index: 1000; animation: slideIn 0.5s ease-out;
-            }
+        /* Ajuste do QR Code para não atrapalhar */
+        #qr-sidebar {
+            position: fixed; top: 120px; right: 20px; width: 160px;
+            background: white; padding: 15px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 2px solid #e2e8f0;
+            z-index: 1000; transition: all 0.3s ease;
         }
-        @keyframes slideIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        @media print { .no-print { display: none !important; } }
+        .qr-hidden { transform: translateX(130px); opacity: 0.5; }
+        .qr-hidden:hover { transform: translateX(0); opacity: 1; }
+
+        @media (max-width: 1024px) {
+            #qr-sidebar { position: static; width: 100%; margin-top: 20px; border: none; box-shadow: none; text-align: center; }
+            .qr-hidden { transform: none; opacity: 1; }
+        }
     </style>
 </head>
 <body class="pb-24">
 
-    <div id="qr-container" class="no-print">
-        <p class="font-black text-[10px] uppercase mb-4 text-slate-800 tracking-tighter">📲 ESCANEAR PARA O IPHONE</p>
-        <div id="qrcode" class="flex justify-center bg-white p-2"></div>
-        <p class="text-[8px] mt-4 text-blue-600 font-black uppercase italic tracking-widest">Acesse na obra</p>
+    <div id="qr-sidebar" class="no-print">
+        <div class="flex justify-between items-center mb-2">
+            <span class="text-[8px] font-black uppercase text-slate-400">Acesso Mobile</span>
+            <button onclick="document.getElementById('qr-sidebar').classList.toggle('qr-hidden')" class="text-blue-600 font-bold text-[10px]">[-] </button>
+        </div>
+        <div id="qrcode" class="flex justify-center mb-3"></div>
+        <button onclick="shareLink()" class="w-full bg-emerald-500 text-white py-2 rounded-lg font-black text-[8px] uppercase flex items-center justify-center gap-1 shadow-md active:scale-95 transition-all">
+            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            WhatsApp
+        </button>
     </div>
 
     <header class="header-master text-white p-6 mb-6 shadow-2xl mx-1">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <div>
                 <h1 class="text-3xl font-black italic tracking-tighter text-blue-400 uppercase leading-none">AP 2209 MASTER</h1>
-                <p class="text-[8px] font-bold uppercase tracking-[0.4em] opacity-60 mt-3">Engenharia Trifásica • Suprimentos 2026</p>
+                <p class="text-[8px] font-bold uppercase tracking-[0.4em] opacity-60 mt-3">Cálculo de Pontos e Metragens • 2026</p>
             </div>
             <div class="flex gap-6">
                 <div class="text-right border-r border-slate-700 pr-6">
                     <p class="text-[7px] font-black text-slate-400 uppercase">Investimento</p>
-                    <p id="total-geral" class="text-lg font-mono font-bold text-white">R$ 0,00</p>
+                    <p id="total-geral" class="text-lg font-mono font-bold">R$ 5.932,90</p>
                 </div>
                 <div class="text-right">
                     <p class="text-[7px] font-black text-emerald-400 uppercase">Comprado</p>
-                    <p id="total-pago" class="text-lg font-mono font-bold text-emerald-400">R$ 0,00</p>
+                    <p id="total-pago" class="text-lg font-mono font-bold text-emerald-400">R$ 668,40</p>
                 </div>
             </div>
         </div>
@@ -68,173 +75,121 @@
     <div class="max-w-6xl mx-auto px-4">
         
         <nav class="flex gap-2 mb-6 no-print overflow-x-auto pb-2">
-            <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 min-w-[120px] py-5 rounded-2xl font-black text-[9px] uppercase bg-white text-slate-400 shadow-sm tab-active transition-all">1. Orçamento (15 Itens)</button>
-            <button onclick="switchTab('eletrica')" id="btn-eletrica" class="flex-1 min-w-[120px] py-5 rounded-2xl font-black text-[9px] uppercase bg-white text-slate-400 shadow-sm transition-all">2. Memorial Técnico</button>
-            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 min-w-[120px] py-5 rounded-2xl font-black text-[9px] uppercase bg-white text-slate-400 shadow-sm transition-all">3. Mapa de Pontos Detalhado</button>
+            <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 min-w-[120px] py-4 rounded-2xl font-black text-[9px] uppercase bg-white text-slate-400 shadow-sm tab-active">1. Orçamento Ativo</button>
+            <button onclick="switchTab('eletrica')" id="btn-eletrica" class="flex-1 min-w-[120px] py-4 rounded-2xl font-black text-[9px] uppercase bg-white text-slate-400 shadow-sm">2. Memorial Técnico</button>
+            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 min-w-[120px] py-4 rounded-2xl font-black text-[9px] uppercase bg-white text-slate-400 shadow-sm">3. Mapa de Pontos</button>
         </nav>
 
-        <div id="view-planilha" class="space-y-4">
-            <button onclick="addItem()" class="w-full bg-blue-600 text-white py-5 rounded-2xl font-black text-[11px] uppercase shadow-lg hover:bg-blue-700 active:scale-95 transition-all">+ Adicionar Item ao Orçamento</button>
-            <div class="bg-white rounded-[32px] shadow-xl border border-slate-200 p-4 overflow-hidden">
-                <table class="w-full text-left border-separate border-spacing-y-2">
-                    <tbody id="inventory-body"></tbody>
-                </table>
+        <div id="view-eletrica" class="hidden space-y-4">
+            <div class="bg-slate-900 text-white p-6 rounded-[24px] border-b-4 border-blue-600 shadow-xl">
+                <h3 class="text-blue-400 font-black text-[10px] uppercase mb-2">Regra de Ouro AP 2209:</h3>
+                <p class="italic text-[12px] font-serif leading-relaxed">"Conexões em Wago 221 e terminais ilhós com crimpagem hexagonal em todo o sistema."</p>
             </div>
-        </div>
 
-        <div id="view-eletrica" class="hidden space-y-5">
-            <div class="memorial-section" style="border-left-color: #2563eb;">
-                <h3 class="font-black text-blue-700 mb-4 uppercase text-[12px] border-b pb-2">⚡ Padrão de Engenharia Trifásica</h3>
-                <p class="text-[10px] text-slate-700 mb-4 leading-tight">Sistema 127/220V. Cargas pesadas utilizam **Bifásico (F+F)**. <br><strong>Indispensável:</strong> Equilíbrio de fases entre R, S e T no Quadro.</p>
-                <div class="grid grid-cols-2 gap-2 text-[9px] font-black uppercase">
-                    <div class="bg-black text-white p-4 rounded-xl text-center shadow-md">Fase R: Preto</div>
-                    <div class="bg-red-600 text-white p-4 rounded-xl text-center shadow-md">Fase S: Vermelho</div>
-                    <div class="bg-white border-2 border-blue-600 text-blue-600 p-4 rounded-xl text-center">Fase T: Branco</div>
-                    <div class="bg-blue-600 text-white p-4 rounded-xl text-center shadow-md">Neutro: Azul</div>
-                    <div class="bg-emerald-600 text-white p-4 rounded-xl text-center col-span-2 shadow-md">Terra: Verde (Proteção Obrigatória)</div>
+            <div class="memorial-section">
+                <h3 class="font-black text-blue-700 mb-4 uppercase text-[11px] border-b pb-2">Diretrizes de Instalação</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-slate-50 p-4 rounded-xl">
+                        <p class="font-black text-[8px] uppercase text-slate-500 mb-2">Identificação Prysmian:</p>
+                        <div class="space-y-1 text-[10px] font-bold">
+                            <div class="flex justify-between"><span>FASE R/S/T:</span> <span class="text-slate-900 uppercase">Preto/Verm/Branco</span></div>
+                            <div class="flex justify-between text-blue-600"><span>NEUTRO:</span> <span>Azul</span></div>
+                            <div class="flex justify-between text-emerald-600"><span>TERRA:</span> <span>Verde</span></div>
+                        </div>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 text-[9px] leading-relaxed text-blue-800 italic">
+                        <strong>PROTEÇÃO SCHNEIDER:</strong> Uso obrigatório de DR 30mA e DPS Classe II 275V 20kA. Crimpagem Hexagonal obrigatória em todos os bornes.
+                    </div>
                 </div>
-            </div>
-
-            <div class="memorial-section" style="border-left-color: #000;">
-                <h3 class="font-black text-slate-900 mb-2 uppercase text-[11px]">🛠️ Conexões e Crimpagem (Schneider)</h3>
-                <ul class="text-[10px] text-slate-600 space-y-2 leading-relaxed italic">
-                    <li>• Uso obrigatório de **Terminais Ilhós Tubulares** (Ferrules).</li>
-                    <li>• Crimpagem **Hexagonal** em todos os bornes de disjuntores.</li>
-                    <li>• Emendas de chuveiro: **Wago 221-612** (Resistência a calor).</li>
-                    <li>• Proteção: IDR 30mA + DPS Classe II Schneider Easy9.</li>
-                </ul>
-                
-            </div>
-
-            <div class="memorial-section" style="border-left-color: #0ea5e9;">
-                <h3 class="font-black text-sky-700 mb-2 uppercase text-[11px]">🚰 Hidráulica Docol Vitalícia</h3>
-                <p class="text-[10px] text-slate-600 leading-relaxed italic">Instalação de monocomandos Docol Gourmet. Realizar o "Flushing" (limpeza) de toda a tubulação antes de conectar os flexíveis para evitar entupimento dos filtros cerâmicos.</p>
             </div>
         </div>
 
         <div id="view-pontos" class="hidden space-y-4">
-            <h2 class="text-xs font-black uppercase border-b-4 border-blue-600 pb-2 mb-6 italic tracking-tighter">Mapa de Distribuição e Bitolas</h2>
+            <h2 class="text-xs font-black uppercase border-b-4 border-blue-600 pb-2 mb-6 italic tracking-tighter">Engenharia de Pontos</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="card-ponto" style="border-left-color: #ef4444;">
-                    <div class="flex justify-between items-start mb-3 border-b pb-2">
-                        <p class="font-black text-[12px] text-red-600 uppercase">🚿 Chuveiro (220V)</p>
-                        <span class="bg-red-100 text-red-700 px-2 py-1 rounded text-[7px] font-black">7500W</span>
-                    </div>
-                    <div class="space-y-2 text-[10px] font-bold">
-                        <div class="flex justify-between"><span><span class="tag-cor bg-black">Fase R</span> 6mm²:</span> <span>15m</span></div>
-                        <div class="flex justify-between"><span><span class="tag-cor bg-red-600">Fase S</span> 6mm²:</span> <span>15m</span></div>
-                        <div class="flex justify-between border-t pt-2"><span><span class="tag-cor bg-emerald-600">Terra</span> 6mm²:</span> <span>15m</span></div>
-                        <p class="text-red-700 mt-2 font-black text-[8px] bg-red-50 p-2 rounded leading-tight uppercase">Equipamento Schneider Bipolar 40A + Wago 221-612</p>
+                <div class="card-ponto">
+                    <p class="font-black text-[12px] text-red-600 uppercase mb-3">🚿 Chuveiro Master</p>
+                    <div class="text-[9px] font-bold text-slate-600 space-y-1">
+                        <p>6,0mm² | 40A | ~45 metros totais</p>
+                        <p class="text-[7px] bg-red-50 p-2 rounded text-red-700 uppercase italic">Fases R+S (220V) - Sem Neutro</p>
                     </div>
                 </div>
 
                 <div class="card-ponto" style="border-left-color: #f97316;">
-                    <div class="flex justify-between items-start mb-3 border-b pb-2">
-                        <p class="font-black text-[12px] text-orange-600 uppercase">🔥 Torre Quente (220V)</p>
-                        <span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-[7px] font-black">4000W</span>
-                    </div>
-                    <div class="space-y-2 text-[10px] font-bold">
-                        <div class="flex justify-between"><span><span class="tag-cor bg-red-600">Fase S</span> 4mm²:</span> <span>12m</span></div>
-                        <div class="flex justify-between"><span><span class="tag-cor border-2 border-blue-600 text-blue-600">Fase T</span> 4mm²:</span> <span>12m</span></div>
-                        <div class="flex justify-between border-t pt-2"><span><span class="tag-cor bg-emerald-600">Terra</span> 4mm²:</span> <span>12m</span></div>
+                    <p class="font-black text-[12px] text-orange-600 uppercase mb-3">🔥 Torre Quente (220V)</p>
+                    <div class="text-[9px] font-bold text-slate-600 space-y-1">
+                        <p>4,0mm² | Tomadas 20A | ~36 metros total</p>
+                        <p class="text-[7px] bg-orange-50 p-2 rounded text-orange-700 uppercase italic">Incluso: Máquina Lava-louça, Forno e Micro-ondas</p>
                     </div>
                 </div>
 
                 <div class="card-ponto" style="border-left-color: #fbbf24;">
-                    <p class="font-black text-[12px] text-amber-500 uppercase border-b pb-2 mb-3">💡 Iluminação (127V)</p>
-                    <div class="space-y-2 text-[10px] font-bold">
-                        <div class="flex justify-between"><span><span class="tag-cor border-2 border-blue-600 text-blue-600">Fase T</span> 1,5mm²:</span> <span>40m</span></div>
-                        <div class="flex justify-between"><span><span class="tag-cor bg-blue-600">Neutro</span> 1,5mm²:</span> <span>40m</span></div>
-                        <div class="flex justify-between"><span><span class="tag-cor bg-yellow-400 text-black">Retorno</span> 1,5mm²:</span> <span>40m</span></div>
-                    </div>
+                    <p class="font-black text-[12px] text-amber-500 uppercase mb-3">💡 Iluminação Geral</p>
+                    <p class="text-[9px] font-bold text-slate-600">1,5mm² | ~120 metros total</p>
                 </div>
 
                 <div class="card-ponto" style="border-left-color: #64748b;">
-                    <p class="font-black text-[12px] text-slate-700 uppercase border-b pb-2 mb-3">🔌 Tomadas Gerais (127V)</p>
-                    <div class="space-y-2 text-[10px] font-bold">
-                        <div class="flex justify-between"><span><span class="tag-cor bg-black">Fase R</span> 2,5mm²:</span> <span>60m</span></div>
-                        <div class="flex justify-between"><span><span class="tag-cor bg-blue-600">Neutro</span> 2,5mm²:</span> <span>60m</span></div>
-                        <div class="flex justify-between border-t pt-2"><span><span class="tag-cor bg-emerald-600">Terra</span> 2,5mm²:</span> <span>60m</span></div>
-                    </div>
+                    <p class="font-black text-[12px] text-slate-700 uppercase mb-3">🔌 Tomadas TUG (10A)</p>
+                    <p class="text-[9px] font-bold text-slate-600">2,5mm² | ~180 metros total</p>
                 </div>
             </div>
-            
+
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-xl">
+                <p class="text-[9px] text-amber-900 leading-relaxed font-bold italic">
+                    Nota técnica: As metragens calculam o trajeto ida/volta pelo eletroduto + 30cm de sobra em cada caixa para a crimpagem hexagonal dos terminais.
+                </p>
+            </div>
+        </div>
+
+        <div id="view-planilha" class="space-y-4">
+            <div id="inventory-body" class="bg-white rounded-[32px] shadow-xl border border-slate-200 p-4">
+                </div>
         </div>
     </div>
 
     <script>
-        // INVENTÁRIO COMPLETO COM 15 ITENS DIRETRIZ
+        // Dados recuperados das imagens
         let inventory = [
             { id: 1, desc: "Cabo Prysmian 6,0mm² (Preto/Verm/Verde)", qty: 45, price: 9.80, cat: "Elet", bought: false },
             { id: 2, desc: "Cabo Prysmian 4,0mm² (Verm/Branco/Verde)", qty: 36, price: 6.50, cat: "Elet", bought: false },
-            { id: 3, desc: "Cabo Prysmian 2,5mm² VERDE (Terra)", qty: 100, price: 4.50, cat: "Elet", bought: true },
-            { id: 4, desc: "Cabo Prysmian 2,5mm² PRETO (Fase R)", qty: 100, price: 4.20, cat: "Elet", bought: false },
-            { id: 5, desc: "Cabo Prysmian 2,5mm² AZUL (Neutro)", qty: 100, price: 4.20, cat: "Elet", bought: false },
-            { id: 6, desc: "Cabo Prysmian 1,5mm² (Amarelo/Branco/Azul)", qty: 120, price: 2.80, cat: "Elet", bought: false },
+            { id: 3, desc: "Cabo Prysmian 2,5mm² (R/S/T + N + T)", qty: 180, price: 4.50, cat: "Elet", bought: true },
             { id: 7, desc: "IDR Schneider 4P 40A 30mA", qty: 1, price: 295.00, cat: "Elet", bought: false },
             { id: 8, desc: "DPS Schneider 20kA 275V", qty: 3, price: 145.00, cat: "Elet", bought: false },
-            { id: 9, desc: "Disjuntor Bipolar 40A Schneider (Chuveiro)", qty: 1, price: 72.00, cat: "Elet", bought: false },
-            { id: 10, desc: "Módulo Tomada 10A Schneider Orion (x35)", qty: 35, price: 18.90, cat: "Elet", bought: false },
-            { id: 11, desc: "Caixa 4x4 Amarela Reforçada (x12)", qty: 12, price: 7.80, cat: "Infra", bought: true },
-            { id: 12, desc: "Caixa 4x2 Amarela Reforçada (x26)", qty: 26, price: 4.80, cat: "Infra", bought: true },
-            { id: 13, desc: "Torneira Cozinha Gourmet Docol", qty: 1, price: 920.00, cat: "Hidr", bought: false },
-            { id: 14, desc: "Conector Wago 221-612 (Original)", qty: 10, price: 8.50, cat: "Elet", bought: false },
-            { id: 15, desc: "Quadro Schneider 36 DIN Completo", qty: 1, price: 310.00, cat: "Infra", bought: false }
+            { id: 11, desc: "Caixa 4x4 Amarela", qty: 12, price: 7.80, cat: "Infra", bought: true },
+            { id: 12, desc: "Caixa 4x2 Amarela", qty: 22, price: 4.80, cat: "Infra", bought: true }
         ];
 
         function render() {
             const body = document.getElementById('inventory-body');
-            body.innerHTML = '';
-            let totalG = 0, totalP = 0;
-            inventory.forEach(item => {
-                const sub = item.qty * item.price;
-                totalG += sub; if(item.bought) totalP += sub;
-                const row = document.createElement('tr');
-                row.className = `border-b border-slate-100 ${item.bought ? 'row-purchased' : 'bg-white'}`;
-                row.innerHTML = `
-                    <td class="p-4 w-12 text-center"><input type="checkbox" ${item.bought?'checked':''} onchange="toggle(${item.id})" class="w-7 h-7 accent-blue-600"></td>
-                    <td class="p-4">
-                        <div class="font-black text-[12px] uppercase text-slate-800 leading-tight">${item.desc}</div>
-                        <span class="text-blue-500 text-[7px] font-black uppercase tracking-widest">${item.cat}</span>
-                    </td>
-                    <td class="p-4 text-center font-black text-slate-600 text-[11px]">${item.qty}</td>
-                    <td class="p-4 text-right font-mono font-black text-blue-900 text-[11px]">R$ ${sub.toFixed(2)}</td>
-                    <td class="p-4 text-center"><button onclick="remove(${item.id})" class="text-slate-300 hover:text-red-500 font-black text-3xl px-2 transition-colors">✕</button></td>
-                `;
-                body.appendChild(row);
-            });
-            document.getElementById('total-geral').innerText = `R$ ${totalG.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-            document.getElementById('total-pago').innerText = `R$ ${totalP.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            body.innerHTML = inventory.map(item => `
+                <div class="flex justify-between items-center border-b p-3 ${item.bought ? 'opacity-30 line-through' : ''}">
+                    <div>
+                        <div class="font-black uppercase text-[10px]">${item.desc}</div>
+                        <span class="text-[7px] font-bold text-blue-600 uppercase">${item.cat}</span>
+                    </div>
+                    <div class="font-mono font-bold">R$ ${(item.qty * item.price).toFixed(2)}</div>
+                </div>
+            `).join('');
         }
 
-        function addItem() {
-            const d = prompt("Nome do Material:"); if(!d) return;
-            const q = parseFloat(prompt("Quantidade:", "1"));
-            const p = parseFloat(prompt("Preço Unitário:", "0"));
-            inventory = [{id: Date.now(), desc: d, qty: q, price: p, cat: "ADICIONADO", bought: false}, ...inventory];
-            render();
-        }
-
-        function remove(id) { if(confirm("Deseja remover este item?")) { inventory = inventory.filter(x => x.id !== id); render(); } }
-        function toggle(id) { const i = inventory.find(x => x.id === id); i.bought = !i.bought; render(); }
-        
         function switchTab(t) {
             ['planilha', 'eletrica', 'pontos'].forEach(tab => {
                 document.getElementById('view-' + tab).classList.toggle('hidden', t !== tab);
                 document.getElementById('btn-' + tab).classList.toggle('tab-active', t === tab);
             });
-            window.scrollTo(0, 0);
+        }
+
+        function shareLink() {
+            navigator.clipboard.writeText(window.location.href);
+            alert("Link copiado! Agora é só colar no WhatsApp do seu eletricista.");
         }
 
         window.onload = function() {
-            // Gera o QR Code baseado na URL atual do projeto
             new QRCode(document.getElementById("qrcode"), {
                 text: window.location.href,
-                width: 140,
-                height: 140,
-                colorDark : "#0f172a",
-                colorLight : "#ffffff",
+                width: 120, height: 120,
+                colorDark : "#0f172a", colorLight : "#ffffff",
                 correctLevel : QRCode.CorrectLevel.H
             });
             render();
