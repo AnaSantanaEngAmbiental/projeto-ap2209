@@ -19,39 +19,33 @@
         body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; font-size: 10px; -webkit-tap-highlight-color: transparent; }
         .tab-active { background-color: #1e40af !important; color: white !important; transform: scale(1.02); box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3); }
         .header-master { background: #0f172a; border-bottom: 4px solid #2563eb; border-radius: 0 0 24px 24px; }
-        .card-ponto { border-left: 6px solid #2563eb; border-radius: 16px; padding: 18px; background: white; margin-bottom: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .card-ponto { border-left: 5px solid #2563eb; border-radius: 16px; padding: 15px; background: white; margin-bottom: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
         .row-purchased { opacity: 0.3; filter: grayscale(1); text-decoration: line-through; background-color: #f8fafc !important; }
-        .memorial-section { border-left: 5px solid #1e40af; background: white; padding: 20px; border-radius: 16px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .tag-cor { padding: 4px 10px; border-radius: 6px; color: white; font-weight: 900; font-size: 8px; text-transform: uppercase; border: 1px solid rgba(0,0,0,0.1); display: inline-block; margin: 2px 0; }
+        .memorial-section { border-left: 4px solid #1e40af; background: white; padding: 18px; border-radius: 16px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .tag-cor { padding: 3px 8px; border-radius: 6px; color: white; font-weight: 900; font-size: 8px; text-transform: uppercase; border: 1px solid rgba(0,0,0,0.1); display: inline-block; }
         
-        /* LAYOUT INTELIGENTE PARA QR CODE */
-        @media (min-width: 1280px) {
-            .container-master { margin-right: 260px !important; }
-            #qr-station { 
-                display: block; position: fixed; top: 120px; right: 40px; 
-                background: white; padding: 25px; border-radius: 24px; 
-                box-shadow: 0 20px 40px rgba(0,0,0,0.1); border: 2px solid #e2e8f0;
-                text-align: center; width: 200px; z-index: 1000;
+        /* QR Code flutuante (Apenas PC) */
+        #qr-container { display: none; }
+        @media (min-width: 1024px) {
+            #qr-container { 
+                display: block; position: fixed; bottom: 30px; right: 30px; 
+                background: white; padding: 20px; border-radius: 20px; 
+                box-shadow: 0 20px 40px rgba(0,0,0,0.2); border: 3px solid #1e40af;
+                text-align: center; z-index: 1000; animate: bounce 2s infinite;
             }
         }
-        @media (max-width: 1279px) { 
-            #qr-station { display: none; } 
-            .container-master { margin-right: 0; }
-        }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
     </style>
 </head>
 <body class="pb-24">
 
-    <div id="qr-station" class="no-print">
-        <p class="font-black text-[10px] uppercase mb-4 text-slate-800 tracking-tighter italic">📲 Abrir no iPhone</p>
-        <div id="qrcode" class="flex justify-center mb-4"></div>
-        <button onclick="copyToClipboard()" class="w-full bg-emerald-500 text-white py-3 rounded-xl font-black text-[8px] uppercase shadow-md active:scale-95 transition-all">
-            Copiar p/ WhatsApp
-        </button>
-        <p class="text-[7px] mt-4 text-slate-400 font-bold uppercase italic leading-tight">Escaneie para levar à obra</p>
+    <div id="qr-container" class="no-print">
+        <p class="font-black text-[9px] uppercase mb-3 text-slate-700">📱 LEVAR PARA O IPHONE</p>
+        <div id="qrcode" class="flex justify-center border-4 border-slate-50 p-2 rounded-lg"></div>
+        <p class="text-[7px] mt-3 text-blue-600 font-black tracking-widest uppercase">Escaneie na tela</p>
     </div>
 
-    <header class="header-master text-white p-6 mb-6 shadow-2xl mx-1 container-master">
+    <header class="header-master text-white p-6 mb-6 shadow-2xl mx-1">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <div>
                 <h1 class="text-3xl font-black italic tracking-tighter text-blue-400 uppercase leading-none">AP 2209 MASTER</h1>
@@ -70,51 +64,52 @@
         </div>
     </header>
 
-    <div class="max-w-6xl mx-auto px-4 container-master">
+    <div class="max-w-6xl mx-auto px-4">
         
         <nav class="flex gap-2 mb-6 no-print overflow-x-auto pb-2">
-            <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 min-w-[120px] py-5 rounded-2xl font-black text-[9px] uppercase bg-white text-slate-400 shadow-sm tab-active transition-all">1. Orçamento (15 Itens)</button>
-            <button onclick="switchTab('eletrica')" id="btn-eletrica" class="flex-1 min-w-[120px] py-5 rounded-2xl font-black text-[9px] uppercase bg-white text-slate-400 shadow-sm transition-all">2. Memorial Técnico</button>
-            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 min-w-[120px] py-5 rounded-2xl font-black text-[9px] uppercase bg-white text-slate-400 shadow-sm transition-all">3. Mapa de Pontos 220V</button>
+            <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 min-w-[120px] py-4 rounded-2xl font-black text-[9px] uppercase bg-white text-slate-400 shadow-sm tab-active transition-all">1. Orçamento (15 Itens)</button>
+            <button onclick="switchTab('eletrica')" id="btn-eletrica" class="flex-1 min-w-[120px] py-4 rounded-2xl font-black text-[9px] uppercase bg-white text-slate-400 shadow-sm transition-all">2. Memorial Técnico</button>
+            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 min-w-[120px] py-4 rounded-2xl font-black text-[9px] uppercase bg-white text-slate-400 shadow-sm transition-all">3. Mapa de Pontos 220V</button>
         </nav>
 
         <div id="view-planilha" class="space-y-4">
-            <button onclick="addItem()" class="w-full bg-blue-600 text-white py-5 rounded-2xl font-black text-[11px] uppercase shadow-lg hover:bg-blue-700 active:scale-95 transition-all">+ Adicionar Material</button>
-            <div class="bg-white rounded-[32px] shadow-xl border border-slate-200 p-4 overflow-hidden">
+            <button onclick="addItem()" class="w-full bg-blue-600 text-white py-5 rounded-2xl font-black text-[11px] uppercase shadow-lg hover:bg-blue-700 active:scale-95 transition-all">+ Novo Item no Orçamento</button>
+            <div class="bg-white rounded-[32px] shadow-xl border border-slate-200 p-3 overflow-hidden">
                 <table class="w-full text-left border-separate border-spacing-y-2">
                     <tbody id="inventory-body"></tbody>
                 </table>
             </div>
         </div>
 
-        <div id="view-eletrica" class="hidden space-y-5">
+        <div id="view-eletrica" class="hidden space-y-4">
             <div class="memorial-section">
-                <h3 class="font-black text-blue-700 mb-4 uppercase text-[12px] border-b pb-2">⚡ Padrão de Engenharia Trifásica</h3>
+                <h3 class="font-black text-blue-700 mb-4 uppercase text-[11px] border-b pb-2 flex justify-between">
+                    ⚡ Configuração Trifásica 127V <span>220V (F+F)</span>
+                </h3>
                 <div class="grid grid-cols-2 gap-2 text-[9px] font-black uppercase">
                     <div class="bg-black text-white p-4 rounded-xl text-center shadow-md">Fase R: Preto</div>
                     <div class="bg-red-600 text-white p-4 rounded-xl text-center shadow-md">Fase S: Vermelho</div>
                     <div class="bg-white border-2 border-blue-600 text-blue-600 p-4 rounded-xl text-center">Fase T: Branco</div>
                     <div class="bg-blue-600 text-white p-4 rounded-xl text-center shadow-md">Neutro: Azul</div>
+                    <div class="bg-emerald-600 text-white p-4 rounded-xl text-center col-span-2 shadow-md italic">Terra: Verde (100% dos pontos)</div>
                 </div>
             </div>
+
             <div class="memorial-section" style="border-left-color: #000;">
-                <h3 class="font-black text-slate-900 mb-2 uppercase text-[11px]">🛠️ Conexões Schneider & Wago</h3>
-                <ul class="text-[10px] text-slate-600 space-y-2 leading-relaxed italic">
-                    <li>• Crimpagem Hexagonal obrigatória em bornes Schneider.</li>
-                    <li>• Terminais Ilhós Tubulares em todas as pontas de cabos.</li>
-                    <li>• Chuveiro: Conector Wago 221-612 (Original).</li>
-                    <li>• DR 30mA e DPS 20kA instalados e testados.</li>
-                </ul>
+                <h3 class="font-black text-slate-900 mb-2 uppercase text-[10px]">🛠️ Tecnologia de Conexão</h3>
+                <p class="text-[10px] text-slate-600 leading-relaxed italic">"Proibido emendas manuais. Utilizar conectores <strong>Wago 221</strong>. Todos os terminais devem ser <strong>Ilhós Tubulares</strong> com crimpagem <strong>Hexagonal</strong> em dispositivos Schneider."</p>
                 
             </div>
+
             <div class="memorial-section" style="border-left-color: #0ea5e9;">
-                <h3 class="font-black text-sky-700 mb-2 uppercase text-[11px]">🚰 Hidráulica Docol Gourmet</h3>
-                <p class="text-[10px] text-slate-600 leading-relaxed italic">Realizar flushing preventivo da rede. Proteção obrigatória dos vedantes cerâmicos monocomando contra detritos de obra.</p>
+                <h3 class="font-black text-sky-700 mb-2 uppercase text-[10px]">🚰 Hidráulica Docol Gourmet</h3>
+                <p class="text-[10px] text-slate-600 leading-relaxed italic">Instalação de monocomandos com verificação de MCA. Uso obrigatório de filtros de linha Schneider/Docol para evitar detritos no reparo cerâmico.</p>
             </div>
         </div>
 
         <div id="view-pontos" class="hidden space-y-4">
-            <h2 class="text-xs font-black uppercase border-b-4 border-blue-600 pb-2 mb-6 italic tracking-tighter">Metragens e Distribuição 220V (F+F)</h2>
+            <h2 class="text-xs font-black uppercase border-b-4 border-blue-600 pb-2 mb-6 italic tracking-tighter">Engenharia de Cargas 220V (F+F)</h2>
+            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="card-ponto" style="border-left-color: #ef4444;">
                     <p class="font-black text-[12px] text-red-600 uppercase border-b pb-2 mb-3">🚿 Chuveiro Master (220V)</p>
@@ -122,14 +117,25 @@
                         <div class="flex justify-between"><span><span class="tag-cor bg-black">Fase R</span> 6mm²:</span> <span>15m</span></div>
                         <div class="flex justify-between"><span><span class="tag-cor bg-red-600">Fase S</span> 6mm²:</span> <span>15m</span></div>
                         <div class="flex justify-between border-t pt-2"><span><span class="tag-cor bg-emerald-600">Terra</span> 6mm²:</span> <span>15m</span></div>
+                        <p class="text-red-700 mt-2 font-black text-[8px] bg-red-50 p-2 rounded">Bipolar 40A Schneider + Wago 221-612</p>
                     </div>
                 </div>
+
                 <div class="card-ponto" style="border-left-color: #f97316;">
                     <p class="font-black text-[12px] text-orange-600 uppercase border-b pb-2 mb-3">🔥 Torre Quente (220V)</p>
                     <div class="space-y-2 text-[10px] font-bold">
                         <div class="flex justify-between"><span><span class="tag-cor bg-red-600">Fase S</span> 4mm²:</span> <span>12m</span></div>
-                        <div class="flex justify-between"><span><span class="tag-cor border-2 border-blue-600 text-blue-600">Fase T</span> 4mm²:</span> <span>12m</span></div>
+                        <div class="flex justify-between"><span><span class="tag-cor border border-blue-600 text-blue-600">Fase T</span> 4mm²:</span> <span>12m</span></div>
                         <div class="flex justify-between border-t pt-2"><span><span class="tag-cor bg-emerald-600">Terra</span> 4mm²:</span> <span>12m</span></div>
+                    </div>
+                </div>
+
+                <div class="card-ponto" style="border-left-color: #fbbf24;">
+                    <p class="font-black text-[12px] text-amber-500 uppercase border-b pb-2 mb-3">💡 Iluminação (127V)</p>
+                    <div class="space-y-2 text-[10px] font-bold">
+                        <div class="flex justify-between"><span><span class="tag-cor border border-blue-600 text-blue-600">Fase T</span> 1,5mm²:</span> <span>40m</span></div>
+                        <div class="flex justify-between"><span><span class="tag-cor bg-blue-600">Neutro</span> 1,5mm²:</span> <span>40m</span></div>
+                        <div class="flex justify-between"><span><span class="tag-cor bg-yellow-400 text-black text-[7px]">Retorno</span> 1,5mm²:</span> <span>40m</span></div>
                     </div>
                 </div>
             </div>
@@ -138,23 +144,23 @@
     </div>
 
     <script>
-        // INVENTÁRIO COMPLETO RECUPERADO
+        // RECUPERADO O INVENTÁRIO DE 15 ITENS COMPLETO
         let inventory = [
             { id: 1, desc: "Cabo Prysmian 6,0mm² (Preto/Verm/Verde)", qty: 45, price: 9.80, cat: "Elet", bought: false },
             { id: 2, desc: "Cabo Prysmian 4,0mm² (Verm/Branco/Verde)", qty: 36, price: 6.50, cat: "Elet", bought: false },
             { id: 3, desc: "Cabo Prysmian 2,5mm² VERDE (Terra)", qty: 100, price: 4.50, cat: "Elet", bought: true },
             { id: 4, desc: "Cabo Prysmian 2,5mm² PRETO (Fase R)", qty: 100, price: 4.20, cat: "Elet", bought: false },
             { id: 5, desc: "Cabo Prysmian 2,5mm² AZUL (Neutro)", qty: 100, price: 4.20, cat: "Elet", bought: false },
-            { id: 6, desc: "Cabo Prysmian 1,5mm² (Amarelo/Branco/Azul)", qty: 120, price: 2.80, cat: "Elet", bought: false },
+            { id: 6, desc: "Cabo Prysmian 1,5mm² (Amarelo/Branco)", qty: 120, price: 2.80, cat: "Elet", bought: false },
             { id: 7, desc: "IDR Schneider 4P 40A 30mA", qty: 1, price: 295.00, cat: "Elet", bought: false },
             { id: 8, desc: "DPS Schneider 20kA 275V", qty: 3, price: 145.00, cat: "Elet", bought: false },
-            { id: 9, desc: "Disjuntor Bipolar 40A Schneider (Chuveiro)", qty: 1, price: 72.00, cat: "Elet", bought: false },
-            { id: 10, desc: "Módulo Tomada 10A Schneider Orion (x35)", qty: 35, price: 18.90, cat: "Elet", bought: false },
-            { id: 11, desc: "Caixa 4x4 Amarela Reforçada (x12)", qty: 12, price: 7.80, cat: "Infra", bought: true },
-            { id: 12, desc: "Caixa 4x2 Amarela Reforçada (x26)", qty: 26, price: 4.80, cat: "Infra", bought: true },
+            { id: 9, desc: "Disjuntor Bipolar 40A Schneider", qty: 1, price: 68.00, cat: "Elet", bought: false },
+            { id: 10, desc: "Módulo Tomada 10A Schneider Orion", qty: 35, price: 18.90, cat: "Elet", bought: false },
+            { id: 11, desc: "Caixa 4x4 Amarela Reforçada", qty: 12, price: 7.80, cat: "Infra", bought: true },
+            { id: 12, desc: "Caixa 4x2 Amarela Reforçada", qty: 26, price: 4.80, cat: "Infra", bought: true },
             { id: 13, desc: "Torneira Cozinha Gourmet Docol", qty: 1, price: 920.00, cat: "Hidr", bought: false },
-            { id: 14, desc: "Conector Wago 221-612 (Original)", qty: 10, price: 8.50, cat: "Elet", bought: false },
-            { id: 15, desc: "Quadro Schneider 36 DIN Completo", qty: 1, price: 310.00, cat: "Infra", bought: false }
+            { id: 14, desc: "Conector Wago 221-612 (Chuveiro)", qty: 10, price: 8.50, cat: "Elet", bought: false },
+            { id: 15, desc: "Quadro Schneider 36 DIN", qty: 1, price: 310.00, cat: "Infra", bought: false }
         ];
 
         function render() {
@@ -167,14 +173,14 @@
                 const row = document.createElement('tr');
                 row.className = `border-b border-slate-100 ${item.bought ? 'row-purchased' : 'bg-white'}`;
                 row.innerHTML = `
-                    <td class="p-4 w-12 text-center"><input type="checkbox" ${item.bought?'checked':''} onchange="toggle(${item.id})" class="w-7 h-7 accent-blue-600"></td>
+                    <td class="p-4 w-12 text-center"><input type="checkbox" ${item.bought?'checked':''} onchange="toggle(${item.id})" class="w-6 h-6 accent-blue-600"></td>
                     <td class="p-4">
-                        <div class="font-black text-[12px] uppercase text-slate-800 leading-tight">${item.desc}</div>
-                        <span class="text-blue-500 text-[7px] font-black uppercase tracking-widest">${item.cat}</span>
+                        <div class="font-black text-[11px] uppercase text-slate-800 leading-tight">${item.desc}</div>
+                        <span class="text-blue-500 text-[6px] font-black uppercase tracking-widest">${item.cat}</span>
                     </td>
-                    <td class="p-4 text-center font-black text-slate-600 text-[11px]">${item.qty}</td>
-                    <td class="p-4 text-right font-mono font-black text-blue-900 text-[11px]">R$ ${sub.toFixed(2)}</td>
-                    <td class="p-4 text-center"><button onclick="remove(${item.id})" class="text-slate-300 hover:text-red-500 font-black text-3xl px-2 transition-colors">✕</button></td>
+                    <td class="p-4 text-center font-black text-slate-600 text-[10px]">${item.qty}</td>
+                    <td class="p-4 text-right font-mono font-black text-blue-900 text-[10px]">R$ ${sub.toFixed(2)}</td>
+                    <td class="p-4 text-center"><button onclick="remove(${item.id})" class="text-slate-300 hover:text-red-500 font-black text-2xl px-2 transition-colors">✕</button></td>
                 `;
                 body.appendChild(row);
             });
@@ -190,7 +196,7 @@
             render();
         }
 
-        function remove(id) { if(confirm("Remover?")) { inventory = inventory.filter(x => x.id !== id); render(); } }
+        function remove(id) { if(confirm("Remover item?")) { inventory = inventory.filter(x => x.id !== id); render(); } }
         function toggle(id) { const i = inventory.find(x => x.id === id); i.bought = !i.bought; render(); }
         function switchTab(t) {
             ['planilha', 'eletrica', 'pontos'].forEach(tab => {
@@ -200,17 +206,13 @@
             window.scrollTo(0, 0);
         }
 
-        function copyToClipboard() {
-            navigator.clipboard.writeText(window.location.href);
-            alert("✅ Link copiado! Cole agora no WhatsApp.");
-        }
-
         window.onload = function() {
             new QRCode(document.getElementById("qrcode"), {
                 text: window.location.href,
-                width: 150, height: 150,
-                colorDark : "#0f172a", colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
+                width: 120,
+                height: 120,
+                colorDark : "#0f172a",
+                colorLight : "#ffffff"
             });
             render();
         };
