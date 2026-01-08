@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AP 2209 - MASTER V50</title>
+    <title>AP 2209 - MASTER V55</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -33,7 +33,7 @@
         <div class="max-w-4xl mx-auto flex justify-between items-end">
             <div>
                 <h1 class="text-2xl font-black italic tracking-tighter uppercase leading-none">AP 2209 MASTER</h1>
-                <p class="text-[8px] font-bold uppercase tracking-[0.3em] opacity-70 mt-2">Engenharia Trifásica • V50.0</p>
+                <p class="text-[8px] font-bold uppercase tracking-[0.3em] opacity-70 mt-2">Engenharia Trifásica • V55.0 FULL CONNECT</p>
             </div>
             <div class="text-right">
                 <p class="text-[9px] font-black text-blue-300 uppercase">Investimento Total</p>
@@ -54,7 +54,7 @@
 
         <nav class="flex gap-2 mb-6">
             <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 py-4 rounded-xl font-black text-[9px] uppercase bg-white text-slate-400 tab-active">1. Orçamento</button>
-            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 py-4 rounded-xl font-black text-[9px] uppercase bg-white text-slate-400">2. Mapa de Pontos Detalhado</button>
+            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 py-4 rounded-xl font-black text-[9px] uppercase bg-white text-slate-400">2. Mapa de Pontos Full</button>
         </nav>
 
         <div id="view-planilha" class="space-y-3">
@@ -75,69 +75,77 @@
 
         <div id="view-pontos" class="hidden space-y-4">
             
-            <div class="card-ponto" style="border-left-color: #3b82f6;">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-black text-blue-800 uppercase text-xs">🏠 Padrão Geral (Sala, Quartos e Cozinha)</h4>
-                    <span class="bg-blue-100 text-blue-800 text-[8px] px-2 py-1 rounded font-bold uppercase">Caixas 4x4</span>
-                </div>
+            <div class="card-ponto" style="border-left-color: #f59e0b;">
+                <h4 class="font-black text-amber-700 uppercase text-xs mb-2">🍳 Cozinha Gourmet & Filtros</h4>
                 <div class="space-y-2 text-[10px]">
-                    <p class="font-bold text-slate-700">Configuração Interna por Caixa:</p>
-                    <p class="flex items-center"><span class="tag-detalhe bg-blue-600 text-white">110V</span> 03 Módulos de Tomada (F+N+T)</p>
-                    <p class="flex items-center"><span class="tag-detalhe bg-red-600 text-white">220V</span> 01 Módulo de Tomada (F+F+T)</p>
-                    <p class="mt-2 text-slate-500 italic border-t pt-2">Infra: Utilizar cabo 2,5mm² para tomadas gerais.</p>
+                    <p><strong>Bancada Principal (2 Pontos 4x4):</strong> 6 tomadas 110V (Fritadeira, Cafeteira, Mixer) + 2 tomadas 220V.</p>
+                    <p><strong>Geladeira e Filtro (1 Ponto 4x4):</strong> 3 tomadas 110V + 1 tomada 220V (reserva).</p>
+                    <p class="p-2 bg-amber-50 rounded italic">Torre Quente: 4 caixas 4x4 em série (60cm de distância) totalizando 12 tomadas 110V + 4 tomadas 220V.</p>
                 </div>
             </div>
 
-            <div class="card-ponto" style="border-left-color: #ef4444;">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-black text-red-800 uppercase text-xs">🗼 Torre Quente (Alta Performance)</h4>
-                    <span class="bg-red-100 text-red-800 text-[8px] px-2 py-1 rounded font-bold uppercase">4 Caixas em Série</span>
+            <div class="card-ponto" style="border-left-color: #3b82f6;">
+                <h4 class="font-black text-blue-800 uppercase text-xs mb-2">📺 Sala de Estar & Home Office</h4>
+                <div class="space-y-2 text-[10px]">
+                    <p><strong>Painel TV/Games (2 Pontos 4x4):</strong> 6 tomadas 110V (TV, PS5, Soundbar, Modem) + 2 tomadas 220V (Ar-cond. Portátil).</p>
+                    <p><strong>Sofá/Laterais (2 Pontos 4x4):</strong> 6 tomadas 110V (Carregadores, Luminárias) + 2 tomadas 220V.</p>
                 </div>
-                <div class="space-y-3 text-[10px]">
-                    <p class="font-bold text-slate-700 underline text-[11px]">Especificação de Montagem:</p>
-                    <div class="p-3 bg-slate-50 rounded-lg border border-dashed border-slate-300">
-                        <p class="mb-1">📏 <strong>Espaçamento:</strong> 60cm entre centros de cada caixa.</p>
-                        <p class="mb-1">🔌 <strong>Cada Caixa (x4):</strong> 3x Tomadas 110V + 1x Tomada 220V.</p>
-                        <p>⚡ <strong>Condutores:</strong> Uso obrigatório de 4,0mm² (Orçamento Item 02).</p>
+            </div>
+
+            <div class="card-ponto" style="border-left-color: #8b5cf6;">
+                <h4 class="font-black text-purple-800 uppercase text-xs mb-2">🛌 Dormitórios (Master + 01)</h4>
+                <div class="space-y-2 text-[10px]">
+                    <p><strong>Cabeceiras (2 Pontos 4x4 por Quarto):</strong> 6 tomadas 110V (Celular, Abajur, Umidificador) + 2 tomadas 220V.</p>
+                    <p><strong>Painel Quarto (1 Ponto 4x4):</strong> 3 tomadas 110V (TV/Monitor) + 1 tomada 220V.</p>
+                </div>
+            </div>
+
+            <div class="card-ponto" style="border-left-color: #10b981;">
+                <h4 class="font-black text-emerald-800 uppercase text-xs mb-2">🚿 Banheiros</h4>
+                <div class="space-y-2 text-[10px]">
+                    <p><strong>Bancada Banheiro (1 Ponto 4x4):</strong> 3 tomadas 110V (Barbeador, Escova, Secador) + 1 tomada 220V (Dedicada).</p>
+                </div>
+            </div>
+
+            <div class="card-ponto" style="border-left-color: #0f172a; background: #f1f5f9;">
+                <h4 class="font-black text-slate-900 uppercase text-xs mb-3 text-center">📐 Dimensionamento Total do Projeto</h4>
+                <div class="grid grid-cols-2 gap-4 text-[9px] font-bold">
+                    <div class="bg-white p-2 rounded border shadow-sm">
+                        <p class="text-blue-600">CAIXAS 4X4</p>
+                        <p class="text-lg">22 Unid.</p>
+                        <p class="text-[7px] text-slate-400">Total distribuído</p>
+                    </div>
+                    <div class="bg-white p-2 rounded border shadow-sm">
+                        <p class="text-red-600">MÓDULOS TOMADA</p>
+                        <p class="text-lg">88 Unid.</p>
+                        <p class="text-[7px] text-slate-400">66x 110V | 22x 220V</p>
                     </div>
                 </div>
             </div>
-
-            <div class="card-ponto" style="border-left-color: #0f172a; background: #f8fafc;">
-                <h4 class="font-black text-slate-900 uppercase text-xs mb-4">📊 Resumo de Materiais (V50)</h4>
-                <div class="grid grid-cols-1 gap-2 text-[9px] font-mono">
-                    <div class="flex justify-between border-b pb-1"><span>CABO 4,0mm² (Torre Quente)</span> <strong>36m</strong></div>
-                    <div class="flex justify-between border-b pb-1"><span>CABO 2,5mm² (Geral)</span> <strong>300m</strong></div>
-                    <div class="flex justify-between border-b pb-1"><span>CAIXAS 4x4 (Total)</span> <strong>12 Unid.</strong></div>
-                    <div class="flex justify-between border-b pb-1"><span>MÓDULOS TOMADA (Schneider)</span> <strong>35 Unid.</strong></div>
-                </div>
-            </div>
-
+            
             
 
         </div>
     </div>
 
     <script>
+        // Orçamento atualizado para a carga real (88 módulos e 22 caixas 4x4)
         const defaultInventory = [
             { id: 1, desc: "Cabo Prysmian 6,0mm² (Preto/Verm/Verde)", qty: 45, price: 9.80, bought: false },
-            { id: 2, desc: "Cabo Prysmian 4,0mm² (Verm/Branco/Verde)", qty: 36, price: 6.50, bought: false },
-            { id: 3, desc: "Cabo Prysmian 2,5mm² VERDE (Terra)", qty: 100, price: 4.50, bought: true },
-            { id: 4, desc: "Cabo Prysmian 2,5mm² PRETO (Fase R)", qty: 100, price: 4.20, bought: false },
-            { id: 5, desc: "Cabo Prysmian 2,5mm² AZUL (Neutro)", qty: 100, price: 4.20, bought: false },
-            { id: 6, desc: "Cabo Prysmian 1,5mm² (Iluminação)", qty: 120, price: 2.80, bought: false },
+            { id: 2, desc: "Cabo Prysmian 4,0mm² (Verm/Branco/Verde)", qty: 60, price: 6.50, bought: false },
+            { id: 3, desc: "Cabo Prysmian 2,5mm² VERDE (Terra)", qty: 200, price: 4.50, bought: false },
+            { id: 4, desc: "Cabo Prysmian 2,5mm² PRETO (Fase R)", qty: 200, price: 4.20, bought: false },
+            { id: 5, desc: "Cabo Prysmian 2,5mm² AZUL (Neutro)", qty: 200, price: 4.20, bought: false },
+            { id: 10, desc: "Módulo Tomada 10A Schneider Orion (x88)", qty: 88, price: 18.90, bought: false },
+            { id: 11, desc: "Caixa 4x4 Amarela Reforçada (x22)", qty: 22, price: 7.80, bought: false },
+            { id: 12, desc: "Caixa 4x2 Amarela (Interruptores)", qty: 15, price: 4.80, bought: false },
             { id: 7, desc: "IDR Schneider 4P 40A 30mA", qty: 1, price: 295.00, bought: false },
             { id: 8, desc: "DPS Schneider 20kA 275V", qty: 3, price: 145.00, bought: false },
-            { id: 9, desc: "Disjuntor Bipolar 40A Schneider", qty: 1, price: 72.00, bought: false },
-            { id: 10, desc: "Módulo Tomada 10A Schneider Orion (x35)", qty: 35, price: 18.90, bought: false },
-            { id: 11, desc: "Caixa 4x4 Amarela Reforçada (x12)", qty: 12, price: 7.80, bought: true },
-            { id: 12, desc: "Caixa 4x2 Amarela Reforçada (x26)", qty: 26, price: 4.80, bought: true },
-            { id: 13, desc: "Torneira Cozinha Gourmet Docol", qty: 1, price: 920.00, bought: false },
-            { id: 14, desc: "Conector Wago 221-612 Original (x10)", qty: 10, price: 8.50, bought: false },
-            { id: 15, desc: "Quadro Schneider 36 DIN Completo", qty: 1, price: 310.00, bought: false }
+            { id: 15, desc: "Quadro Schneider 36 DIN Completo", qty: 1, price: 310.00, bought: false },
+            { id: 14, desc: "Conector Wago 221-413 (Caixa de 50)", qty: 2, price: 120.00, bought: false }
         ];
 
-        let inventory = JSON.parse(localStorage.getItem('ap2209_master_v46')) || defaultInventory;
+        let inventory = JSON.parse(localStorage.getItem('ap2209_master_v55')) || defaultInventory;
 
         function getSyncURL() {
             const dataStr = btoa(unescape(encodeURIComponent(JSON.stringify(inventory))));
@@ -172,7 +180,7 @@
         }
 
         function saveAndRender() {
-            localStorage.setItem('ap2209_master_v46', JSON.stringify(inventory));
+            localStorage.setItem('ap2209_master_v55', JSON.stringify(inventory));
             const body = document.getElementById('inventory-body');
             body.innerHTML = '';
             let total = 0;
@@ -185,7 +193,7 @@
                 tr.innerHTML = `
                     <td class="p-4">
                         <div class="font-black uppercase text-[10px] text-slate-800">${item.desc}</div>
-                        <div class="text-[8px] text-slate-400">Prysmian / Schneider / Docol</div>
+                        <div class="text-[8px] text-slate-400">Linha Schneider Orion / Prysmian</div>
                     </td>
                     <td class="p-4 text-center font-black">${item.qty}</td>
                     <td class="p-4 text-right font-mono font-black text-blue-900">R$ ${sub.toFixed(2)}</td>
