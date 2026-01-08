@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SISTEMA AP 2209 - MASTER V80 FINAL</title>
+    <title>SISTEMA AP 2209 - MASTER V81</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -20,16 +20,19 @@
         .tag-ponto { font-size: 9px; font-weight: 900; padding: 3px 8px; border-radius: 5px; text-transform: uppercase; margin-top: 8px; display: inline-block; }
         
         #qrcode-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-        #qrcode-content { background: white; padding: 2rem; border-radius: 1.5rem; text-align: center; }
+        #qrcode-content { background: white; padding: 2rem; border-radius: 1.5rem; text-align: center; max-width: 90%; }
     </style>
 </head>
 <body class="pb-20">
 
     <div id="qrcode-modal" onclick="this.style.display='none'">
         <div id="qrcode-content" onclick="event.stopPropagation()">
-            <div id="qrcode-img" class="flex justify-center mb-4"></div>
-            <p class="font-black text-slate-800 uppercase text-sm">Escaneie para Sincronizar</p>
-            <button onclick="document.getElementById('qrcode-modal').style.display='none'" class="mt-4 text-xs font-bold text-blue-600 uppercase italic underline">Fechar</button>
+            <div id="qrcode-img" class="flex justify-center mb-4 border-4 border-slate-100 p-2 rounded-xl"></div>
+            <p class="font-black text-slate-800 uppercase text-sm mb-4">Sincronização Ativa</p>
+            <div class="flex flex-col gap-2">
+                <button onclick="copySyncLink()" class="bg-blue-600 text-white text-[10px] font-black uppercase py-3 rounded-lg w-full">Copiar Link do Painel</button>
+                <button onclick="document.getElementById('qrcode-modal').style.display='none'" class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-2">Fechar Janela</button>
+            </div>
         </div>
     </div>
 
@@ -49,11 +52,11 @@
     <main class="max-w-5xl mx-auto px-4 mt-6">
         
         <div class="grid grid-cols-2 gap-3 mb-8">
-            <button onclick="shareWhatsApp()" class="bg-emerald-600 text-white py-4 rounded-2xl font-black text-[10px] uppercase shadow-lg border-b-4 border-emerald-800 active:border-b-0 transition-all flex items-center justify-center gap-2">
-                <span>🟢 WhatsApp</span>
+            <button onclick="copySyncLink()" class="bg-slate-200 text-slate-800 py-4 rounded-2xl font-black text-[10px] uppercase shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 border-b-4 border-slate-400">
+                <span>🔗 Copiar Link</span>
             </button>
             <button onclick="showQR()" class="bg-slate-900 text-white py-4 rounded-2xl font-black text-[10px] uppercase shadow-lg border-b-4 border-blue-600 active:border-b-0 transition-all flex items-center justify-center gap-2">
-                <span>📱 QR Sync</span>
+                <span>📱 Abrir QR Code</span>
             </button>
         </div>
 
@@ -70,9 +73,9 @@
                     <table class="w-full text-left">
                         <thead class="bg-slate-50 border-b border-slate-200">
                             <tr>
-                                <th class="p-4 text-[8px] font-black uppercase text-slate-400">Descrição Técnica</th>
+                                <th class="p-4 text-[8px] font-black uppercase text-slate-400">Descrição</th>
                                 <th class="p-4 text-[8px] font-black uppercase text-slate-400 text-center">Qtd</th>
-                                <th class="p-4 text-[8px] font-black uppercase text-slate-400 text-right">Subtotal</th>
+                                <th class="p-4 text-[8px] font-black uppercase text-slate-400 text-right">Total</th>
                                 <th class="p-4"></th>
                             </tr>
                         </thead>
@@ -80,99 +83,58 @@
                     </table>
                 </div>
             </div>
-            <button onclick="newItem()" class="w-full py-4 border-2 border-dashed border-blue-300 rounded-2xl text-blue-600 font-black text-[10px] uppercase hover:bg-blue-50 transition-all">+ Inserir Novo Material</button>
+            <button onclick="newItem()" class="w-full py-4 border-2 border-dashed border-blue-300 rounded-2xl text-blue-600 font-black text-[10px] uppercase hover:bg-blue-50 transition-all">+ Novo Item</button>
         </section>
 
         <section id="view-pontos" class="hidden space-y-4">
             <div class="ponto-card border-slate-900">
                 <h3 class="font-black text-[11px] uppercase text-slate-900 mb-1">⚡ Quadro de Comando (QDC)</h3>
-                <p class="text-[10px] text-slate-600 leading-relaxed italic">Posicionado na entrada principal. Barramento bifásico 100A. 36 slots DIN para separação total de circuitos (Iluminação, Tomadas, Ar Condicionado, Cozinha).</p>
+                <p class="text-[10px] text-slate-600 leading-relaxed italic">Posicionado na entrada. Barramento bifásico 100A. 36 slots DIN para separação total de circuitos (Iluminação, Tomadas, AC, Cozinha).</p>
                 <span class="tag-ponto bg-slate-900 text-white">Centro de Distribuição</span>
             </div>
-
             <div class="ponto-card border-red-500">
                 <h3 class="font-black text-[11px] uppercase text-red-600 mb-1">🍳 Cozinha & Torre Quente</h3>
-                <p class="text-[10px] text-slate-600 leading-relaxed">Configuração de 7 pontos 4x4. Cada caixa 4x4 contém: 3 módulos 110V + 1 módulo 220V dedicado (Fiação 4,0mm² para Forno e Microondas). Tomadas de serviço acima da bancada com espaçamento de 60cm.</p>
-                <span class="tag-ponto bg-red-100 text-red-600">Circuito de Alta Potência</span>
+                <p class="text-[10px] text-slate-600 leading-relaxed">7 pontos 4x4. Cada caixa contém: 3 módulos 110V + 1 módulo 220V dedicado (Fiação 4,0mm² para Forno/Micro). Bancada com tomadas a cada 60cm.</p>
+                <span class="tag-ponto bg-red-100 text-red-600">Alta Potência</span>
             </div>
-
             <div class="ponto-card border-blue-600">
-                <h3 class="font-black text-[11px] uppercase text-blue-600 mb-1">🛋️ Sala de Estar (Painel TV)</h3>
-                <p class="text-[10px] text-slate-600 leading-relaxed">5 pontos 4x4 ocultos pelo painel. Total de 8 tomadas 110V + 2 tomadas 220V para automação e Home Theater. Infraestrutura para cabos HDMI e Rede (Cat6) via conduíte de 1 polegada.</p>
-                <span class="tag-ponto bg-blue-100 text-blue-600">Multimídia & Automação</span>
-            </div>
-
-            <div class="ponto-card border-emerald-600">
-                <h3 class="font-black text-[11px] uppercase text-emerald-600 mb-1">🛏️ Suíte & Quartos</h3>
-                <p class="text-[10px] text-slate-600 leading-relaxed">Pontos de cabeceira com tomada dupla + USB em cada lado da cama. Ponto dedicado para Ar Condicionado (220V) com disjuntor individual no QDC.</p>
-                <span class="tag-ponto bg-emerald-100 text-emerald-600">Conforto Térmico</span>
+                <h3 class="font-black text-[11px] uppercase text-blue-600 mb-1">🛋️ Sala & Home Theater</h3>
+                <p class="text-[10px] text-slate-600 leading-relaxed">5 pontos 4x4 ocultos. 8 tomadas 110V + 2x 220V. Infra para HDMI e Rede Cat6 via conduíte de 1".</p>
+                <span class="tag-ponto bg-blue-100 text-blue-600">Multimídia</span>
             </div>
         </section>
 
         <section id="view-memorial" class="hidden space-y-4">
             <div class="glass-card p-6 rounded-2xl">
-                <h3 class="font-black text-blue-600 uppercase text-xs mb-6 border-b pb-2">Especificações de Engenharia AP 2209</h3>
-                
-                <div class="space-y-6">
-                    <div>
-                        <h4 class="text-[10px] font-black uppercase text-slate-800 flex items-center gap-2">
-                            <span class="w-2 h-2 bg-blue-500 rounded-full"></span> 01. Condutores (Fiação)
-                        </h4>
-                        <p class="text-[10px] text-slate-500 mt-2 ml-4 leading-relaxed">
-                            Uso exclusivo de <strong>Cabos Prysmian Superastic</strong>. Cores normatizadas: Azul (Neutro), Verde (Terra), Preto/Vermelho (Fase). <br>
-                            - Circuitos de tomada: 2,5mm²<br>
-                            - Circuitos de potência (Chuveiro/AC): 4,0mm² a 6,0mm²
-                        </p>
-                    </div>
-
-                    <div>
-                        <h4 class="text-[10px] font-black uppercase text-slate-800 flex items-center gap-2">
-                            <span class="w-2 h-2 bg-blue-500 rounded-full"></span> 02. Acabamentos e Módulos
-                        </h4>
-                        <p class="text-[10px] text-slate-500 mt-2 ml-4 leading-relaxed">
-                            Linha <strong>Schneider Orion (Bianco Polar)</strong>. Placas com proteção UV e design modular. Conectores rápidos para garantir que não haja aquecimento nos contatos.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h4 class="text-[10px] font-black uppercase text-slate-800 flex items-center gap-2">
-                            <span class="w-2 h-2 bg-blue-500 rounded-full"></span> 03. Infraestrutura Oculta
-                        </h4>
-                        <p class="text-[10px] text-slate-500 mt-2 ml-4 leading-relaxed">
-                            Caixas 4x4 e 4x2 <strong>Tramontina Amarela (Reforçada)</strong>. Conexões internas realizadas com <strong>Conectores Wago 221</strong> (dispensando fita isolante e evitando oxidação).
-                        </p>
-                    </div>
-
-                    <div class="p-4 bg-blue-50 rounded-xl border border-blue-100">
-                        <p class="text-[9px] font-bold text-blue-700 uppercase italic leading-tight">
-                            Norma Técnica: NBR 5410 (Instalações Elétricas de Baixa Tensão). Toda a instalação deve prever o balanceamento de fases no QDC.
-                        </p>
-                    </div>
+                <h3 class="font-black text-blue-600 uppercase text-xs mb-6 border-b pb-2">Memorial AP 2209</h3>
+                <div class="space-y-6 text-[10px]">
+                    <p><strong>01. Fiação:</strong> Cabos Prysmian Superastic. Azul (N), Verde (T), Preto/Verm (F). Tomadas: 2,5mm² | Potência: 4,0mm²-6,0mm².</p>
+                    <p><strong>02. Módulos:</strong> Schneider Orion (Bianco Polar). Placas UV com acabamento modular.</p>
+                    <p><strong>03. Estrutura:</strong> Caixas Tramontina Amarela e Conectores Wago 221 para emendas seguras (sem fita).</p>
+                    <div class="p-3 bg-blue-50 text-blue-700 font-bold italic rounded-lg">Padrão NBR 5410</div>
                 </div>
             </div>
         </section>
 
         <section id="view-galeria" class="hidden space-y-4">
             <div class="border-2 border-dashed border-slate-300 rounded-2xl p-8 text-center" onclick="document.getElementById('img-upload').click()">
-                <p class="text-[10px] font-black text-slate-400 uppercase">Arraste ou clique para fotos da obra</p>
+                <p class="text-[10px] font-black text-slate-400 uppercase">Subir fotos da obra</p>
                 <input type="file" id="img-upload" class="hidden" multiple accept="image/*" onchange="processFiles(this.files)">
             </div>
             <div id="gallery-grid" class="grid grid-cols-2 gap-3"></div>
         </section>
-
     </main>
 
     <script>
-        // DADOS TÉCNICOS INICIAIS
         const INITIAL_DATA = [
-            { id: 1, desc: "Cabo Prysmian 6,0mm² (Chuveiros)", qty: 50, price: 10.40, bought: false },
-            { id: 2, desc: "Cabo Prysmian 4,0mm² (Ar Cond/Torre)", qty: 80, price: 7.20, bought: false },
-            { id: 3, desc: "Cabo Prysmian 2,5mm² (Tomadas)", qty: 300, price: 4.50, bought: false },
-            { id: 4, desc: "Módulo Tomada Schneider Orion 10A", qty: 65, price: 18.90, bought: false },
-            { id: 5, desc: "Módulo Tomada Schneider Orion 20A", qty: 15, price: 22.50, bought: false },
-            { id: 6, desc: "Quadro de Distribuição Schneider 36 DIN", qty: 1, price: 345.00, bought: false },
-            { id: 7, desc: "Conector Wago 221-413 (Cx 50un)", qty: 2, price: 130.00, bought: false },
-            { id: 8, desc: "Caixa Tramontina 4x4 Reforçada Amarela", qty: 25, price: 8.50, bought: false }
+            { id: 1, desc: "Cabo Prysmian 6,0mm²", qty: 50, price: 10.40, bought: false },
+            { id: 2, desc: "Cabo Prysmian 4,0mm²", qty: 80, price: 7.20, bought: false },
+            { id: 3, desc: "Cabo Prysmian 2,5mm²", qty: 300, price: 4.50, bought: false },
+            { id: 4, desc: "Tomada Schneider Orion 10A", qty: 65, price: 18.90, bought: false },
+            { id: 5, desc: "Tomada Schneider Orion 20A", qty: 15, price: 22.50, bought: false },
+            { id: 6, desc: "Quadro Schneider 36 DIN", qty: 1, price: 345.00, bought: false },
+            { id: 7, desc: "Conector Wago 221 (Cx 50)", qty: 2, price: 130.00, bought: false },
+            { id: 8, desc: "Caixa 4x4 Tramontina", qty: 25, price: 8.50, bought: false }
         ];
 
         let inventory = JSON.parse(localStorage.getItem('AP2209_DATA')) || INITIAL_DATA;
@@ -182,7 +144,6 @@
             const list = document.getElementById('inventory-list');
             list.innerHTML = '';
             let total = 0;
-
             inventory.forEach(item => {
                 const sub = item.qty * item.price;
                 total += sub;
@@ -200,7 +161,6 @@
                 `;
                 list.appendChild(row);
             });
-
             document.getElementById('total-geral').innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
             localStorage.setItem('AP2209_DATA', JSON.stringify(inventory));
             renderGallery();
@@ -213,17 +173,17 @@
         }
 
         function deleteItem(id) {
-            if(confirm('Remover item?')) {
+            if(confirm('Excluir?')) {
                 inventory = inventory.filter(i => i.id !== id);
                 render();
             }
         }
 
         function newItem() {
-            const desc = prompt("Descrição do Material:");
+            const desc = prompt("Material:");
             if(!desc) return;
-            const qty = parseFloat(prompt("Quantidade:", "1")) || 0;
-            const price = parseFloat(prompt("Preço Unitário:", "0")) || 0;
+            const qty = parseFloat(prompt("Qtd:", "1")) || 0;
+            const price = parseFloat(prompt("Preço:", "0")) || 0;
             inventory.push({ id: Date.now(), desc, qty, price, bought: false });
             render();
         }
@@ -254,10 +214,8 @@
             photos.forEach(p => {
                 const div = document.createElement('div');
                 div.className = "aspect-square rounded-xl overflow-hidden shadow-md relative";
-                div.innerHTML = `
-                    <img src="${p.data}" class="w-full h-full object-cover">
-                    <button onclick="deletePhoto(${p.id})" class="absolute top-1 right-1 bg-black/50 text-white p-1 rounded-full text-[8px]">✕</button>
-                `;
+                div.innerHTML = `<img src="${p.data}" class="w-full h-full object-cover">
+                    <button onclick="deletePhoto(${p.id})" class="absolute top-1 right-1 bg-black/50 text-white p-1 rounded-full text-[8px]">✕</button>`;
                 grid.appendChild(div);
             });
         }
@@ -272,6 +230,13 @@
             return btoa(unescape(encodeURIComponent(JSON.stringify(inventory.map(i => [i.desc, i.qty, i.price, i.bought ? 1 : 0])))));
         }
 
+        function copySyncLink() {
+            const link = window.location.origin + window.location.pathname + "?v=" + generateSyncData();
+            navigator.clipboard.writeText(link).then(() => {
+                alert("Link de sincronia copiado! Cole no navegador de outro celular.");
+            });
+        }
+
         function showQR() {
             const modal = document.getElementById('qrcode-modal');
             const qrDiv = document.getElementById('qrcode-img');
@@ -279,15 +244,10 @@
             modal.style.display = 'flex';
             new QRCode(qrDiv, {
                 text: window.location.origin + window.location.pathname + "?v=" + generateSyncData(),
-                width: 200, height: 200
+                width: 220, height: 220,
+                colorDark : "#0f172a",
+                colorLight : "#ffffff"
             });
-        }
-
-        function shareWhatsApp() {
-            const total = document.getElementById('total-geral').innerText;
-            const link = window.location.origin + window.location.pathname + "?v=" + generateSyncData();
-            const text = `🛠️ *STATUS OBRA AP 2209*\n\n💰 Total: ${total}\n\n🔗 Sincronizar Painel:\n${link}`;
-            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`);
         }
 
         window.onload = () => {
