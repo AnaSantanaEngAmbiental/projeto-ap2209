@@ -21,12 +21,12 @@
         #qrcode { background: white; padding: 25px; border-radius: 24px; box-shadow: 0 0 50px rgba(59, 130, 246, 0.5); }
         .tag-detalhe { font-size: 8px; font-weight: 900; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; margin-right: 4px; }
 
-        /* Estilos Novos para Aba de Plantas */
+        /* Estilos de Arquivos Ajustados para Visualização Completa */
         #drop-zone { border: 2px dashed #cbd5e1; transition: all 0.3s; }
         #drop-zone.dragover { background: #e0f2fe; border-color: #3b82f6; }
-        .file-card { background: white; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; position: relative; }
-        .file-preview { height: 120px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .file-preview img { width: 100%; height: 100%; object-fit: cover; }
+        .file-card { background: white; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; display: flex; flex-direction: column; }
+        .file-preview { height: 200px; background: #334155; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 4px; }
+        .file-preview img { max-width: 100%; max-height: 100%; object-fit: contain; cursor: pointer; }
     </style>
 </head>
 <body class="pb-24">
@@ -143,7 +143,7 @@
                 <input type="file" id="file-input" class="hidden" multiple onchange="handleFiles(this.files)">
             </div>
 
-            <div id="file-grid" class="grid grid-cols-2 gap-3">
+            <div id="file-grid" class="grid grid-cols-1 gap-4">
                 </div>
         </div>
     </div>
@@ -222,7 +222,6 @@
             renderFiles();
         }
 
-        /* Lógica de Arquivos */
         function handleDrop(e) {
             e.preventDefault();
             document.getElementById('drop-zone').classList.remove('dragover');
@@ -233,7 +232,7 @@
             Array.from(files).forEach(file => {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    filesList.push({
+                    filesList.unshift({
                         id: Date.now() + Math.random(),
                         name: file.name,
                         type: file.type,
@@ -256,11 +255,11 @@
                 card.className = 'file-card';
                 card.innerHTML = `
                     <div class="file-preview">
-                        ${isImg ? `<img src="${file.data}">` : `<span class="text-2xl">📄</span>`}
+                        ${isImg ? `<img src="${file.data}" onclick="window.open('${file.data}')">` : `<span class="text-2xl">📄</span>`}
                     </div>
-                    <div class="p-2 flex justify-between items-center">
-                        <div class="truncate pr-2 font-bold text-[8px] uppercase">${file.name}</div>
-                        <button onclick="deleteFile(${file.id})" class="text-red-500 font-black">✕</button>
+                    <div class="p-3 bg-white flex justify-between items-center border-t border-slate-100">
+                        <div class="truncate font-black text-[9px] uppercase text-slate-700">${file.name}</div>
+                        <button onclick="deleteFile(${file.id})" class="bg-red-50 text-red-500 px-3 py-1 rounded-lg font-black">EXCLUIR</button>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -268,9 +267,11 @@
         }
 
         function deleteFile(id) {
-            filesList = filesList.filter(f => f.id !== id);
-            localStorage.setItem('ap2209_files_v60', JSON.stringify(filesList));
-            renderFiles();
+            if(confirm("Excluir este arquivo?")) {
+                filesList = filesList.filter(f => f.id !== id);
+                localStorage.setItem('ap2209_files_v60', JSON.stringify(filesList));
+                renderFiles();
+            }
         }
 
         function toggle(id) {
@@ -293,7 +294,6 @@
             document.getElementById('view-planilha').classList.toggle('hidden', t !== 'planilha');
             document.getElementById('view-pontos').classList.toggle('hidden', t !== 'pontos');
             document.getElementById('view-arquivos').classList.toggle('hidden', t !== 'arquivos');
-            
             document.getElementById('btn-planilha').classList.toggle('tab-active', t === 'planilha');
             document.getElementById('btn-pontos').classList.toggle('tab-active', t === 'pontos');
             document.getElementById('btn-arquivos').classList.toggle('tab-active', t === 'arquivos');
