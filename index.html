@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AP 2209 - MASTER V46</title>
+    <title>AP 2209 - MASTER V47</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -33,7 +33,7 @@
         <div class="max-w-4xl mx-auto flex justify-between items-end">
             <div>
                 <h1 class="text-2xl font-black italic tracking-tighter uppercase leading-none">AP 2209 MASTER</h1>
-                <p class="text-[8px] font-bold uppercase tracking-[0.3em] opacity-70 mt-2">Engenharia Trifásica • V46.0</p>
+                <p class="text-[8px] font-bold uppercase tracking-[0.3em] opacity-70 mt-2">Engenharia Trifásica • V47.0</p>
             </div>
             <div class="text-right">
                 <p class="text-[9px] font-black text-blue-300 uppercase">Investimento Total</p>
@@ -75,55 +75,44 @@
 
         <div id="view-pontos" class="hidden space-y-4">
             
-            <div class="card-ponto" style="border-left-color: #3b82f6;">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-black text-blue-800 uppercase text-xs">🔌 Tomadas Gerais (TUG - 127V)</h4>
-                    <span class="bg-blue-100 text-blue-800 text-[8px] px-2 py-1 rounded font-bold uppercase">Circuito 01</span>
-                </div>
-                <div class="space-y-2 text-[10px]">
-                    <p class="flex items-center"><span class="tag-detalhe bg-black text-white">Fase R</span> 2,5mm² Prysmian Preto - <strong class="ml-1">60m</strong></p>
-                    <p class="flex items-center"><span class="tag-detalhe bg-blue-600 text-white">Neutro</span> 2,5mm² Prysmian Azul - <strong class="ml-1">60m</strong></p>
-                    <p class="flex items-center"><span class="tag-detalhe bg-emerald-500 text-white">Terra</span> 2,5mm² Prysmian Verde - <strong class="ml-1">60m</strong></p>
-                    <p class="text-slate-500 italic mt-2 border-t pt-2">Destino: Sala, Quartos e Cozinha (Pontos comuns).</p>
-                </div>
-            </div>
-
-            <div class="card-ponto" style="border-left-color: #8b5cf6;">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-black text-purple-800 uppercase text-xs">❄️ Ar Condicionado (02 Unid - 220V)</h4>
-                    <span class="bg-purple-100 text-purple-800 text-[8px] px-2 py-1 rounded font-bold uppercase">Circuito 02/03</span>
-                </div>
-                <div class="space-y-2 text-[10px]">
-                    <p class="flex items-center"><span class="tag-detalhe bg-red-600 text-white">Fase S</span> 2,5mm² Prysmian Vermelho - <strong class="ml-1">28m</strong></p>
-                    <p class="flex items-center"><span class="tag-detalhe bg-slate-200 text-slate-800 border">Fase T</span> 2,5mm² Prysmian Branco - <strong class="ml-1">28m</strong></p>
-                    <p class="flex items-center"><span class="tag-detalhe bg-emerald-500 text-white">Terra</span> 2,5mm² Prysmian Verde - <strong class="ml-1">28m</strong></p>
-                    <p class="text-slate-500 italic mt-2 border-t pt-2">Nota: Alimentação bifásica 220V entre Fases S e T.</p>
-                </div>
-            </div>
-
             <div class="card-ponto" style="border-left-color: #ef4444;">
                 <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-black text-red-800 uppercase text-xs">🚿 Chuveiro Master (7500W - 220V)</h4>
-                    <span class="bg-red-100 text-red-800 text-[8px] px-2 py-1 rounded font-bold uppercase">Circuito 04</span>
+                    <h4 class="font-black text-red-800 uppercase text-xs">🔥 Pontos Híbridos (Cozinha/Torre/Quartos)</h4>
+                    <span class="bg-red-100 text-red-800 text-[8px] px-2 py-1 rounded font-bold uppercase">Caixas 4x4</span>
                 </div>
-                <div class="space-y-2 text-[10px]">
-                    <p class="flex items-center"><span class="tag-detalhe bg-black text-white">Fase R</span> 6,0mm² Prysmian Preto - <strong class="ml-1">15m</strong></p>
-                    <p class="flex items-center"><span class="tag-detalhe bg-red-600 text-white">Fase S</span> 6,0mm² Prysmian Vermelho - <strong class="ml-1">15m</strong></p>
-                    <p class="flex items-center"><span class="tag-detalhe bg-emerald-500 text-white">Terra</span> 6,0mm² Prysmian Verde - <strong class="ml-1">15m</strong></p>
-                    <p class="text-slate-500 italic mt-2 border-t pt-2">⚠️ Conexão obrigatória com Wago 221-612 (Original).</p>
+                <div class="space-y-3 text-[10px]">
+                    <div class="p-2 bg-slate-50 rounded-lg border border-dashed border-slate-300">
+                        <p class="font-black text-slate-700 mb-1 underline">Configuração do Espelho:</p>
+                        <p class="flex items-center"><span class="tag-detalhe bg-blue-500 text-white">110V</span> 01 Tomada Monofásica (F+N+T)</p>
+                        <p class="flex items-center mt-1"><span class="tag-detalhe bg-red-600 text-white">220V</span> 01 Tomada Bifásica (F+F+T)</p>
+                    </div>
+                    <p class="text-slate-500 italic border-t pt-2">Infra: Exige Neutro (Azul) + Terra (Verde) + 2 Fases distintas no mesmo conduíte.</p>
                 </div>
             </div>
 
-            <div class="card-ponto" style="border-left-color: #f59e0b;">
+            <div class="card-ponto" style="border-left-color: #3b82f6;">
                 <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-black text-amber-700 uppercase text-xs">💡 Iluminação Master</h4>
-                    <span class="bg-amber-100 text-amber-800 text-[8px] px-2 py-1 rounded font-bold uppercase">Circuito 05</span>
+                    <h4 class="font-black text-blue-800 uppercase text-xs">🔌 Estações de Trabalho / Salas</h4>
+                    <span class="bg-blue-100 text-blue-800 text-[8px] px-2 py-1 rounded font-bold uppercase">Multi-Ponto</span>
                 </div>
-                <div class="space-y-2 text-[10px]">
-                    <p class="flex items-center"><span class="tag-detalhe bg-slate-200 text-slate-800 border">Fase T</span> 1,5mm² Branco - <strong class="ml-1">45m</strong></p>
-                    <p class="flex items-center"><span class="tag-detalhe bg-yellow-400 text-black">Retorno</span> 1,5mm² Amarelo - <strong class="ml-1">80m</strong></p>
-                    <p class="flex items-center"><span class="tag-detalhe bg-blue-600 text-white">Neutro</span> 1,5mm² Azul - <strong class="ml-1">45m</strong></p>
-                    <p class="text-slate-500 italic mt-2 border-t pt-2">Total de Cabos 1,5mm² no Orçamento: 170m.</p>
+                <div class="space-y-3 text-[10px]">
+                    <div class="p-2 bg-blue-50 rounded-lg border border-blue-100">
+                        <p class="font-black text-blue-900 mb-1 underline">Composição Total:</p>
+                        <p class="flex items-center font-bold">● 03 Tomadas Monofásicas 110V (F+N+T)</p>
+                        <p class="flex items-center font-bold mt-1 text-red-600">● 01 Tomada Bifásica 220V (F+F+T)</p>
+                    </div>
+                    <p class="text-slate-600 font-medium italic mt-2">Bitola Recomendada: 2,5mm² para TUGs e 4,0mm² para Torre Quente.</p>
+                </div>
+            </div>
+
+            <div class="card-ponto" style="border-left-color: #10b981;">
+                <h4 class="font-black text-emerald-800 uppercase text-xs mb-3">📋 Resumo de Infraestrutura Atualizada</h4>
+                <div class="grid grid-cols-1 gap-2 text-[9px]">
+                    <div class="flex justify-between border-b pb-1"><span>Cabos 2,5mm² TUGs (Total)</span> <strong>60m</strong></div>
+                    <div class="flex justify-between border-b pb-1"><span>Cabos 2,5mm² Ar Condicionado</span> <strong>28m</strong></div>
+                    <div class="flex justify-between border-b pb-1"><span>Cabos 6,0mm² Chuveiro</span> <strong>15m</strong></div>
+                    <div class="flex justify-between border-b pb-1"><span>Caixas 4x4 Instaladas</span> <strong class="text-red-600">12 Unid.</strong></div>
+                    <div class="flex justify-between"><span>Caixas 4x2 Instaladas</span> <strong>26 Unid.</strong></div>
                 </div>
             </div>
 
@@ -132,7 +121,6 @@
     </div>
 
     <script>
-        // Manutenção Integral dos Itens do Orçamento
         const defaultInventory = [
             { id: 1, desc: "Cabo Prysmian 6,0mm² (Preto/Verm/Verde)", qty: 45, price: 9.80, bought: false },
             { id: 2, desc: "Cabo Prysmian 4,0mm² (Verm/Branco/Verde)", qty: 36, price: 6.50, bought: false },
