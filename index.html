@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AP 2209 - MASTER V80 FINAL</title>
+    <title>AP 2209 - MASTER V60</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -17,23 +17,6 @@
         .item-row { border-bottom: 1px solid #e2e8f0; transition: all 0.2s; cursor: pointer; }
         .item-bought { opacity: 0.4; background-color: #f1f5f9; text-decoration: line-through; }
         
-        /* Estilos Drag & Drop para Plantas */
-        .planta-drop-zone { 
-            border: 3px dashed #cbd5e1; 
-            background: #f1f5f9; 
-            border-radius: 20px; 
-            min-height: 280px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            position: relative; 
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-        .planta-drop-zone.dragover { border-color: #3b82f6; background: #eff6ff; }
-        .planta-preview { width: 100%; height: 100%; object-fit: contain; position: absolute; top: 0; left: 0; z-index: 10; }
-
         #qrcode-container { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; padding: 20px; }
         #qrcode { background: white; padding: 25px; border-radius: 24px; box-shadow: 0 0 50px rgba(59, 130, 246, 0.5); }
         .tag-detalhe { font-size: 8px; font-weight: 900; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; margin-right: 4px; }
@@ -50,7 +33,7 @@
         <div class="max-w-4xl mx-auto flex justify-between items-end">
             <div>
                 <h1 class="text-2xl font-black italic tracking-tighter uppercase leading-none">AP 2209 MASTER</h1>
-                <p class="text-[8px] font-bold uppercase tracking-[0.3em] opacity-70 mt-2">Engenharia Trifásica • V80.0 FULL SCHEMATIC</p>
+                <p class="text-[8px] font-bold uppercase tracking-[0.3em] opacity-70 mt-2">Planta: Sala/Cozinha/Quartos • V60.0</p>
             </div>
             <div class="text-right">
                 <p class="text-[9px] font-black text-blue-300 uppercase">Investimento Total</p>
@@ -65,14 +48,13 @@
                 📱 Ver QR Code
             </button>
             <button onclick="copySyncLink()" class="bg-emerald-600 text-white py-4 rounded-2xl font-black text-[10px] uppercase shadow-lg border-b-4 border-emerald-800 active:translate-y-1 active:border-b-0 transition-all">
-                🔗 Link WhatsApp
+                🔗 Copiar Link WhatsApp
             </button>
         </div>
 
-        <nav class="flex gap-1 mb-6">
-            <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 py-4 rounded-xl font-black text-[8px] uppercase bg-white text-slate-400 tab-active">1. Orçamento</button>
-            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 py-4 rounded-xl font-black text-[8px] uppercase bg-white text-slate-400">2. Mapa Pontos</button>
-            <button onclick="switchTab('plantas')" id="btn-plantas" class="flex-1 py-4 rounded-xl font-black text-[8px] uppercase bg-white text-slate-400 border-2 border-blue-200">3. Plantas & Esquema</button>
+        <nav class="flex gap-2 mb-6">
+            <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 py-4 rounded-xl font-black text-[9px] uppercase bg-white text-slate-400 tab-active">1. Orçamento</button>
+            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 py-4 rounded-xl font-black text-[9px] uppercase bg-white text-slate-400">2. Mapa de Pontos AP 2209</button>
         </nav>
 
         <div id="view-planilha" class="space-y-3">
@@ -88,113 +70,113 @@
                     <tbody id="inventory-body"></tbody>
                 </table>
             </div>
-            <button onclick="addItem()" class="w-full bg-blue-50 text-blue-600 py-4 rounded-xl font-black text-[10px] uppercase border-2 border-dashed border-blue-200">+ Novo Item</button>
+            <button onclick="addItem()" class="w-full bg-blue-50 text-blue-600 py-4 rounded-xl font-black text-[10px] uppercase border-2 border-dashed border-blue-200 hover:bg-blue-100 transition-all">+ Novo Item</button>
         </div>
 
         <div id="view-pontos" class="hidden space-y-4">
+            
             <div class="card-ponto" style="border-left-color: #000;">
                 <h4 class="font-black text-slate-900 uppercase text-xs mb-2">⚡ Centro de Comando (QDC)</h4>
                 <div class="p-3 bg-slate-900 text-white rounded-lg text-[10px]">
-                    <p>📌 Localização: Entrada principal da sala, parede à esquerda.</p>
+                    <p>📌 <strong>Localização:</strong> Entrada principal da sala, parede à esquerda.</p>
+                    <p>🔋 <strong>Capacidade:</strong> Barramento para 36 DIN (Suporta expansão futura).</p>
                 </div>
             </div>
 
             <div class="card-ponto" style="border-left-color: #ef4444;">
-                <h4 class="font-black text-red-800 uppercase text-xs mb-2">🍳 Cozinha & Torre (SH3D)</h4>
-                <p class="text-[10px]">7 Pontos 4x4: Torre Quente (Exclusivo 4mm²) + Bancadas.</p>
+                <h4 class="font-black text-red-800 uppercase text-xs mb-2">🍳 Cozinha Gourmet & Torre Quente</h4>
+                <div class="space-y-2 text-[10px]">
+                    <p><strong>Torre Quente:</strong> 4 caixas 4x4 em série (60cm de intervalo). Cada caixa: 3x 110V + 1x 220V.</p>
+                    <p><strong>Bancada/Pia:</strong> 3 caixas 4x4 (Distribuídas para Geladeira, Filtro e Eletroportáteis).</p>
+                    <p class="tag-detalhe bg-red-100 text-red-600">Total: 7 Pontos 4x4 (28 Tomadas)</p>
+                </div>
             </div>
-            
+
             <div class="card-ponto" style="border-left-color: #3b82f6;">
                 <h4 class="font-black text-blue-800 uppercase text-xs mb-2">🛋️ Sala de Estar e Jantar</h4>
-                <p class="text-[10px]">5 Pontos 4x4: Painel TV/Game + Perímetro Sofá.</p>
-            </div>
-        </div>
-
-        <div id="view-plantas" class="hidden space-y-6">
-            
-            <div class="space-y-2">
-                <h3 class="font-black text-slate-800 uppercase text-[10px] flex items-center gap-2">
-                    <span class="w-2 h-2 bg-blue-500 rounded-full"></span> 1. Planta Baixa (Arraste ou clique)
-                </h3>
-                <div class="planta-drop-zone" id="drop-baixa" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'img-baixa')">
-                    <img id="img-baixa" class="planta-preview hidden">
-                    <div class="text-center p-6 pointer-events-none z-0">
-                        <p class="font-black text-[10px] text-slate-400 uppercase">Solte a Planta Baixa (SH3D) aqui</p>
-                    </div>
-                    <input type="file" class="absolute inset-0 opacity-0 cursor-pointer z-20" onchange="handleFile(this.files[0], 'img-baixa')">
+                <div class="space-y-2 text-[10px]">
+                    <p><strong>Painel TV/Game:</strong> 2 pontos 4x4 (6 tomadas 110V para TV, consoles, roteador + 2x 220V).</p>
+                    <p><strong>Perímetro:</strong> 3 pontos 4x4 distribuídos (Atrás do sofá e mesa de jantar).</p>
+                    <p class="tag-detalhe bg-blue-100 text-blue-600">Total: 5 Pontos 4x4 (20 Tomadas)</p>
                 </div>
             </div>
 
-            <div class="space-y-2">
-                <h3 class="font-black text-slate-800 uppercase text-[10px] flex items-center gap-2">
-                    <span class="w-2 h-2 bg-red-500 rounded-full"></span> 2. Esquema Elétrico Trifásico
-                </h3>
-                <div class="planta-drop-zone" id="drop-eletrico" style="background: #1e293b;" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'img-eletrico')">
-                    <img id="img-eletrico" class="planta-preview hidden">
-                    <div class="text-center p-6 pointer-events-none z-0">
-                        <p class="font-black text-[10px] text-slate-500 uppercase">Solte o Esquema Elétrico aqui</p>
-                    </div>
-                    <input type="file" class="absolute inset-0 opacity-0 cursor-pointer z-20" onchange="handleFile(this.files[0], 'img-eletrico')">
+            <div class="card-ponto" style="border-left-color: #8b5cf6;">
+                <h4 class="font-black text-purple-800 uppercase text-xs mb-2">🛌 Dormitórios (Quarto 1 + Suíte)</h4>
+                <div class="space-y-2 text-[10px]">
+                    <p><strong>Suíte:</strong> 2 pontos na cabeceira + 1 ponto para TV (Todos 4x4: 3x110V + 1x220V).</p>
+                    <p><strong>Quarto 2:</strong> 2 pontos na cabeceira + 1 ponto para mesa de estudos (Todos 4x4).</p>
+                    <p class="tag-detalhe bg-purple-100 text-purple-600">Total: 6 Pontos 4x4 (24 Tomadas)</p>
                 </div>
             </div>
 
-            <div class="bg-blue-900 text-white p-4 rounded-2xl shadow-lg">
-                <h4 class="font-black uppercase text-xs mb-2">💡 Nota de Instalação</h4>
-                <p class="text-[10px] opacity-80 leading-relaxed">
-                    A fiação parte do QDC via teto. A Torre Quente utiliza circuito trifásico dedicado para garantir estabilidade nos equipamentos de alta potência.
-                </p>
+            <div class="card-ponto" style="border-left-color: #10b981;">
+                <h4 class="font-black text-emerald-800 uppercase text-xs mb-2">🚿 Banheiros (Social + Suíte)</h4>
+                <div class="space-y-2 text-[10px]">
+                    <p><strong>Cada Banheiro:</strong> 1 ponto 4x4 acima da bancada (3x110V p/ Secador/Barbeador + 1x220V).</p>
+                </div>
             </div>
+
+            <div class="p-4 bg-blue-50 border border-blue-200 rounded-2xl text-[9px] font-bold text-blue-700">
+                ⚠️ RESUMO PARA INSTALAÇÃO:<br>
+                - Total de Caixas 4x4: 20 Unidades<br>
+                - Total de Módulos Tomada: 80 Unidades (60x 110V | 20x 220V)<br>
+                - Condutor Torre Quente: 4,0mm² direto do QDC.
+            </div>
+
         </div>
     </div>
 
     <script>
-        // Configuração Inicial e Inventário
         const defaultInventory = [
             { id: 1, desc: "Cabo Prysmian 6,0mm² (Chuveiros)", qty: 50, price: 9.80, bought: false },
             { id: 2, desc: "Cabo Prysmian 4,0mm² (Torre Quente)", qty: 60, price: 6.50, bought: false },
             { id: 3, desc: "Cabo Prysmian 2,5mm² VERDE (Terra)", qty: 200, price: 4.50, bought: false },
+            { id: 4, desc: "Cabo Prysmian 2,5mm² PRETO (Fase)", qty: 200, price: 4.20, bought: false },
+            { id: 5, desc: "Cabo Prysmian 2,5mm² AZUL (Neutro)", qty: 200, price: 4.20, bought: false },
             { id: 10, desc: "Módulo Tomada Schneider Orion (x80)", qty: 80, price: 18.90, bought: false },
-            { id: 15, desc: "Quadro Schneider 36 DIN (Parede Esquerda)", qty: 1, price: 310.00, bought: false }
+            { id: 11, desc: "Caixa 4x4 Amarela Reforçada (x20)", qty: 20, price: 7.80, bought: false },
+            { id: 15, desc: "Quadro Schneider 36 DIN (Entrada Sala)", qty: 1, price: 310.00, bought: false },
+            { id: 14, desc: "Conector Wago 221-413 (Caixa 50un)", qty: 2, price: 125.00, bought: false },
+            { id: 16, desc: "Placa 4x4 p/ 4 Módulos Schneider", qty: 20, price: 12.50, bought: false }
         ];
 
-        let inventory = JSON.parse(localStorage.getItem('ap2209_master_v80')) || defaultInventory;
+        let inventory = JSON.parse(localStorage.getItem('ap2209_master_v60')) || defaultInventory;
 
-        // Funções de Drag & Drop e Imagens
-        function handleDragOver(e) { e.preventDefault(); e.currentTarget.classList.add('dragover'); }
-        function handleDragLeave(e) { e.currentTarget.classList.remove('dragover'); }
-        function handleDrop(e, targetId) {
-            e.preventDefault();
-            e.currentTarget.classList.remove('dragover');
-            handleFile(e.dataTransfer.files[0], targetId);
+        function getSyncURL() {
+            const dataStr = btoa(unescape(encodeURIComponent(JSON.stringify(inventory))));
+            return window.location.origin + window.location.pathname + '?sync=' + dataStr;
         }
 
-        function handleFile(file, targetId) {
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = document.getElementById(targetId);
-                    img.src = e.target.result;
-                    img.classList.remove('hidden');
-                    localStorage.setItem('ap2209_img_' + targetId, e.target.result);
-                };
-                reader.readAsDataURL(file);
+        function generateQR() {
+            const container = document.getElementById("qrcode-container");
+            const qrDiv = document.getElementById("qrcode");
+            qrDiv.innerHTML = "";
+            container.style.display = "flex";
+            new QRCode(qrDiv, { text: getSyncURL(), width: 250, height: 250, correctLevel: QRCode.CorrectLevel.L });
+        }
+
+        function copySyncLink() {
+            navigator.clipboard.writeText(getSyncURL()).then(() => alert("✅ Link Sincronizado Copiado!"));
+        }
+
+        function checkSync() {
+            const params = new URLSearchParams(window.location.search);
+            const syncData = params.get('sync');
+            if(syncData) {
+                try {
+                    const decoded = JSON.parse(decodeURIComponent(escape(atob(syncData))));
+                    if(confirm("Deseja importar os dados da planta AP 2209?")) {
+                        inventory = decoded;
+                        saveAndRender();
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                    }
+                } catch(e) { console.error("Erro no Sync."); }
             }
         }
 
-        function loadSavedImages() {
-            ['img-baixa', 'img-eletrico'].forEach(id => {
-                const saved = localStorage.getItem('ap2209_img_' + id);
-                if (saved) {
-                    const img = document.getElementById(id);
-                    img.src = saved;
-                    img.classList.remove('hidden');
-                }
-            });
-        }
-
-        // Sistema de Tabs e Planilha
         function saveAndRender() {
-            localStorage.setItem('ap2209_master_v80', JSON.stringify(inventory));
+            localStorage.setItem('ap2209_master_v60', JSON.stringify(inventory));
             const body = document.getElementById('inventory-body');
             body.innerHTML = '';
             let total = 0;
@@ -203,11 +185,11 @@
                 total += sub;
                 const tr = document.createElement('tr');
                 tr.className = `item-row ${item.bought ? 'item-bought' : ''}`;
-                tr.onclick = () => { item.bought = !item.bought; saveAndRender(); };
+                tr.onclick = () => toggle(item.id);
                 tr.innerHTML = `
                     <td class="p-4">
                         <div class="font-black uppercase text-[10px] text-slate-800">${item.desc}</div>
-                        <div class="text-[8px] text-blue-500 font-bold italic">Ref: Engenharia Trifásica</div>
+                        <div class="text-[8px] text-slate-400">Padrão Engenharia AP 2209</div>
                     </td>
                     <td class="p-4 text-center font-black">${item.qty}</td>
                     <td class="p-4 text-right font-mono font-black text-blue-900">R$ ${sub.toFixed(2)}</td>
@@ -217,45 +199,32 @@
             document.getElementById('total-geral').innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
         }
 
-        function switchTab(t) {
-            document.getElementById('view-planilha').classList.toggle('hidden', t !== 'planilha');
-            document.getElementById('view-pontos').classList.toggle('hidden', t !== 'pontos');
-            document.getElementById('view-plantas').classList.toggle('hidden', t !== 'plantas');
-            document.getElementById('btn-planilha').classList.toggle('tab-active', t === 'planilha');
-            document.getElementById('btn-pontos').classList.toggle('tab-active', t === 'pontos');
-            document.getElementById('btn-plantas').classList.toggle('tab-active', t === 'plantas');
+        function toggle(id) {
+            const item = inventory.find(x => x.id === id);
+            item.bought = !item.bought;
+            saveAndRender();
         }
 
         function addItem() {
             const d = prompt("Descrição:");
-            const q = parseFloat(prompt("Qtd:", "1"));
+            const q = parseFloat(prompt("Quantidade:", "1"));
             const p = parseFloat(prompt("Preço:", "0"));
-            if(d) { inventory.unshift({id: Date.now(), desc: d, qty: q, price: p, bought: false}); saveAndRender(); }
+            if(d && q) {
+                inventory.unshift({id: Date.now(), desc: d, qty: q, price: p, bought: false});
+                saveAndRender();
+            }
         }
 
-        // QR e Sync
-        function generateQR() {
-            const container = document.getElementById("qrcode-container");
-            const qrDiv = document.getElementById("qrcode");
-            qrDiv.innerHTML = "";
-            container.style.display = "flex";
-            const dataStr = btoa(unescape(encodeURIComponent(JSON.stringify(inventory))));
-            new QRCode(qrDiv, { text: window.location.origin + window.location.pathname + '?sync=' + dataStr, width: 250, height: 250 });
-        }
-
-        function copySyncLink() {
-            const dataStr = btoa(unescape(encodeURIComponent(JSON.stringify(inventory))));
-            const url = window.location.origin + window.location.pathname + '?sync=' + dataStr;
-            navigator.clipboard.writeText(url).then(() => alert("✅ Link Sincronizado Copiado!"));
+        function switchTab(t) {
+            document.getElementById('view-planilha').classList.toggle('hidden', t !== 'planilha');
+            document.getElementById('view-pontos').classList.toggle('hidden', t !== 'pontos');
+            document.getElementById('btn-planilha').classList.toggle('tab-active', t === 'planilha');
+            document.getElementById('btn-pontos').classList.toggle('tab-active', t === 'pontos');
         }
 
         window.onload = () => {
-            const params = new URLSearchParams(window.location.search);
-            if(params.get('sync')) {
-                inventory = JSON.parse(decodeURIComponent(escape(atob(params.get('sync')))));
-            }
+            checkSync();
             saveAndRender();
-            loadSavedImages();
         };
     </script>
 </body>
