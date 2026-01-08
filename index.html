@@ -10,30 +10,33 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; font-size: 11px; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; font-size: 11px; -webkit-tap-highlight-color: transparent; }
         .header-eng { background: linear-gradient(135deg, #0f172a 0%, #1e40af 100%); border-bottom: 4px solid #3b82f6; }
         .tab-active { background-color: #3b82f6 !important; color: white !important; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4); }
         .card-ponto { border-left: 5px solid #3b82f6; background: white; border-radius: 12px; padding: 18px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
         .item-row { border-bottom: 1px solid #e2e8f0; transition: all 0.2s; }
         .item-bought { opacity: 0.4; background-color: #f1f5f9; text-decoration: line-through; }
         
-        #qrcode-container { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; padding: 20px; }
+        #qrcode-container { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; padding: 20px; backdrop-filter: blur(5px); }
         #qrcode { background: white; padding: 25px; border-radius: 24px; box-shadow: 0 0 50px rgba(59, 130, 246, 0.5); }
+        #qrcode img { margin: 0 auto; }
         .tag-detalhe { font-size: 8px; font-weight: 900; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; margin-right: 4px; }
 
         /* Estilos de Arquivos */
-        #drop-zone { border: 2px dashed #cbd5e1; transition: all 0.3s; }
+        #drop-zone { border: 2px dashed #cbd5e1; transition: all 0.3s; background: #ffffff; }
         #drop-zone.dragover { background: #e0f2fe; border-color: #3b82f6; }
-        .file-card { background: white; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; display: flex; flex-direction: column; }
-        .file-preview { height: 200px; background: #334155; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 4px; }
-        .file-preview img { max-width: 100%; max-height: 100%; object-fit: contain; cursor: pointer; }
+        .file-card { background: white; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; display: flex; flex-direction: column; transition: transform 0.2s; }
+        .file-card:active { transform: scale(0.98); }
+        .file-preview { height: 160px; background: #1e293b; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .file-preview img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
     </style>
 </head>
 <body class="pb-24">
 
     <div id="qrcode-container" onclick="this.style.display='none'">
         <div id="qrcode"></div>
-        <p class="text-white mt-6 font-black text-center text-lg">QR CODE SINCRONIZADO<br><span class="text-blue-400 text-sm font-medium italic">Toque para fechar</span></p>
+        <p class="text-white mt-6 font-black text-center text-lg tracking-tight">QR CODE DE SINCRONIZAÇÃO<br>
+        <span class="text-blue-400 text-sm font-medium italic">Toque em qualquer lugar para fechar</span></p>
     </div>
 
     <header class="header-eng text-white p-6 shadow-xl mb-4">
@@ -44,7 +47,7 @@
             </div>
             <div class="text-right">
                 <p class="text-[9px] font-black text-blue-300 uppercase">Investimento Total</p>
-                <p id="total-geral" class="text-xl font-mono font-black">R$ 0,00</p>
+                <p id="total-geral" class="text-xl font-mono font-black text-white">R$ 0,00</p>
             </div>
         </div>
     </header>
@@ -52,34 +55,38 @@
     <div class="max-w-4xl mx-auto px-4">
         <div class="grid grid-cols-2 gap-2 mb-6">
             <button onclick="generateQR()" class="bg-slate-900 text-white py-4 rounded-2xl font-black text-[10px] uppercase shadow-lg border-b-4 border-blue-600 active:translate-y-1 active:border-b-0 transition-all">
-                📱 Ver QR Code
+                📱 Gerar QR Code
             </button>
             <button onclick="copySyncLink()" class="bg-emerald-600 text-white py-4 rounded-2xl font-black text-[10px] uppercase shadow-lg border-b-4 border-emerald-800 active:translate-y-1 active:border-b-0 transition-all">
-                🔗 Copiar Link WhatsApp
+                🔗 Link p/ WhatsApp
             </button>
         </div>
 
-        <nav class="flex gap-1 mb-6">
-            <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 py-4 rounded-xl font-black text-[8px] uppercase bg-white text-slate-400 tab-active">1. Orçamento</button>
-            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 py-4 rounded-xl font-black text-[8px] uppercase bg-white text-slate-400">2. Mapa de Pontos</button>
-            <button onclick="switchTab('arquivos')" id="btn-arquivos" class="flex-1 py-4 rounded-xl font-black text-[8px] uppercase bg-white text-slate-400">3. Plantas/Docs</button>
+        <nav class="flex gap-1 mb-6 bg-slate-200/50 p-1 rounded-2xl">
+            <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 py-4 rounded-xl font-black text-[8px] uppercase transition-all tab-active">1. Orçamento</button>
+            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 py-4 rounded-xl font-black text-[8px] uppercase transition-all bg-transparent text-slate-500">2. Mapa de Pontos</button>
+            <button onclick="switchTab('arquivos')" id="btn-arquivos" class="flex-1 py-4 rounded-xl font-black text-[8px] uppercase transition-all bg-transparent text-slate-500">3. Plantas/Docs</button>
         </nav>
 
         <div id="view-planilha" class="space-y-3">
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                <table class="w-full text-left">
-                    <thead class="bg-slate-50 text-[8px] uppercase font-black text-slate-500">
-                        <tr>
-                            <th class="p-4">Descrição do Material</th>
-                            <th class="p-4 text-center">Qtd</th>
-                            <th class="p-4 text-right">Subtotal</th>
-                            <th class="p-4 text-center">Ação</th>
-                        </tr>
-                    </thead>
-                    <tbody id="inventory-body"></tbody>
-                </table>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50 text-[8px] uppercase font-black text-slate-500">
+                            <tr>
+                                <th class="p-4">Descrição</th>
+                                <th class="p-4 text-center">Qtd</th>
+                                <th class="p-4 text-right">Subtotal</th>
+                                <th class="p-4 text-center"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-body"></tbody>
+                    </table>
+                </div>
             </div>
-            <button onclick="addItem()" class="w-full bg-blue-50 text-blue-600 py-4 rounded-xl font-black text-[10px] uppercase border-2 border-dashed border-blue-200 hover:bg-blue-100 transition-all">+ Novo Item</button>
+            <button onclick="addItem()" class="w-full bg-blue-50 text-blue-600 py-4 rounded-xl font-black text-[10px] uppercase border-2 border-dashed border-blue-200 hover:bg-blue-100 transition-all">
+                + Adicionar Novo Item
+            </button>
         </div>
 
         <div id="view-pontos" class="hidden space-y-4">
@@ -87,68 +94,48 @@
                 <h4 class="font-black text-slate-900 uppercase text-xs mb-2">⚡ Centro de Comando (QDC)</h4>
                 <div class="p-3 bg-slate-900 text-white rounded-lg text-[10px]">
                     <p>📌 <strong>Localização:</strong> Entrada principal da sala, parede à esquerda.</p>
-                    <p>🔋 <strong>Capacidade:</strong> Barramento para 36 DIN (Suporta expansão futura).</p>
+                    <p>🔋 <strong>Capacidade:</strong> Barramento para 36 DIN.</p>
                 </div>
             </div>
 
             <div class="card-ponto" style="border-left-color: #ef4444;">
-                <h4 class="font-black text-red-800 uppercase text-xs mb-2">🍳 Cozinha Gourmet & Torre Quente</h4>
+                <h4 class="font-black text-red-800 uppercase text-xs mb-2">🍳 Cozinha & Torre Quente</h4>
                 <div class="space-y-2 text-[10px]">
-                    <p><strong>Torre Quente:</strong> 4 caixas 4x4 em série (60cm de intervalo). Cada caixa: 3x 110V + 1x 220V.</p>
-                    <p><strong>Bancada/Pia:</strong> 3 caixas 4x4 (Distribuídas para Geladeira, Filtro e Eletroportáteis).</p>
-                    <p class="tag-detalhe bg-red-100 text-red-600">Total: 7 Pontos 4x4 (28 Tomadas)</p>
+                    <p><strong>Torre Quente:</strong> 4 caixas 4x4 (3x 110V + 1x 220V cada).</p>
+                    <p class="tag-detalhe bg-red-100 text-red-600">Total: 7 Pontos 4x4</p>
                 </div>
             </div>
 
             <div class="card-ponto" style="border-left-color: #3b82f6;">
                 <h4 class="font-black text-blue-800 uppercase text-xs mb-2">🛋️ Sala de Estar e Jantar</h4>
                 <div class="space-y-2 text-[10px]">
-                    <p><strong>Painel TV/Game:</strong> 2 pontos 4x4 (6 tomadas 110V para TV, consoles, roteador + 2x 220V).</p>
-                    <p><strong>Perímetro:</strong> 3 pontos 4x4 distribuídos (Atrás do sofá e mesa de jantar).</p>
-                    <p class="tag-detalhe bg-blue-100 text-blue-600">Total: 5 Pontos 4x4 (20 Tomadas)</p>
+                    <p><strong>Painel TV:</strong> 2 pontos 4x4 (6x 110V + 2x 220V).</p>
+                    <p class="tag-detalhe bg-blue-100 text-blue-600">Total: 5 Pontos 4x4</p>
                 </div>
             </div>
 
-            <div class="card-ponto" style="border-left-color: #8b5cf6;">
-                <h4 class="font-black text-purple-800 uppercase text-xs mb-2">🛌 Dormitórios (Quarto 1 + Suíte)</h4>
-                <div class="space-y-2 text-[10px]">
-                    <p><strong>Suíte:</strong> 2 pontos na cabeceira + 1 ponto para TV (Todos 4x4: 3x110V + 1x220V).</p>
-                    <p><strong>Quarto 2:</strong> 2 pontos na cabeceira + 1 ponto para mesa de estudos (Todos 4x4).</p>
-                    <p class="tag-detalhe bg-purple-100 text-purple-600">Total: 6 Pontos 4x4 (24 Tomadas)</p>
-                </div>
-            </div>
-
-            <div class="card-ponto" style="border-left-color: #10b981;">
-                <h4 class="font-black text-emerald-800 uppercase text-xs mb-2">🚿 Banheiros (Social + Suíte)</h4>
-                <div class="space-y-2 text-[10px]">
-                    <p><strong>Cada Banheiro:</strong> 1 ponto 4x4 acima da bancada (3x110V p/ Secador/Barbeador + 1x220V).</p>
-                </div>
-            </div>
-
-            <div class="p-4 bg-blue-50 border border-blue-200 rounded-2xl text-[9px] font-bold text-blue-700">
-                ⚠️ RESUMO PARA INSTALAÇÃO:<br>
-                - Total de Caixas 4x4: 20 Unidades<br>
-                - Total de Módulos Tomada: 80 Unidades (60x 110V | 20x 220V)<br>
-                - Condutor Torre Quente: 4,0mm² direto do QDC.
+            <div class="p-4 bg-amber-50 border border-amber-200 rounded-2xl text-[9px] font-bold text-amber-800">
+                ⚠️ DICA: Ao copiar o link, certifique-se que o item "comprado" está marcado para economizar espaço no link do WhatsApp.
             </div>
         </div>
 
         <div id="view-arquivos" class="hidden space-y-4">
-            <div id="drop-zone" class="p-8 rounded-2xl text-center cursor-pointer bg-white" 
+            <div id="drop-zone" class="p-8 rounded-2xl text-center cursor-pointer border-dashed border-2" 
                  onclick="document.getElementById('file-input').click()"
                  ondragover="event.preventDefault(); this.classList.add('dragover')"
                  ondragleave="this.classList.remove('dragover')"
                  ondrop="handleDrop(event)">
-                <p class="text-[10px] font-black text-slate-500 uppercase">📁 Arraste ou clique para upload</p>
-                <p class="text-[8px] text-slate-400 mt-1">JPEG, PNG ou DOCX</p>
-                <input type="file" id="file-input" class="hidden" multiple onchange="handleFiles(this.files)">
+                <p class="text-[10px] font-black text-slate-500 uppercase">📁 Arraste Fotos ou clique aqui</p>
+                <p class="text-[8px] text-slate-400 mt-1">Imagens aparecem instantaneamente abaixo</p>
+                <input type="file" id="file-input" class="hidden" multiple accept="image/*" onchange="handleFiles(this.files)">
             </div>
 
-            <div id="file-grid" class="grid grid-cols-1 gap-4"></div>
+            <div id="file-grid" class="grid grid-cols-2 gap-3"></div>
         </div>
     </div>
 
     <script>
+        // Dados Iniciais
         const defaultInventory = [
             { id: 1, desc: "Cabo Prysmian 6,0mm² (Chuveiros)", qty: 50, price: 9.80, bought: false },
             { id: 2, desc: "Cabo Prysmian 4,0mm² (Torre Quente)", qty: 60, price: 6.50, bought: false },
@@ -165,8 +152,12 @@
         let inventory = JSON.parse(localStorage.getItem('ap2209_master_v60')) || defaultInventory;
         let filesList = JSON.parse(localStorage.getItem('ap2209_files_v60')) || [];
 
+        // --- FUNÇÕES DE SINCRONIZAÇÃO (CORRIGIDAS PARA WHATSAPP) ---
+        
         function getSyncURL() {
-            const dataStr = btoa(unescape(encodeURIComponent(JSON.stringify(inventory))));
+            // Otimização: Enviamos apenas o necessário para o link não ficar gigante
+            const minimalData = inventory.map(item => [item.id, item.qty, item.price, item.bought ? 1 : 0, item.desc]);
+            const dataStr = btoa(unescape(encodeURIComponent(JSON.stringify(minimalData))));
             return window.location.origin + window.location.pathname + '?sync=' + dataStr;
         }
 
@@ -175,11 +166,24 @@
             const qrDiv = document.getElementById("qrcode");
             qrDiv.innerHTML = "";
             container.style.display = "flex";
-            new QRCode(qrDiv, { text: getSyncURL(), width: 250, height: 250, correctLevel: QRCode.CorrectLevel.L });
+            
+            try {
+                new QRCode(qrDiv, { 
+                    text: getSyncURL(), 
+                    width: 220, 
+                    height: 220, 
+                    correctLevel: QRCode.CorrectLevel.M 
+                });
+            } catch (e) {
+                qrDiv.innerHTML = "<p class='p-4 text-red-500'>Erro ao gerar QR. Link muito longo.</p>";
+            }
         }
 
         function copySyncLink() {
-            navigator.clipboard.writeText(getSyncURL()).then(() => alert("✅ Link Sincronizado Copiado!"));
+            const url = getSyncURL();
+            navigator.clipboard.writeText(url).then(() => {
+                alert("✅ LINK COPIADO!\n\nAgora cole no WhatsApp. O destinatário conseguirá ver todo o seu orçamento ao clicar.");
+            });
         }
 
         function checkSync() {
@@ -188,20 +192,30 @@
             if(syncData) {
                 try {
                     const decoded = JSON.parse(decodeURIComponent(escape(atob(syncData))));
-                    if(confirm("Deseja importar os dados da planta AP 2209?")) {
-                        inventory = decoded;
+                    // Se for o formato otimizado (array de arrays)
+                    const importedInvemtory = decoded.map(item => ({
+                        id: item[0], qty: item[1], price: item[2], bought: item[3] === 1, desc: item[4]
+                    }));
+
+                    if(confirm("DETECTADO: Novos dados da Planta AP 2209. Deseja atualizar sua lista?")) {
+                        inventory = importedInvemtory;
                         saveAndRender();
                         window.history.replaceState({}, document.title, window.location.pathname);
                     }
-                } catch(e) { console.error("Erro no Sync."); }
+                } catch(e) { 
+                    console.error("Erro na decodificação."); 
+                }
             }
         }
+
+        // --- GESTÃO DE INTERFACE ---
 
         function saveAndRender() {
             localStorage.setItem('ap2209_master_v60', JSON.stringify(inventory));
             const body = document.getElementById('inventory-body');
             body.innerHTML = '';
             let total = 0;
+
             inventory.forEach(item => {
                 const sub = item.qty * item.price;
                 total += sub;
@@ -209,20 +223,23 @@
                 tr.className = `item-row ${item.bought ? 'item-bought' : ''}`;
                 tr.innerHTML = `
                     <td class="p-4 cursor-pointer" onclick="toggle(${item.id})">
-                        <div class="font-black uppercase text-[10px] text-slate-800">${item.desc}</div>
-                        <div class="text-[8px] text-slate-400">Padrão Engenharia AP 2209</div>
+                        <div class="font-black uppercase text-[10px] ${item.bought ? 'text-slate-400' : 'text-slate-800'}">${item.desc}</div>
+                        <div class="text-[7px] text-slate-400 uppercase tracking-widest">Original Engenharia</div>
                     </td>
                     <td class="p-4 text-center font-black">${item.qty}</td>
                     <td class="p-4 text-right font-mono font-black text-blue-900">R$ ${sub.toFixed(2)}</td>
                     <td class="p-4 text-center">
-                        <button onclick="removeItem(${item.id})" class="text-red-400 font-black hover:text-red-600 transition-colors">✕</button>
+                        <button onclick="removeItem(${item.id})" class="text-slate-300 hover:text-red-500 text-xs">✕</button>
                     </td>
                 `;
                 body.appendChild(tr);
             });
+            
             document.getElementById('total-geral').innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
             renderFiles();
         }
+
+        // --- GESTÃO DE ARQUIVOS (VISUALIZAÇÃO MELHORADA) ---
 
         function handleDrop(e) {
             e.preventDefault();
@@ -232,6 +249,10 @@
 
         function handleFiles(files) {
             Array.from(files).forEach(file => {
+                if(!file.type.startsWith('image/')) {
+                    alert("Por favor, envie apenas fotos (JPEG/PNG)");
+                    return;
+                }
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     filesList.unshift({
@@ -240,6 +261,9 @@
                         type: file.type,
                         data: e.target.result
                     });
+                    // Limite de segurança para não travar o navegador (max 10 fotos)
+                    if(filesList.length > 10) filesList.pop();
+                    
                     localStorage.setItem('ap2209_files_v60', JSON.stringify(filesList));
                     renderFiles();
                 };
@@ -251,17 +275,17 @@
             const grid = document.getElementById('file-grid');
             if(!grid) return;
             grid.innerHTML = '';
+            
             filesList.forEach(file => {
-                const isImg = file.type.startsWith('image/');
                 const card = document.createElement('div');
-                card.className = 'file-card';
+                card.className = 'file-card shadow-md';
                 card.innerHTML = `
-                    <div class="file-preview">
-                        ${isImg ? `<img src="${file.data}" onclick="window.open('${file.data}')">` : `<span class="text-2xl">📄</span>`}
+                    <div class="file-preview" onclick="window.open('${file.data}')">
+                        <img src="${file.data}" alt="Anexo">
                     </div>
-                    <div class="p-3 bg-white flex justify-between items-center border-t border-slate-100">
-                        <div class="truncate font-black text-[9px] uppercase text-slate-700">${file.name}</div>
-                        <button onclick="deleteFile(${file.id})" class="bg-red-50 text-red-500 px-3 py-1 rounded-lg font-black">EXCLUIR</button>
+                    <div class="p-2 bg-white flex justify-between items-center border-t border-slate-100">
+                        <div class="truncate font-bold text-[7px] uppercase text-slate-500 w-20">${file.name}</div>
+                        <button onclick="deleteFile(${file.id})" class="text-red-500 font-black text-[8px] bg-red-50 px-2 py-1 rounded">EXCLUIR</button>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -269,7 +293,7 @@
         }
 
         function deleteFile(id) {
-            if(confirm("Excluir este arquivo?")) {
+            if(confirm("Excluir foto?")) {
                 filesList = filesList.filter(f => f.id !== id);
                 localStorage.setItem('ap2209_files_v60', JSON.stringify(filesList));
                 renderFiles();
@@ -277,7 +301,7 @@
         }
 
         function removeItem(id) {
-            if(confirm("Remover este item do orçamento?")) {
+            if(confirm("Remover item?")) {
                 inventory = inventory.filter(item => item.id !== id);
                 saveAndRender();
             }
@@ -290,22 +314,26 @@
         }
 
         function addItem() {
-            const d = prompt("Descrição:");
-            const q = parseFloat(prompt("Quantidade:", "1"));
-            const p = parseFloat(prompt("Preço:", "0"));
-            if(d && q) {
-                inventory.unshift({id: Date.now(), desc: d, qty: q, price: p, bought: false});
-                saveAndRender();
-            }
+            const d = prompt("Descrição do Material:");
+            if(!d) return;
+            const q = parseFloat(prompt("Quantidade:", "1")) || 1;
+            const p = parseFloat(prompt("Preço Unitário:", "0")) || 0;
+            
+            inventory.unshift({id: Date.now(), desc: d, qty: q, price: p, bought: false});
+            saveAndRender();
         }
 
         function switchTab(t) {
             document.getElementById('view-planilha').classList.toggle('hidden', t !== 'planilha');
             document.getElementById('view-pontos').classList.toggle('hidden', t !== 'pontos');
             document.getElementById('view-arquivos').classList.toggle('hidden', t !== 'arquivos');
+            
             document.getElementById('btn-planilha').classList.toggle('tab-active', t === 'planilha');
             document.getElementById('btn-pontos').classList.toggle('tab-active', t === 'pontos');
             document.getElementById('btn-arquivos').classList.toggle('tab-active', t === 'arquivos');
+            
+            // Estilo inativo
+            if(t !== 'planilha') document.getElementById('btn-planilha').classList.replace('tab-active', 'bg-transparent');
         }
 
         window.onload = () => {
