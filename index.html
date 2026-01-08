@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AP 2209 - ENGENHARIA MASTER</title>
+    <title>AP 2209 - ENGENHARIA TRIFÁSICA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
@@ -13,7 +13,7 @@
         .card-ponto { border-left: 4px solid #2563eb; border-radius: 12px; padding: 12px; background: white; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .row-purchased { opacity: 0.35; filter: grayscale(1); text-decoration: line-through; }
         .memorial-section { border-left: 4px solid #1e40af; background: white; padding: 15px; border-radius: 12px; margin-bottom: 12px; }
-        .tag-cor { padding: 2px 6px; border-radius: 4px; color: white; font-weight: 900; font-size: 7px; }
+        .tag-cor { padding: 2px 6px; border-radius: 4px; color: white; font-weight: 900; font-size: 7px; text-transform: uppercase; }
     </style>
 </head>
 <body class="pb-10">
@@ -22,7 +22,7 @@
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <div>
                 <h1 class="text-2xl font-black italic tracking-tighter text-blue-400 uppercase">AP 2209 MASTER</h1>
-                <p class="text-[7px] font-bold uppercase tracking-[0.4em] opacity-60">Projeto Trifásico • Suprimentos Vercel 2026</p>
+                <p class="text-[7px] font-bold uppercase tracking-[0.4em] opacity-60">Rede Trifásica 220V (F+F) • Suprimentos 2026</p>
             </div>
             <div class="flex gap-4">
                 <div class="text-right border-r border-slate-700 pr-4">
@@ -41,13 +41,11 @@
         <nav class="flex gap-1 mb-4 no-print overflow-x-auto">
             <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 min-w-[100px] py-4 rounded-2xl font-black text-[8px] uppercase bg-white text-slate-400 shadow-sm tab-active">1. Orçamento (15 Itens)</button>
             <button onclick="switchTab('eletrica')" id="btn-eletrica" class="flex-1 min-w-[100px] py-4 rounded-2xl font-black text-[8px] uppercase bg-white text-slate-400 shadow-sm">2. Memorial Técnico</button>
-            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 min-w-[100px] py-4 rounded-2xl font-black text-[8px] uppercase bg-white text-slate-400 shadow-sm">3. Mapa de Pontos Detalhado</button>
+            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 min-w-[100px] py-4 rounded-2xl font-black text-[8px] uppercase bg-white text-slate-400 shadow-sm">3. Mapa de Pontos 220V</button>
         </nav>
 
         <div id="view-planilha" class="space-y-3">
-            <div class="flex gap-2">
-                <button onclick="addItem()" class="flex-1 bg-blue-600 text-white py-3 rounded-xl font-black text-[9px] uppercase shadow-lg">+ Adicionar</button>
-            </div>
+            <button onclick="addItem()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-black text-[9px] uppercase shadow-lg hover:bg-blue-700">+ Adicionar Item</button>
             <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-slate-200 p-2">
                 <table class="w-full text-left">
                     <tbody id="inventory-body"></tbody>
@@ -57,92 +55,90 @@
 
         <div id="view-eletrica" class="hidden space-y-4">
             <div class="memorial-section">
-                <h3 class="font-black text-blue-700 mb-2 uppercase text-[9px]">⚡ Padronização de Condutores Prysmian</h3>
+                <h3 class="font-black text-blue-700 mb-2 uppercase text-[9px]">⚡ Configuração Bifásica (220V)</h3>
+                <p class="text-[9px] text-slate-600 mb-2 italic">Aparelhos 220V utilizam duas fases de 127V. <strong>Sem Neutro (Azul) nestes circuitos.</strong></p>
                 <div class="grid grid-cols-2 gap-1 text-[8px] font-bold uppercase">
                     <div class="bg-black text-white p-2 rounded text-center">Fase R: Preto</div>
                     <div class="bg-red-600 text-white p-2 rounded text-center">Fase S: Vermelho</div>
                     <div class="bg-white border border-blue-600 text-blue-600 p-2 rounded text-center">Fase T: Branco</div>
-                    <div class="bg-blue-600 text-white p-2 rounded text-center">Neutro: Azul</div>
-                    <div class="bg-emerald-600 text-white p-2 rounded text-center col-span-2">Terra: Verde (Específicos em todos os pontos)</div>
+                    <div class="bg-emerald-600 text-white p-2 rounded text-center col-span-2">Terra: Verde (Sempre presente)</div>
                 </div>
-            </div>
-
-            <div class="memorial-section" style="border-left-color: #dc2626;">
-                <h3 class="font-black text-red-700 mb-1 uppercase text-[9px]">🛡️ Proteção Schneider (Obrigatório)</h3>
-                <p class="text-[9px] text-slate-600 leading-tight">Instalação de <strong>IDR 30mA</strong> para áreas molhadas e <strong>DPS Classe II 20kA</strong>. Disjuntores Schneider Easy9.</p>
             </div>
 
             <div class="memorial-section" style="border-left-color: #000;">
                 <h3 class="font-black text-slate-900 mb-1 uppercase text-[9px]">🛠️ Conectividade & Crimpagem</h3>
-                <p class="text-[9px] text-slate-600 leading-tight">Emendas com <strong>Wago 221</strong>. Todos os cabos devem ter <strong>Terminais Ilhós Tubulares</strong> com crimpagem <strong>Hexagonal</strong>.</p>
-                            </div>
+                <p class="text-[9px] text-slate-600 leading-tight">Uso obrigatório de <strong>Terminais Ilhós Tubulares</strong> com compressão <strong>Hexagonal</strong>. Emendas em chuveiro apenas com <strong>Wago 221-612</strong> (alta temperatura).</p>
+                
+            </div>
 
             <div class="memorial-section" style="border-left-color: #0ea5e9;">
                 <h3 class="font-black text-sky-700 mb-1 uppercase text-[9px]">🚰 Hidráulica Docol</h3>
-                <p class="text-[9px] text-slate-600 leading-tight">Monocomandos <strong>Docol Gourmet</strong> com garantia vitalícia. Limpeza de rede antes dos reparos cerâmicos.</p>
+                <p class="text-[9px] text-slate-600 leading-tight">Monocomandos <strong>Docol Gourmet</strong>. Instalação com flexíveis originais. Garantia vitalícia Docol vinculada à limpeza prévia da rede.</p>
             </div>
         </div>
 
         <div id="view-pontos" class="hidden space-y-4">
-            <h2 class="text-xs font-black uppercase border-b-2 border-blue-600 pb-1 italic">Mapa Detalhado por Ponto e Cor de Cabo</h2>
+            <h2 class="text-xs font-black uppercase border-b-2 border-blue-600 pb-1 italic">Distribuição de Carga Trifásica</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div class="card-ponto">
-                    <p class="font-black text-[10px] text-red-600 uppercase border-b pb-1 mb-2">🚿 Chuveiro Master (7500W)</p>
+                    <p class="font-black text-[10px] text-red-600 uppercase border-b pb-1 mb-2">🚿 Chuveiro Master (220V - F+F)</p>
                     <div class="space-y-1 text-[8px] font-bold">
-                        <div class="flex justify-between"><span><span class="tag-cor bg-black">Preto</span> 6mm²:</span> <span>15m</span></div>
-                        <div class="flex justify-between"><span><span class="tag-cor bg-blue-600">Azul</span> 6mm²:</span> <span>15m</span></div>
-                        <div class="flex justify-between border-t pt-1"><span><span class="tag-cor bg-emerald-600">Verde</span> 6mm²:</span> <span>15m</span></div>
-                        <p class="text-blue-600 mt-1 italic text-[7px]">Hardware: Wago 221-612 + Disjuntor 40A</p>
+                        <div class="flex justify-between"><span><span class="tag-cor bg-black">Fase R (Preto)</span> 6mm²:</span> <span>15m</span></div>
+                        <div class="flex justify-between"><span><span class="tag-cor bg-red-600">Fase S (Verm)</span> 6mm²:</span> <span>15m</span></div>
+                        <div class="flex justify-between border-t pt-1"><span><span class="tag-cor bg-emerald-600">Terra (Verde)</span> 6mm²:</span> <span>15m</span></div>
+                        <p class="text-red-600 mt-1 italic text-[7px] font-black">IMPORTANTE: Disjuntor Bipolar 40A Schneider</p>
                     </div>
                 </div>
 
                 <div class="card-ponto">
-                    <p class="font-black text-[10px] text-orange-600 uppercase border-b pb-1 mb-2">🔥 Torre Quente (Forno/Micro)</p>
+                    <p class="font-black text-[10px] text-orange-600 uppercase border-b pb-1 mb-2">🔥 Torre Quente (220V - F+F)</p>
                     <div class="space-y-1 text-[8px] font-bold">
-                        <div class="flex justify-between"><span><span class="tag-cor bg-red-600">Vermelho</span> 4mm²:</span> <span>12m</span></div>
-                        <div class="flex justify-between"><span><span class="tag-cor bg-blue-600">Azul</span> 4mm²:</span> <span>12m</span></div>
-                        <div class="flex justify-between border-t pt-1"><span><span class="tag-cor bg-emerald-600">Verde</span> 4mm²:</span> <span>12m</span></div>
-                        <p class="text-blue-600 mt-1 italic text-[7px]">Hardware: Caixa 4x4 + Tomada 20A</p>
+                        <div class="flex justify-between"><span><span class="tag-cor bg-red-600">Fase S (Verm)</span> 4mm²:</span> <span>12m</span></div>
+                        <div class="flex justify-between"><span><span class="tag-cor border border-blue-600 text-blue-600">Fase T (Branco)</span> 4mm²:</span> <span>12m</span></div>
+                        <div class="flex justify-between border-t pt-1"><span><span class="tag-cor bg-emerald-600">Terra (Verde)</span> 4mm²:</span> <span>12m</span></div>
+                        <p class="text-orange-600 mt-1 italic text-[7px] font-black">Disjuntor Bipolar 25A Schneider</p>
                     </div>
                 </div>
 
                 <div class="card-ponto">
-                    <p class="font-black text-[10px] text-amber-500 uppercase border-b pb-1 mb-2">💡 Iluminação & Sancas</p>
+                    <p class="font-black text-[10px] text-amber-500 uppercase border-b pb-1 mb-2">💡 Iluminação (127V - F+N)</p>
                     <div class="space-y-1 text-[8px] font-bold">
-                        <div class="flex justify-between"><span><span class="tag-cor bg-slate-400">Branco</span> 1,5mm²:</span> <span>40m</span></div>
-                        <div class="flex justify-between"><span><span class="tag-cor bg-yellow-400 text-black">Amarelo</span> 1,5mm²:</span> <span>40m</span></div>
-                        <div class="flex justify-between border-t pt-1"><span><span class="tag-cor bg-blue-600">Azul</span> 1,5mm²:</span> <span>40m</span></div>
+                        <div class="flex justify-between"><span><span class="tag-cor border border-blue-600 text-blue-600">Fase T (Branco)</span> 1,5mm²:</span> <span>40m</span></div>
+                        <div class="flex justify-between"><span><span class="tag-cor bg-blue-600">Neutro (Azul)</span> 1,5mm²:</span> <span>40m</span></div>
+                        <div class="flex justify-between"><span><span class="tag-cor bg-yellow-400 text-black">Retorno (Amar)</span> 1,5mm²:</span> <span>40m</span></div>
                     </div>
                 </div>
 
                 <div class="card-ponto">
-                    <p class="font-black text-[10px] text-slate-700 uppercase border-b pb-1 mb-2">🔌 Tomadas Gerais (TUG x26)</p>
+                    <p class="font-black text-[10px] text-slate-700 uppercase border-b pb-1 mb-2">🔌 Tomadas Gerais (127V)</p>
                     <div class="space-y-1 text-[8px] font-bold">
-                        <div class="flex justify-between"><span>Fase/Neutro/Terra 2,5mm²:</span> <span>60m cada cor</span></div>
-                        <p class="text-blue-600 mt-1 italic text-[7px]">Hardware: 26 Caixas 4x2 + 35 Módulos 10A</p>
+                        <div class="flex justify-between"><span><span class="tag-cor bg-black">Fase R (Preto)</span> 2,5mm²:</span> <span>60m</span></div>
+                        <div class="flex justify-between"><span><span class="tag-cor bg-blue-600">Neutro (Azul)</span> 2,5mm²:</span> <span>60m</span></div>
+                        <div class="flex justify-between"><span><span class="tag-cor bg-emerald-600">Terra (Verde)</span> 2,5mm²:</span> <span>60m</span></div>
                     </div>
                 </div>
             </div>
-                    </div>
+            
+        </div>
     </div>
 
     <script>
         let inventory = [
-            { id: 1, desc: "Cabo Prysmian 6,0mm² (Preto/Azul/Verde)", qty: 45, price: 9.80, cat: "Elet", bought: false },
-            { id: 2, desc: "Cabo Prysmian 4,0mm² (Verm/Azul/Verde)", qty: 36, price: 6.50, cat: "Elet", bought: false },
+            { id: 1, desc: "Cabo Prysmian 6,0mm² (Preto/Verm/Verde)", qty: 45, price: 9.80, cat: "Elet", bought: false },
+            { id: 2, desc: "Cabo Prysmian 4,0mm² (Verm/Branco/Verde)", qty: 36, price: 6.50, cat: "Elet", bought: false },
             { id: 3, desc: "Cabo Prysmian 2,5mm² VERDE (Terra)", qty: 100, price: 4.50, cat: "Elet", bought: true },
-            { id: 4, desc: "Cabo Prysmian 2,5mm² BRANCO (Fase T)", qty: 100, price: 4.20, cat: "Elet", bought: false },
+            { id: 4, desc: "Cabo Prysmian 2,5mm² PRETO (Fase R)", qty: 100, price: 4.20, cat: "Elet", bought: false },
             { id: 5, desc: "Cabo Prysmian 2,5mm² AZUL (Neutro)", qty: 100, price: 4.20, cat: "Elet", bought: false },
-            { id: 6, desc: "Cabo Prysmian 1,5mm² (Amarelo/Branco)", qty: 100, price: 2.80, cat: "Elet", bought: false },
+            { id: 6, desc: "Cabo Prysmian 1,5mm² (Amarelo/Branco/Azul)", qty: 120, price: 2.80, cat: "Elet", bought: false },
             { id: 7, desc: "IDR Schneider 4P 40A 30mA", qty: 1, price: 295.00, cat: "Elet", bought: false },
             { id: 8, desc: "DPS Schneider 20kA 275V", qty: 3, price: 145.00, cat: "Elet", bought: false },
-            { id: 9, desc: "Módulo Tomada 20A Schneider Orion", qty: 8, price: 22.50, cat: "Elet", bought: false },
+            { id: 9, desc: "Disjuntor Bipolar Schneider (220V)", qty: 3, price: 68.00, cat: "Elet", bought: false },
             { id: 10, desc: "Módulo Tomada 10A Schneider Orion", qty: 35, price: 18.90, cat: "Elet", bought: false },
             { id: 11, desc: "Caixa 4x4 Amarela Reforçada", qty: 12, price: 7.80, cat: "Infra", bought: true },
             { id: 12, desc: "Caixa 4x2 Amarela Reforçada", qty: 26, price: 4.80, cat: "Infra", bought: true },
             { id: 13, desc: "Torneira Cozinha Gourmet Docol", qty: 1, price: 920.00, cat: "Hidr", bought: false },
-            { id: 14, desc: "Conector Wago 221-413 (50 un)", qty: 1, price: 115.00, cat: "Elet", bought: false },
+            { id: 14, desc: "Conector Wago 221-612 (Chuveiro)", qty: 10, price: 8.50, cat: "Elet", bought: false },
             { id: 15, desc: "Quadro Schneider 36 DIN", qty: 1, price: 310.00, cat: "Infra", bought: false }
         ];
 
@@ -172,7 +168,7 @@
             const d = prompt("Material:"); if(!d) return;
             const q = parseFloat(prompt("Qtd:","1"));
             const p = parseFloat(prompt("Preço:","0"));
-            inventory = [{id: Date.now(), desc: d, qty: q, price: p, cat: "Novo", bought: false}, ...inventory];
+            inventory = [{id: Date.now(), desc: d, qty: q, price: p, cat: "Extra", bought: false}, ...inventory];
             render();
         }
 
