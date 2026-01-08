@@ -9,7 +9,7 @@
     <meta name="apple-mobile-web-app-title" content="AP 2209">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2942/2942544.png">
     
-    <title>AP 2209 - ENGENHARIA MASTER V26</title>
+    <title>AP 2209 - MASTER V27</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -44,7 +44,7 @@
         <button onclick="syncData()" class="w-full bg-emerald-500 text-white py-3 rounded-xl font-black text-[8px] uppercase shadow-md mb-2 active:scale-95 transition-all">
             GERAR LINK DE ATUALIZAÇÃO
         </button>
-        <p class="text-[7px] text-slate-400 font-bold uppercase italic leading-tight px-2 text-center">Atualize os dados em outros celulares</p>
+        <p class="text-[7px] text-slate-400 font-bold uppercase italic leading-tight px-2 text-center">Use para enviar seus novos itens para outros celulares</p>
     </div>
 
     <header class="header-master text-white p-6 mb-6 shadow-2xl mx-1 main-content">
@@ -67,7 +67,6 @@
     </header>
 
     <div class="max-w-6xl mx-auto px-4 main-content">
-        
         <nav class="flex gap-2 mb-6 no-print overflow-x-auto pb-2">
             <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 min-w-[120px] py-5 rounded-2xl font-black text-[9px] uppercase bg-white text-slate-400 shadow-sm tab-active transition-all">1. Orçamento</button>
             <button onclick="switchTab('eletrica')" id="btn-eletrica" class="flex-1 min-w-[120px] py-5 rounded-2xl font-black text-[9px] uppercase bg-white text-slate-400 shadow-sm transition-all">2. Memorial Técnico</button>
@@ -89,7 +88,6 @@
                 <p class="text-[10px] text-slate-600 leading-relaxed italic mb-3">Conforme NBR 5410, o condutor VERDE deve ser exclusivo para proteção, conectado ao Barramento de Terra no QDC.</p>
                 
             </div>
-
             <div class="memorial-section">
                 <h3 class="font-black text-blue-700 mb-4 uppercase text-[12px] border-b pb-2">⚡ Padrão de Cores e Fases</h3>
                 <div class="grid grid-cols-2 gap-2 text-[9px] font-black uppercase mb-4">
@@ -98,12 +96,6 @@
                     <div class="bg-white border-2 border-slate-200 text-slate-900 p-4 rounded-xl text-center shadow-md">Fase T: Branco</div>
                     <div class="bg-blue-600 text-white p-4 rounded-xl text-center shadow-md">Neutro: Azul</div>
                 </div>
-            </div>
-
-            <div class="memorial-section" style="border-left-color: #000;">
-                <h3 class="font-black text-slate-900 mb-2 uppercase text-[11px]">🛠️ Infraestrutura e Acabamento</h3>
-                <p class="text-[10px] text-slate-600 leading-relaxed italic italic">Crimpagem hexagonal Schneider, nivelamento a laser de caixas, flushing hidráulico Docol e guia de aço em conduítes CAT6.</p>
-                
             </div>
         </div>
 
@@ -117,7 +109,6 @@
                         <div class="flex justify-between border-t pt-2"><span><span class="tag-cor bg-blue-600">Neutro</span> 1,5mm²:</span> <span>45m</span></div>
                     </div>
                 </div>
-
                 <div class="card-ponto" style="border-left-color: #ef4444;">
                     <p class="font-black text-[12px] text-red-600 uppercase border-b pb-2 mb-3">🚿 Chuveiro Master (220V)</p>
                     <div class="space-y-2 text-[10px] font-bold">
@@ -125,15 +116,6 @@
                         <div class="flex justify-between"><span><span class="tag-cor bg-red-600">Fase S</span> 6,0mm²:</span> <span>15m</span></div>
                     </div>
                 </div>
-
-                <div class="card-ponto" style="border-left-color: #f97316;">
-                    <p class="font-black text-[12px] text-orange-600 uppercase border-b pb-2 mb-3">🔥 Torre Quente (220V)</p>
-                    <div class="space-y-2 text-[10px] font-bold">
-                        <div class="flex justify-between"><span><span class="tag-cor bg-red-600">Fase S</span> 4,0mm²:</span> <span>12m</span></div>
-                        <div class="flex justify-between"><span><span class="tag-cor bg-white border border-slate-300 text-slate-900">Fase T</span> 4,0mm²:</span> <span>12m</span></div>
-                    </div>
-                </div>
-
                 <div class="card-ponto" style="border-left-color: #3b82f6;">
                     <p class="font-black text-[12px] text-blue-600 uppercase border-b pb-2 mb-3">🔌 Tomadas Gerais (127V)</p>
                     <div class="space-y-2 text-[10px] font-bold">
@@ -141,16 +123,7 @@
                         <div class="flex justify-between"><span><span class="tag-cor bg-blue-600">Neutro</span> 2,5mm²:</span> <span>60m</span></div>
                     </div>
                 </div>
-
-                <div class="card-ponto" style="border-left-color: #0ea5e9;">
-                    <p class="font-black text-[12px] text-sky-500 uppercase border-b pb-2 mb-3">🍳 Tomadas Cozinha (127V)</p>
-                    <div class="space-y-2 text-[10px] font-bold">
-                        <div class="flex justify-between"><span><span class="tag-cor bg-red-600">Fase S</span> 4,0mm²:</span> <span>25m</span></div>
-                        <div class="flex justify-between"><span><span class="tag-cor bg-blue-600">Neutro</span> 4,0mm²:</span> <span>25m</span></div>
-                    </div>
-                </div>
             </div>
-            
         </div>
     </div>
 
@@ -173,25 +146,38 @@
             { id: 15, desc: "Quadro Schneider 36 DIN Completo", qty: 1, price: 310.00, cat: "Infra", bought: false }
         ];
 
-        let inventory = JSON.parse(localStorage.getItem('ap2209_data')) || defaultInventory;
-
-        function syncData() {
-            const dataStr = btoa(JSON.stringify(inventory));
-            const syncUrl = window.location.origin + window.location.pathname + '?data=' + dataStr;
-            navigator.clipboard.writeText(syncUrl);
-            alert("LINK COPIADO!\nEnvie pelo WhatsApp para atualizar outros aparelhos.");
-        }
+        let inventory = [];
 
         function checkUrlUpdates() {
             const params = new URLSearchParams(window.location.search);
             const syncData = params.get('data');
             if(syncData) {
-                if(confirm("Sincronizar novos dados de compra recebidos?")) {
-                    inventory = JSON.parse(atob(syncData));
-                    localStorage.setItem('ap2209_data', JSON.stringify(inventory));
-                    window.history.replaceState({}, document.title, window.location.pathname);
-                }
+                try {
+                    const decodedData = JSON.parse(atob(syncData));
+                    if(confirm("Novos itens e alterações detectadas! Sincronizar agora?")) {
+                        inventory = decodedData;
+                        localStorage.setItem('ap2209_data', JSON.stringify(inventory));
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                        alert("✅ Sincronizado com sucesso!");
+                    }
+                } catch(e) { console.error("Erro na sincronização:", e); }
             }
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('ap2209_data');
+            if(saved) {
+                inventory = JSON.parse(saved);
+            } else {
+                inventory = defaultInventory;
+            }
+        }
+
+        function syncData() {
+            const dataStr = btoa(JSON.stringify(inventory));
+            const syncUrl = window.location.origin + window.location.pathname + '?data=' + dataStr;
+            navigator.clipboard.writeText(syncUrl);
+            alert("✅ LINK DE ATUALIZAÇÃO GERADO!\n\nEnvie para o outro celular pelo WhatsApp. Ao abrir o link, os itens adicionados aparecerão lá.");
         }
 
         function render() {
@@ -206,7 +192,7 @@
                 row.innerHTML = `
                     <td class="p-4 w-12 text-center"><input type="checkbox" ${item.bought?'checked':''} onchange="toggle(${item.id})" class="w-7 h-7 accent-blue-600"></td>
                     <td class="p-4">
-                        <div class="font-black text-[12px] uppercase text-slate-800 leading-tight">${item.desc}</div>
+                        <div class="font-black text-[11px] uppercase text-slate-800 leading-tight">${item.desc}</div>
                         <span class="text-blue-500 text-[7px] font-black uppercase tracking-widest">${item.cat}</span>
                     </td>
                     <td class="p-4 text-center font-black text-slate-600 text-[11px]">${item.qty}</td>
@@ -221,7 +207,7 @@
         }
 
         function toggle(id) { const i = inventory.find(x => x.id === id); i.bought = !i.bought; render(); }
-        function remove(id) { if(confirm("Deseja remover este item permanentemente?")) { inventory = inventory.filter(x => x.id !== id); render(); } }
+        function remove(id) { if(confirm("Remover item?")) { inventory = inventory.filter(x => x.id !== id); render(); } }
         
         function addItem() {
             const d = prompt("Nome do Material:"); if(!d) return;
@@ -236,11 +222,11 @@
                 document.getElementById('view-' + tab).classList.toggle('hidden', t !== tab);
                 document.getElementById('btn-' + tab).classList.toggle('tab-active', t === tab);
             });
-            window.scrollTo(0, 0);
         }
 
         window.onload = function() {
             checkUrlUpdates();
+            loadData();
             new QRCode(document.getElementById("qrcode"), {
                 text: window.location.href,
                 width: 170, height: 170,
