@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MASTER PLAN AP 2209 - EXCELÊNCIA TÉCNICA</title>
+    <title>MASTER PLAN AP 2209</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; font-size: 11px; } /* Fonte reduzida globalmente */
+        body { font-family: 'Inter', sans-serif; font-size: 10px; } /* Fonte reduzida */
         .tab-active { background-color: #1e40af !important; color: white !important; }
-        .row-purchased { opacity: 0.4; filter: grayscale(1); background-color: #f1f5f9 !important; }
+        .row-purchased { opacity: 0.4; filter: grayscale(1); background-color: #f8fafc !important; }
         .row-purchased td { text-decoration: line-through; }
         input[type=number]::-webkit-inner-spin-button { display: none; }
         @media print { .no-print { display: none !important; } }
@@ -17,136 +17,113 @@
 </head>
 <body class="bg-slate-100 min-h-screen text-slate-800">
 
-    <div class="max-w-6xl mx-auto p-2 md:p-6">
-        <header class="bg-slate-900 text-white p-6 rounded-[1.5rem] shadow-2xl mb-4 border-b-4 border-blue-700 flex flex-col md:row justify-between items-center gap-4">
-            <div class="text-center md:text-left">
-                <h1 class="text-2xl font-black italic uppercase tracking-tighter text-blue-400 leading-none">AP 2209 DASH</h1>
-                <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1">Engenharia Trifásica • 15 Itens Críticos</p>
+    <div class="max-w-5xl mx-auto p-2 md:p-4">
+        <header class="bg-slate-900 text-white p-4 rounded-2xl shadow-xl mb-4 border-b-4 border-blue-700 flex justify-between items-center">
+            <div>
+                <h1 class="text-xl font-black italic uppercase tracking-tighter text-blue-400 leading-none">AP 2209 MASTER</h1>
+                <p class="text-[7px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">Controle de Suprimentos 2026</p>
             </div>
-            <div class="bg-slate-800 p-3 rounded-xl border border-slate-700 text-right min-w-[150px]">
-                <p class="text-[7px] font-black text-blue-400 uppercase mb-1">Investimento Total</p>
-                <p id="total-geral" class="text-lg font-mono font-bold text-white">R$ 0,00</p>
+            <div class="bg-slate-800 p-2 px-4 rounded-xl border border-slate-700 text-right">
+                <p class="text-[6px] font-black text-blue-400 uppercase">Investimento Total</p>
+                <p id="total-geral" class="text-sm font-mono font-bold text-white">R$ 0,00</p>
             </div>
         </header>
 
         <div class="flex gap-2 mb-4 no-print">
-            <div class="flex bg-white p-1 rounded-xl shadow-sm flex-1 font-black text-[9px] uppercase tracking-widest">
-                <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 py-2 rounded-lg tab-active transition-all">1. Orçamento</button>
-                <button onclick="switchTab('eletrica')" id="btn-eletrica" class="flex-1 py-2 rounded-lg text-slate-400 transition-all">2. Memorial Elétrico</button>
+            <div class="flex bg-white p-1 rounded-xl shadow-sm flex-1 font-black text-[8px] uppercase tracking-widest">
+                <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 py-2 rounded-lg tab-active transition-all">Orçamento (15 Itens)</button>
+                <button onclick="switchTab('eletrica')" id="btn-eletrica" class="flex-1 py-2 rounded-lg text-slate-400 transition-all">Memorial Técnico</button>
             </div>
-            <button onclick="addItem()" class="bg-blue-600 text-white px-6 py-2 rounded-xl font-black text-[9px] uppercase shadow-lg hover:bg-blue-700 transition-all">+ Inserir no Topo</button>
+            <button onclick="addItem()" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-black text-[8px] uppercase shadow-lg hover:bg-blue-700 transition-all">+ Novo Item</button>
         </div>
 
-        <div id="content" class="bg-white rounded-[2rem] shadow-xl p-4 md:p-8 border border-slate-200">
-            <div id="view-planilha" class="animate-in fade-in">
+        <div id="content" class="bg-white rounded-2xl shadow-xl p-3 md:p-6 border border-slate-200">
+            <div id="view-planilha">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-separate border-spacing-y-1">
                         <thead>
-                            <tr class="text-[8px] font-black uppercase text-slate-400 italic">
-                                <th class="px-3 py-1">OK</th>
-                                <th class="px-2 py-1">Material de Engenharia / Marca</th>
-                                <th class="px-2 py-1 text-center">Qtd</th>
-                                <th class="px-2 py-1 text-center">Unit R$</th>
-                                <th class="px-2 py-1 text-center text-blue-600 font-bold">Total</th>
-                                <th class="px-2 py-1 text-center">Ação</th>
+                            <tr class="text-[7px] font-black uppercase text-slate-400 italic">
+                                <th class="px-2">OK</th>
+                                <th class="px-2">Especificação Técnica</th>
+                                <th class="px-2 text-center">Qtd</th>
+                                <th class="px-2 text-center">Unit R$</th>
+                                <th class="px-2 text-center text-blue-600">Total</th>
+                                <th class="px-2 text-center">Ação</th>
                             </tr>
                         </thead>
-                        <tbody id="inventory-body">
-                            </tbody>
+                        <tbody id="inventory-body"></tbody>
                     </table>
                 </div>
             </div>
 
-            <div id="view-eletrica" class="hidden space-y-4">
-                <div class="bg-slate-900 text-white p-6 rounded-2xl border-l-[10px] border-blue-600">
-                    <h3 class="text-sm font-black italic text-blue-400 mb-2 uppercase">Protocolo Prysmian AP 2209</h3>
-                    <p class="text-[10px] font-bold text-slate-300">Crimpagem Hexagonal obrigatória. Fase T (Branca) dedicada para Ilha/Cozinha.</p>
+            <div id="view-eletrica" class="hidden space-y-4 p-4 text-[9px]">
+                <div class="bg-blue-600 text-white p-4 rounded-xl font-bold italic uppercase">
+                    Atenção: Uso mandatório de terminais ilhós e crimpagem hexagonal para cabos Prysmian.
                 </div>
-                <div class="grid grid-cols-3 gap-2">
-                    <div class="p-4 bg-slate-50 border-t-4 border-black rounded-xl text-center font-black uppercase text-[8px]">Fase R: PRETO</div>
-                    <div class="p-4 bg-slate-50 border-t-4 border-red-600 rounded-xl text-center font-black uppercase text-[8px]">Fase S: VERMELHO</div>
-                    <div class="p-4 bg-blue-50 border-2 border-blue-600 rounded-xl text-center font-black uppercase text-[8px] italic">Fase T: BRANCO</div>
+                <div class="grid grid-cols-3 gap-2 font-black text-center uppercase">
+                    <div class="p-2 border border-black rounded">Fase R: Preto</div>
+                    <div class="p-2 border border-red-600 text-red-600 rounded">Fase S: Vermelho</div>
+                    <div class="p-2 border-2 border-blue-600 text-blue-600 rounded underline">Fase T: Branco</div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // LISTA DE 15 ITENS DE ENGENHARIA (AP 2209)
+        // LISTA COMPLETA COM 15 ITENS
         let inventory = [
-            { id: 1, desc: "Cabo Prysmian Flex 2,5mm² BRANCO (Fase T)", qty: 100, price: 4.20, cat: "Elétrica", bought: false },
-            { id: 2, desc: "Cabo Prysmian Flex 2,5mm² PRETO (Fase R)", qty: 100, price: 4.20, cat: "Elétrica", bought: true },
-            { id: 3, desc: "Cabo Prysmian Flex 2,5mm² VERMELHO (Fase S)", qty: 100, price: 4.20, cat: "Elétrica", bought: false },
-            { id: 4, desc: "Cabo Prysmian Flex 2,5mm² AZUL (Neutro)", qty: 100, price: 4.20, cat: "Elétrica", bought: false },
-            { id: 5, desc: "Cabo Prysmian Flex 2,5mm² VERDE (Terra)", qty: 100, price: 4.20, cat: "Elétrica", bought: false },
-            { id: 6, desc: "Torneira Cozinha Gourmet Monocomando Docol", qty: 1, price: 980.00, cat: "Hidráulica", bought: false },
-            { id: 7, desc: "Caixa de Embutir 4x4 Reforçada Amarela", qty: 15, price: 6.80, cat: "Infra", bought: false },
-            { id: 8, desc: "Terminal Ilhós Tubular 2,5mm² (Pack 100)", qty: 2, price: 25.00, cat: "Elétrica", bought: true },
-            { id: 9, desc: "Disjuntor Schneider iK60N Bipolar 32A", qty: 2, price: 85.00, cat: "Elétrica", bought: false },
-            { id: 10, desc: "Conector Wago 221-413 (Pack 50)", qty: 1, price: 110.00, cat: "Elétrica", bought: false },
-            { id: 11, desc: "Quadro de Distribuição Schneider 36 DIN", qty: 1, price: 280.00, cat: "Infra", bought: false },
-            { id: 12, desc: "Misturador Monocomando Banheiro Docol", qty: 2, price: 450.00, cat: "Hidráulica", bought: false },
-            { id: 13, desc: "Eletroduto Corrugado Reforçado 3/4 (50m)", qty: 1, price: 95.00, cat: "Infra", bought: false },
-            { id: 14, desc: "Placa 4x4 3 Postos Schneider Orion", qty: 12, price: 14.50, cat: "Elétrica", bought: false },
-            { id: 15, desc: "Adaptador Máquina de Lavar Docol", qty: 1, price: 45.00, cat: "Hidráulica", bought: false }
-        ];
+            { id: 1, desc: "Cabo Prysmian Flex 2,5mm² BRANCO (Fase T)", qty: 100, price: 4.20, cat: "Elet" },
+            { id: 2, desc: "Cabo Prysmian Flex 2,5mm² PRETO (Fase R)", qty: 100, price: 4.20, cat: "Elet" },
+            { id: 3, desc: "Cabo Prysmian Flex 2,5mm² VERMELHO (Fase S)", qty: 100, price: 4.20, cat: "Elet" },
+            { id: 4, desc: "Cabo Prysmian Flex 2,5mm² AZUL (Neutro)", qty: 100, price: 4.20, cat: "Elet" },
+            { id: 5, desc: "Cabo Prysmian Flex 2,5mm² VERDE (Terra)", qty: 100, price: 4.20, cat: "Elet" },
+            { id: 6, desc: "Torneira Cozinha Gourmet Docol", qty: 1, price: 980.00, cat: "Hidr" },
+            { id: 7, desc: "Caixa de Embutir 4x4 Reforçada Amarela", qty: 15, price: 6.80, cat: "Infra" },
+            { id: 8, desc: "Terminal Ilhós Tubular 2,5mm² (100un)", qty: 2, price: 25.00, cat: "Elet" },
+            { id: 9, desc: "Disjuntor Schneider Bipolar 32A", qty: 2, price: 85.00, cat: "Elet" },
+            { id: 10, desc: "Conector Wago 221-413 (50un)", qty: 1, price: 115.00, cat: "Elet" },
+            { id: 11, desc: "Quadro de Distribuição Schneider 36 DIN", qty: 1, price: 295.00, cat: "Infra" },
+            { id: 12, desc: "Misturador Banheiro Monocomando Docol", qty: 2, price: 450.00, cat: "Hidr" },
+            { id: 13, desc: "Eletroduto Corrugado 3/4 (50m)", qty: 1, price: 98.00, cat: "Infra" },
+            { id: 14, desc: "Placa 4x4 3 Postos Schneider Orion", qty: 12, price: 14.50, cat: "Elet" },
+            { id: 15, desc: "Válvula de Escoamento Docol Click", qty: 3, price: 85.00, cat: "Hidr" }
+        ].map(i => ({...i, bought: false}));
 
         function render() {
             const body = document.getElementById('inventory-body');
             body.innerHTML = '';
-            let totalGeral = 0;
+            let total = 0;
 
-            inventory.forEach((item) => {
-                const subtotal = item.qty * item.price;
-                totalGeral += subtotal;
-
+            inventory.forEach(item => {
+                const sub = item.qty * item.price;
+                total += sub;
                 const row = document.createElement('tr');
-                row.className = `transition-all border-b border-slate-100 ${item.bought ? 'row-purchased' : 'bg-slate-50 hover:bg-white'}`;
+                row.className = `transition-all border-b border-slate-50 ${item.bought ? 'row-purchased' : 'hover:bg-blue-50/30'}`;
                 row.innerHTML = `
-                    <td class="px-3 py-2 rounded-l-lg">
-                        <input type="checkbox" ${item.bought ? 'checked' : ''} onchange="toggleBought(${item.id})" class="w-4 h-4 rounded cursor-pointer border-slate-300">
+                    <td class="px-2 py-1"><input type="checkbox" ${item.bought?'checked':''} onchange="toggle(${item.id})" class="w-3 h-3 cursor-pointer"></td>
+                    <td class="px-2 py-1">
+                        <div class="font-bold text-[9px] uppercase italic text-slate-700">${item.desc}</div>
+                        <span class="text-[6px] font-black text-blue-500 uppercase">${item.cat}</span>
                     </td>
-                    <td class="px-2 py-2">
-                        <div class="font-bold text-[10px] uppercase italic text-slate-700 leading-tight">${item.desc}</div>
-                        <span class="text-[7px] font-black text-blue-500 uppercase tracking-tighter">${item.cat}</span>
-                    </td>
-                    <td class="px-2 py-2 text-center font-bold text-[10px]">${item.qty}</td>
-                    <td class="px-2 py-2 text-center font-bold text-[10px]">R$ ${item.price.toFixed(2)}</td>
-                    <td class="px-2 py-2 text-center font-mono font-black text-blue-700 text-[11px]">R$ ${subtotal.toFixed(2)}</td>
-                    <td class="px-2 py-2 rounded-r-lg text-center">
-                        <button onclick="removeItem(${item.id})" class="text-slate-300 hover:text-red-500 font-black text-[10px]">✕</button>
-                    </td>
+                    <td class="px-2 py-1 text-center font-bold">${item.qty}</td>
+                    <td class="px-2 py-1 text-center">R$ ${item.price.toFixed(2)}</td>
+                    <td class="px-2 py-1 text-center font-mono font-black text-blue-700">R$ ${sub.toFixed(2)}</td>
+                    <td class="px-2 py-1 text-center"><button onclick="remove(${item.id})" class="text-slate-300 hover:text-red-500 font-black text-[9px]">✕</button></td>
                 `;
                 body.appendChild(row);
             });
-
-            document.getElementById('total-geral').innerText = `R$ ${totalGeral.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            document.getElementById('total-geral').innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
         }
 
-        function addItem() {
-            const newItem = { id: Date.now(), desc: "NOVO ITEM ADICIONADO", qty: 1, price: 0, cat: "Geral", bought: false };
-            inventory = [newItem, ...inventory];
-            render();
+        function toggle(id) { const i = inventory.find(x => x.id === id); i.bought = !i.bought; render(); }
+        function remove(id) { inventory = inventory.filter(x => x.id !== id); render(); }
+        function addItem() { inventory = [{id: Date.now(), desc: "NOVO MATERIAL ADICIONADO", qty: 1, price: 0, cat: "Geral", bought: false}, ...inventory]; render(); }
+        function switchTab(t) {
+            document.getElementById('view-planilha').classList.toggle('hidden', t !== 'planilha');
+            document.getElementById('view-eletrica').classList.toggle('hidden', t !== 'eletrica');
+            document.getElementById('btn-planilha').classList.toggle('tab-active', t === 'planilha');
+            document.getElementById('btn-eletrica').classList.toggle('tab-active', t === 'eletrica');
         }
-
-        function toggleBought(id) {
-            const item = inventory.find(i => i.id === id);
-            item.bought = !item.bought;
-            render();
-        }
-
-        function removeItem(id) {
-            inventory = inventory.filter(i => i.id !== id);
-            render();
-        }
-
-        function switchTab(tab) {
-            document.getElementById('view-planilha').classList.toggle('hidden', tab !== 'planilha');
-            document.getElementById('view-eletrica').classList.toggle('hidden', tab !== 'eletrica');
-            document.getElementById('btn-planilha').classList.toggle('tab-active', tab === 'planilha');
-            document.getElementById('btn-eletrica').classList.toggle('tab-active', tab === 'eletrica');
-        }
-
         window.onload = render;
     </script>
 </body>
