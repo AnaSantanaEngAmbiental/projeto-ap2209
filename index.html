@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AP 2209 - MASTER SYNC</title>
+    <title>AP 2209 - MASTER V46</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -13,26 +13,27 @@
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; font-size: 11px; }
         .header-eng { background: linear-gradient(135deg, #0f172a 0%, #1e40af 100%); border-bottom: 4px solid #3b82f6; }
         .tab-active { background-color: #3b82f6 !important; color: white !important; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4); }
-        .card-ponto { border-left: 5px solid #3b82f6; background: white; border-radius: 12px; padding: 15px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .item-row { border-bottom: 1px solid #e2e8f0; transition: all 0.2s; }
+        .card-ponto { border-left: 5px solid #3b82f6; background: white; border-radius: 12px; padding: 18px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        .item-row { border-bottom: 1px solid #e2e8f0; transition: all 0.2s; cursor: pointer; }
         .item-bought { opacity: 0.4; background-color: #f1f5f9; text-decoration: line-through; }
         
-        #qrcode-container { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; padding: 20px; }
-        #qrcode { background: white; padding: 20px; border-radius: 20px; }
+        #qrcode-container { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; padding: 20px; }
+        #qrcode { background: white; padding: 25px; border-radius: 24px; box-shadow: 0 0 50px rgba(59, 130, 246, 0.5); }
+        .tag-detalhe { font-size: 8px; font-weight: 900; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; margin-right: 4px; }
     </style>
 </head>
 <body class="pb-24">
 
     <div id="qrcode-container" onclick="this.style.display='none'">
         <div id="qrcode"></div>
-        <p class="text-white mt-4 font-black text-center">QR CODE GERADO!<br><span class="text-blue-400 text-[10px]">Toque em qualquer lugar para fechar</span></p>
+        <p class="text-white mt-6 font-black text-center text-lg">QR CODE SINCRONIZADO<br><span class="text-blue-400 text-sm font-medium italic">Toque para fechar</span></p>
     </div>
 
     <header class="header-eng text-white p-6 shadow-xl mb-4">
         <div class="max-w-4xl mx-auto flex justify-between items-end">
             <div>
                 <h1 class="text-2xl font-black italic tracking-tighter uppercase leading-none">AP 2209 MASTER</h1>
-                <p class="text-[8px] font-bold uppercase tracking-[0.3em] opacity-70 mt-2">Engenharia Trifásica • V45.0</p>
+                <p class="text-[8px] font-bold uppercase tracking-[0.3em] opacity-70 mt-2">Engenharia Trifásica • V46.0</p>
             </div>
             <div class="text-right">
                 <p class="text-[9px] font-black text-blue-300 uppercase">Investimento Total</p>
@@ -43,17 +44,17 @@
 
     <div class="max-w-4xl mx-auto px-4">
         <div class="grid grid-cols-2 gap-2 mb-6">
-            <button onclick="generateQR()" class="bg-slate-900 text-white py-4 rounded-2xl font-black text-[10px] uppercase shadow-lg border-b-4 border-blue-600">
+            <button onclick="generateQR()" class="bg-slate-900 text-white py-4 rounded-2xl font-black text-[10px] uppercase shadow-lg border-b-4 border-blue-600 active:translate-y-1 active:border-b-0 transition-all">
                 📱 Ver QR Code
             </button>
-            <button onclick="copySyncLink()" class="bg-emerald-600 text-white py-4 rounded-2xl font-black text-[10px] uppercase shadow-lg border-b-4 border-emerald-800">
+            <button onclick="copySyncLink()" class="bg-emerald-600 text-white py-4 rounded-2xl font-black text-[10px] uppercase shadow-lg border-b-4 border-emerald-800 active:translate-y-1 active:border-b-0 transition-all">
                 🔗 Copiar Link WhatsApp
             </button>
         </div>
 
         <nav class="flex gap-2 mb-6">
             <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 py-4 rounded-xl font-black text-[9px] uppercase bg-white text-slate-400 tab-active">1. Orçamento</button>
-            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 py-4 rounded-xl font-black text-[9px] uppercase bg-white text-slate-400">2. Mapa de Pontos</button>
+            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 py-4 rounded-xl font-black text-[9px] uppercase bg-white text-slate-400">2. Mapa de Pontos Detalhado</button>
         </nav>
 
         <div id="view-planilha" class="space-y-3">
@@ -61,39 +62,77 @@
                 <table class="w-full text-left">
                     <thead class="bg-slate-50 text-[8px] uppercase font-black text-slate-500">
                         <tr>
-                            <th class="p-3">Item</th>
-                            <th class="p-3 text-center">Qtd</th>
-                            <th class="p-3 text-right">Total</th>
+                            <th class="p-4">Descrição do Material</th>
+                            <th class="p-4 text-center">Qtd</th>
+                            <th class="p-4 text-right">Subtotal</th>
                         </tr>
                     </thead>
                     <tbody id="inventory-body"></tbody>
                 </table>
             </div>
-            <button onclick="addItem()" class="w-full bg-blue-50 text-blue-600 py-4 rounded-xl font-black text-[10px] uppercase border-2 border-dashed border-blue-200">+ Inserir Material Extra</button>
+            <button onclick="addItem()" class="w-full bg-blue-50 text-blue-600 py-4 rounded-xl font-black text-[10px] uppercase border-2 border-dashed border-blue-200 hover:bg-blue-100 transition-all">+ Novo Item</button>
         </div>
 
         <div id="view-pontos" class="hidden space-y-4">
+            
             <div class="card-ponto" style="border-left-color: #3b82f6;">
-                <h4 class="font-black text-blue-700 uppercase mb-1">🔌 Tomadas Gerais (127V)</h4>
-                <p class="font-bold text-slate-500">Cabo 2,5mm² (Preto/Azul/Verde): <span class="text-slate-900">60 Metros</span></p>
+                <div class="flex justify-between items-start mb-2">
+                    <h4 class="font-black text-blue-800 uppercase text-xs">🔌 Tomadas Gerais (TUG - 127V)</h4>
+                    <span class="bg-blue-100 text-blue-800 text-[8px] px-2 py-1 rounded font-bold uppercase">Circuito 01</span>
+                </div>
+                <div class="space-y-2 text-[10px]">
+                    <p class="flex items-center"><span class="tag-detalhe bg-black text-white">Fase R</span> 2,5mm² Prysmian Preto - <strong class="ml-1">60m</strong></p>
+                    <p class="flex items-center"><span class="tag-detalhe bg-blue-600 text-white">Neutro</span> 2,5mm² Prysmian Azul - <strong class="ml-1">60m</strong></p>
+                    <p class="flex items-center"><span class="tag-detalhe bg-emerald-500 text-white">Terra</span> 2,5mm² Prysmian Verde - <strong class="ml-1">60m</strong></p>
+                    <p class="text-slate-500 italic mt-2 border-t pt-2">Destino: Sala, Quartos e Cozinha (Pontos comuns).</p>
+                </div>
             </div>
+
             <div class="card-ponto" style="border-left-color: #8b5cf6;">
-                <h4 class="font-black text-purple-700 uppercase mb-1">❄️ Ar Condicionado (220V)</h4>
-                <p class="font-bold text-slate-500">Cabo 2,5mm² (Vermelho/Branco/Verde): <span class="text-slate-900">28 Metros</span></p>
+                <div class="flex justify-between items-start mb-2">
+                    <h4 class="font-black text-purple-800 uppercase text-xs">❄️ Ar Condicionado (02 Unid - 220V)</h4>
+                    <span class="bg-purple-100 text-purple-800 text-[8px] px-2 py-1 rounded font-bold uppercase">Circuito 02/03</span>
+                </div>
+                <div class="space-y-2 text-[10px]">
+                    <p class="flex items-center"><span class="tag-detalhe bg-red-600 text-white">Fase S</span> 2,5mm² Prysmian Vermelho - <strong class="ml-1">28m</strong></p>
+                    <p class="flex items-center"><span class="tag-detalhe bg-slate-200 text-slate-800 border">Fase T</span> 2,5mm² Prysmian Branco - <strong class="ml-1">28m</strong></p>
+                    <p class="flex items-center"><span class="tag-detalhe bg-emerald-500 text-white">Terra</span> 2,5mm² Prysmian Verde - <strong class="ml-1">28m</strong></p>
+                    <p class="text-slate-500 italic mt-2 border-t pt-2">Nota: Alimentação bifásica 220V entre Fases S e T.</p>
+                </div>
             </div>
+
             <div class="card-ponto" style="border-left-color: #ef4444;">
-                <h4 class="font-black text-red-700 uppercase mb-1">🚿 Chuveiro Master (220V)</h4>
-                <p class="font-bold text-slate-500">Cabo 6,0mm² (Preto/Vermelho/Verde): <span class="text-slate-900">15 Metros</span></p>
+                <div class="flex justify-between items-start mb-2">
+                    <h4 class="font-black text-red-800 uppercase text-xs">🚿 Chuveiro Master (7500W - 220V)</h4>
+                    <span class="bg-red-100 text-red-800 text-[8px] px-2 py-1 rounded font-bold uppercase">Circuito 04</span>
+                </div>
+                <div class="space-y-2 text-[10px]">
+                    <p class="flex items-center"><span class="tag-detalhe bg-black text-white">Fase R</span> 6,0mm² Prysmian Preto - <strong class="ml-1">15m</strong></p>
+                    <p class="flex items-center"><span class="tag-detalhe bg-red-600 text-white">Fase S</span> 6,0mm² Prysmian Vermelho - <strong class="ml-1">15m</strong></p>
+                    <p class="flex items-center"><span class="tag-detalhe bg-emerald-500 text-white">Terra</span> 6,0mm² Prysmian Verde - <strong class="ml-1">15m</strong></p>
+                    <p class="text-slate-500 italic mt-2 border-t pt-2">⚠️ Conexão obrigatória com Wago 221-612 (Original).</p>
+                </div>
             </div>
+
             <div class="card-ponto" style="border-left-color: #f59e0b;">
-                <h4 class="font-black text-amber-600 uppercase mb-1">💡 Iluminação Master</h4>
-                <p class="font-bold text-slate-500">Cabo 1,5mm² (Branco/Azul/Retornos): <span class="text-slate-900">170 Metros</span></p>
+                <div class="flex justify-between items-start mb-2">
+                    <h4 class="font-black text-amber-700 uppercase text-xs">💡 Iluminação Master</h4>
+                    <span class="bg-amber-100 text-amber-800 text-[8px] px-2 py-1 rounded font-bold uppercase">Circuito 05</span>
+                </div>
+                <div class="space-y-2 text-[10px]">
+                    <p class="flex items-center"><span class="tag-detalhe bg-slate-200 text-slate-800 border">Fase T</span> 1,5mm² Branco - <strong class="ml-1">45m</strong></p>
+                    <p class="flex items-center"><span class="tag-detalhe bg-yellow-400 text-black">Retorno</span> 1,5mm² Amarelo - <strong class="ml-1">80m</strong></p>
+                    <p class="flex items-center"><span class="tag-detalhe bg-blue-600 text-white">Neutro</span> 1,5mm² Azul - <strong class="ml-1">45m</strong></p>
+                    <p class="text-slate-500 italic mt-2 border-t pt-2">Total de Cabos 1,5mm² no Orçamento: 170m.</p>
+                </div>
             </div>
+
             
         </div>
     </div>
 
     <script>
+        // Manutenção Integral dos Itens do Orçamento
         const defaultInventory = [
             { id: 1, desc: "Cabo Prysmian 6,0mm² (Preto/Verm/Verde)", qty: 45, price: 9.80, bought: false },
             { id: 2, desc: "Cabo Prysmian 4,0mm² (Verm/Branco/Verde)", qty: 36, price: 6.50, bought: false },
@@ -104,15 +143,15 @@
             { id: 7, desc: "IDR Schneider 4P 40A 30mA", qty: 1, price: 295.00, bought: false },
             { id: 8, desc: "DPS Schneider 20kA 275V", qty: 3, price: 145.00, bought: false },
             { id: 9, desc: "Disjuntor Bipolar 40A Schneider", qty: 1, price: 72.00, bought: false },
-            { id: 10, desc: "Módulo Tomada 10A Schneider (x35)", qty: 35, price: 18.90, bought: false },
+            { id: 10, desc: "Módulo Tomada 10A Schneider Orion (x35)", qty: 35, price: 18.90, bought: false },
             { id: 11, desc: "Caixa 4x4 Amarela Reforçada (x12)", qty: 12, price: 7.80, bought: true },
             { id: 12, desc: "Caixa 4x2 Amarela Reforçada (x26)", qty: 26, price: 4.80, bought: true },
             { id: 13, desc: "Torneira Cozinha Gourmet Docol", qty: 1, price: 920.00, bought: false },
-            { id: 14, desc: "Conector Wago 221-612 (x10)", qty: 10, price: 8.50, bought: false },
+            { id: 14, desc: "Conector Wago 221-612 Original (x10)", qty: 10, price: 8.50, bought: false },
             { id: 15, desc: "Quadro Schneider 36 DIN Completo", qty: 1, price: 310.00, bought: false }
         ];
 
-        let inventory = JSON.parse(localStorage.getItem('ap2209_v45')) || defaultInventory;
+        let inventory = JSON.parse(localStorage.getItem('ap2209_master_v46')) || defaultInventory;
 
         function getSyncURL() {
             const dataStr = btoa(unescape(encodeURIComponent(JSON.stringify(inventory))));
@@ -124,7 +163,6 @@
             const qrDiv = document.getElementById("qrcode");
             qrDiv.innerHTML = "";
             container.style.display = "flex";
-            
             new QRCode(qrDiv, {
                 text: getSyncURL(),
                 width: 250,
@@ -134,9 +172,7 @@
         }
 
         function copySyncLink() {
-            navigator.clipboard.writeText(getSyncURL()).then(() => {
-                alert("✅ Link de sincronismo copiado! Cole no WhatsApp do outro aparelho.");
-            });
+            navigator.clipboard.writeText(getSyncURL()).then(() => alert("✅ Link Master Copiado!"));
         }
 
         function checkSync() {
@@ -145,33 +181,33 @@
             if(syncData) {
                 try {
                     const decoded = JSON.parse(decodeURIComponent(escape(atob(syncData))));
-                    if(confirm("DADOS RECEBIDOS! Deseja atualizar este celular com as informações do outro?")) {
+                    if(confirm("SINCRONIZAR DISPOSITIVOS?\nIsso atualizará este celular com os dados recebidos.")) {
                         inventory = decoded;
                         saveAndRender();
                         window.history.replaceState({}, document.title, window.location.pathname);
                     }
-                } catch(e) { alert("Erro ao ler dados."); }
+                } catch(e) { console.error("Erro no Sync."); }
             }
         }
 
         function saveAndRender() {
-            localStorage.setItem('ap2209_v45', JSON.stringify(inventory));
+            localStorage.setItem('ap2209_master_v46', JSON.stringify(inventory));
             const body = document.getElementById('inventory-body');
             body.innerHTML = '';
             let total = 0;
-            
             inventory.forEach(item => {
                 const sub = item.qty * item.price;
                 total += sub;
                 const tr = document.createElement('tr');
                 tr.className = `item-row ${item.bought ? 'item-bought' : ''}`;
+                tr.onclick = () => toggle(item.id);
                 tr.innerHTML = `
-                    <td class="p-3" onclick="toggle(${item.id})">
-                        <div class="font-black uppercase text-[10px]">${item.desc}</div>
-                        <div class="text-[8px] text-slate-400">R$ ${item.price.toFixed(2)} / un</div>
+                    <td class="p-4">
+                        <div class="font-black uppercase text-[10px] text-slate-800">${item.desc}</div>
+                        <div class="text-[8px] text-slate-400">Prysmian / Schneider / Docol</div>
                     </td>
-                    <td class="p-3 text-center font-black">${item.qty}</td>
-                    <td class="p-3 text-right font-mono font-black">R$ ${sub.toFixed(2)}</td>
+                    <td class="p-4 text-center font-black">${item.qty}</td>
+                    <td class="p-4 text-right font-mono font-black text-blue-900">R$ ${sub.toFixed(2)}</td>
                 `;
                 body.appendChild(tr);
             });
@@ -185,11 +221,11 @@
         }
 
         function addItem() {
-            const d = prompt("Nome do Material:");
+            const d = prompt("Descrição:");
             const q = parseFloat(prompt("Quantidade:", "1"));
-            const p = parseFloat(prompt("Preço Unitário:", "0"));
+            const p = parseFloat(prompt("Preço:", "0"));
             if(d && q) {
-                inventory.push({id: Date.now(), desc: d, qty: q, price: p, bought: false});
+                inventory.unshift({id: Date.now(), desc: d, qty: q, price: p, bought: false});
                 saveAndRender();
             }
         }
