@@ -3,26 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="AP 2209">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2942/2942544.png">
-    
-    <title>AP 2209 - ENGENHARIA TOTAL V22</title>
+    <title>AP 2209 - ENGENHARIA TOTAL V23</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; font-size: 10px; -webkit-tap-highlight-color: transparent; }
-        .tab-active { background-color: #1e40af !important; color: white !important; transform: scale(1.02); box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3); }
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; font-size: 10px; }
+        .tab-active { background-color: #1e40af !important; color: white !important; transform: scale(1.02); }
         .header-master { background: #0f172a; border-bottom: 4px solid #2563eb; border-radius: 0 0 24px 24px; }
-        .card-ponto { border-left: 6px solid #2563eb; border-radius: 16px; padding: 18px; background: white; margin-bottom: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .card-ponto { border-left: 6px solid #2563eb; border-radius: 16px; padding: 18px; background: white; margin-bottom: 12px; }
         .row-purchased { opacity: 0.3; filter: grayscale(1); text-decoration: line-through; background-color: #f8fafc !important; }
-        .memorial-section { border-left: 5px solid #1e40af; background: white; padding: 20px; border-radius: 16px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .tag-cor { padding: 4px 10px; border-radius: 6px; color: white; font-weight: 900; font-size: 8px; text-transform: uppercase; border: 1px solid rgba(0,0,0,0.1); display: inline-block; margin: 2px 0; }
+        .tag-cor { padding: 4px 10px; border-radius: 6px; color: white; font-weight: 900; font-size: 8px; text-transform: uppercase; display: inline-block; }
         
         @media (min-width: 1280px) {
             .main-content { margin-right: 280px !important; }
@@ -39,19 +32,19 @@
 <body class="pb-24">
 
     <div id="qr-panel" class="no-print">
-        <p class="font-black text-[11px] uppercase mb-4 text-slate-800 tracking-tighter italic">📲 LEVAR PARA O IPHONE</p>
+        <p class="font-black text-[11px] uppercase mb-4 text-slate-800 italic">📲 SINCRONIZAR PROJETO</p>
         <div id="qrcode" class="flex justify-center mb-4"></div>
-        <button onclick="copyToClipboard()" class="w-full bg-emerald-500 text-white py-3 rounded-xl font-black text-[8px] uppercase shadow-md active:scale-95 transition-all">
-            COPIAR LINK WHATSAPP
+        <button onclick="syncData()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-black text-[8px] uppercase shadow-md mb-2">
+            GERAR LINK DE ATUALIZAÇÃO
         </button>
-        <p class="text-[7px] mt-4 text-slate-400 font-bold uppercase italic leading-tight px-2">Engenharia Digital AP 2209</p>
+        <p class="text-[7px] text-slate-400 font-bold uppercase italic">Clique para atualizar os dados nos outros celulares</p>
     </div>
 
-    <header class="header-master text-white p-6 mb-6 shadow-2xl mx-1 main-content">
+    <header class="header-master text-white p-6 mb-6 main-content">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <div>
-                <h1 class="text-3xl font-black italic tracking-tighter text-blue-400 uppercase leading-none">AP 2209 MASTER</h1>
-                <p class="text-[8px] font-bold uppercase tracking-[0.4em] opacity-60 mt-3">Engenharia Trifásica • Vercel Pro 2026</p>
+                <h1 class="text-3xl font-black italic tracking-tighter text-blue-400 uppercase">AP 2209 MASTER</h1>
+                <p class="text-[8px] font-bold uppercase opacity-60">Suprimentos e Engenharia 2026</p>
             </div>
             <div class="flex gap-6">
                 <div class="text-right border-r border-slate-700 pr-6">
@@ -59,7 +52,7 @@
                     <p id="total-geral" class="text-lg font-mono font-bold">R$ 0,00</p>
                 </div>
                 <div class="text-right">
-                    <p class="text-[7px] font-black text-emerald-400 uppercase">Total Pago</p>
+                    <p class="text-[7px] font-black text-emerald-400 uppercase">Pago</p>
                     <p id="total-pago" class="text-lg font-mono font-bold text-emerald-400">R$ 0,00</p>
                 </div>
             </div>
@@ -67,117 +60,85 @@
     </header>
 
     <div class="max-w-6xl mx-auto px-4 main-content">
-        
-        <nav class="flex gap-2 mb-6 no-print overflow-x-auto pb-2">
-            <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 min-w-[120px] py-5 rounded-2xl font-black text-[9px] uppercase bg-white text-slate-400 shadow-sm tab-active transition-all">1. Orçamento (15 Itens)</button>
-            <button onclick="switchTab('eletrica')" id="btn-eletrica" class="flex-1 min-w-[120px] py-5 rounded-2xl font-black text-[9px] uppercase bg-white text-slate-400 shadow-sm transition-all">2. Memorial Técnico</button>
-            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 min-w-[120px] py-5 rounded-2xl font-black text-[9px] uppercase bg-white text-slate-400 shadow-sm transition-all">3. Mapa de Pontos</button>
+        <nav class="flex gap-2 mb-6 overflow-x-auto pb-2">
+            <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 min-w-[120px] py-5 rounded-2xl font-black text-[9px] uppercase bg-white text-slate-400 shadow-sm tab-active">1. Lista de Compras</button>
+            <button onclick="switchTab('eletrica')" id="btn-eletrica" class="flex-1 min-w-[120px] py-5 rounded-2xl font-black text-[9px] uppercase bg-white text-slate-400 shadow-sm">2. Memorial Técnico</button>
+            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 min-w-[120px] py-5 rounded-2xl font-black text-[9px] uppercase bg-white text-slate-400 shadow-sm">3. Mapa de Pontos</button>
         </nav>
 
         <div id="view-planilha" class="space-y-4">
-            <button onclick="addItem()" class="w-full bg-blue-600 text-white py-5 rounded-2xl font-black text-[11px] uppercase shadow-lg hover:bg-blue-700 active:scale-95 transition-all">+ Novo Item</button>
             <div class="bg-white rounded-[32px] shadow-xl border border-slate-200 p-4 overflow-hidden">
                 <table class="w-full text-left border-separate border-spacing-y-2">
+                    <thead>
+                        <tr class="text-[8px] font-black uppercase text-slate-400">
+                            <th class="px-4">Status</th>
+                            <th class="px-4">Especificação do Produto (Item por Item)</th>
+                            <th class="px-4 text-center">Qtd</th>
+                            <th class="px-4 text-right">Subtotal</th>
+                        </tr>
+                    </thead>
                     <tbody id="inventory-body"></tbody>
                 </table>
             </div>
         </div>
 
         <div id="view-eletrica" class="hidden space-y-5">
-            <div class="memorial-section" style="border-left-color: #10b981;">
-                <h3 class="font-black text-emerald-700 mb-4 uppercase text-[12px] border-b pb-2">🌍 Sistema de Aterramento (TN-S)</h3>
+            <div class="memorial-section" style="border-left: 5px solid #10b981; background:white; padding:20px; border-radius:16px;">
+                <h3 class="font-black text-emerald-700 mb-4 uppercase text-[12px] border-b pb-2">🌍 Aterramento e Equipotencialização</h3>
                 <p class="text-[10px] text-slate-600 leading-relaxed italic mb-3">
-                    Conforme NBR 5410, o sistema adota o esquema TN-S. O condutor de proteção (VERDE) deve ser contínuo em toda a instalação, sem interrupções por chaves ou fusíveis.
+                    Sistema <strong>TN-S</strong>: O condutor de proteção (Verde) deve ser exclusivo. No QDC, instalar o Barramento de Terra conectado à malha do prédio.
                 </p>
-                <ul class="text-[9px] font-black text-slate-700 space-y-1 uppercase">
-                    <li>• BARRAMENTO DE EQUIPOTENCIALIZAÇÃO (BEP) LOCALIZADO NO QDC.</li>
-                    <li>• CONEXÃO DE TODAS AS MASSAS METÁLICAS À MALHA DE TERRA.</li>
-                    <li>• RESISTÊNCIA DE ATERRAMENTO ALVO: < 10 OHMS.</li>
-                </ul>
                 
             </div>
-
-            <div class="memorial-section">
-                <h3 class="font-black text-blue-700 mb-4 uppercase text-[12px] border-b pb-2">⚡ Padrão de Cores e Fases</h3>
-                <div class="grid grid-cols-2 gap-2 text-[9px] font-black uppercase mb-4">
-                    <div class="bg-black text-white p-4 rounded-xl text-center shadow-md">Fase R: Preto</div>
-                    <div class="bg-red-600 text-white p-4 rounded-xl text-center shadow-md">Fase S: Vermelho</div>
-                    <div class="bg-white border-2 border-slate-200 text-slate-900 p-4 rounded-xl text-center shadow-md">Fase T: Branco</div>
-                    <div class="bg-blue-600 text-white p-4 rounded-xl text-center shadow-md">Neutro: Azul</div>
-                </div>
             </div>
-
-            <div class="memorial-section" style="border-left-color: #000;">
-                <h3 class="font-black text-slate-900 mb-2 uppercase text-[11px]">🛠️ Infraestrutura e Acabamento</h3>
-                <p class="text-[10px] text-slate-600 leading-relaxed italic">
-                    Uso de terminais ilhós e crimpagem hexagonal Schneider. Nivelamento a laser de todas as caixas. Flushing preventivo na rede hidráulica Docol. Passagem de guia de aço em conduítes CAT6.
-                </p>
-            </div>
-        </div>
 
         <div id="view-pontos" class="hidden space-y-4">
-            <h2 class="text-xs font-black uppercase border-b-4 border-blue-600 pb-2 mb-6 italic tracking-tighter">Distribuição Técnica e Metragens</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="card-ponto" style="border-left-color: #fbbf24;">
-                    <p class="font-black text-[12px] text-amber-500 uppercase border-b pb-2 mb-3">💡 Iluminação (Circuitos e Retornos)</p>
-                    <div class="space-y-2 text-[10px] font-bold">
-                        <div class="flex justify-between"><span><span class="tag-cor bg-white border border-slate-300 text-slate-900">Fase T</span> 1,5mm²:</span> <span>45m</span></div>
-                        <div class="flex justify-between"><span><span class="tag-cor bg-blue-600">Neutro</span> 1,5mm²:</span> <span>45m</span></div>
-                        <div class="flex justify-between"><span><span class="tag-cor bg-amber-400">Retornos</span> 1,5mm²:</span> <span>80m (Amarelo/Branco)</span></div>
-                        <div class="flex justify-between border-t pt-1"><span><span class="tag-cor bg-emerald-600">Terra</span> 1,5mm²:</span> <span>45m</span></div>
-                    </div>
-                </div>
-
-                <div class="card-ponto" style="border-left-color: #ef4444;">
-                    <p class="font-black text-[12px] text-red-600 uppercase border-b pb-2 mb-3">🚿 Chuveiro Master (220V)</p>
-                    <div class="space-y-2 text-[10px] font-bold">
-                        <div class="flex justify-between"><span><span class="tag-cor bg-black">Fase R</span> 6,0mm²:</span> <span>15m</span></div>
-                        <div class="flex justify-between"><span><span class="tag-cor bg-red-600">Fase S</span> 6,0mm²:</span> <span>15m</span></div>
-                        <div class="flex justify-between border-t pt-1"><span><span class="tag-cor bg-emerald-600">Terra</span> 6,0mm²:</span> <span>15m</span></div>
-                    </div>
-                </div>
-
-                <div class="card-ponto" style="border-left-color: #f97316;">
-                    <p class="font-black text-[12px] text-orange-600 uppercase border-b pb-2 mb-3">🔥 Torre Quente (220V)</p>
-                    <div class="space-y-2 text-[10px] font-bold">
-                        <div class="flex justify-between"><span><span class="tag-cor bg-red-600">Fase S</span> 4,0mm²:</span> <span>12m</span></div>
-                        <div class="flex justify-between"><span><span class="tag-cor bg-white border border-slate-300 text-slate-900">Fase T</span> 4,0mm²:</span> <span>12m</span></div>
-                        <div class="flex justify-between border-t pt-1"><span><span class="tag-cor bg-emerald-600">Terra</span> 4,0mm²:</span> <span>12m</span></div>
-                    </div>
-                </div>
-
-                <div class="card-ponto" style="border-left-color: #3b82f6;">
-                    <p class="font-black text-[12px] text-blue-600 uppercase border-b pb-2 mb-3">🔌 Tomadas TUG (127V)</p>
-                    <div class="space-y-2 text-[10px] font-bold">
-                        <div class="flex justify-between"><span><span class="tag-cor bg-black">Fase R</span> 2,5mm²:</span> <span>60m</span></div>
-                        <div class="flex justify-between"><span><span class="tag-cor bg-blue-600">Neutro</span> 2,5mm²:</span> <span>60m</span></div>
-                        <div class="flex justify-between border-t pt-1"><span><span class="tag-cor bg-emerald-600">Terra</span> 2,5mm²:</span> <span>60m</span></div>
-                    </div>
-                </div>
             </div>
-            
-        </div>
     </div>
 
     <script>
-        let inventory = [
-            { id: 1, desc: "Cabo Prysmian 6,0mm² (Preto/Verm/Verde)", qty: 45, price: 9.80, cat: "Elet", bought: false },
-            { id: 2, desc: "Cabo Prysmian 4,0mm² (Verm/Branco/Verde)", qty: 36, price: 6.50, cat: "Elet", bought: false },
-            { id: 3, desc: "Cabo Prysmian 2,5mm² VERDE (Terra)", qty: 100, price: 4.50, cat: "Elet", bought: true },
-            { id: 4, desc: "Cabo Prysmian 2,5mm² PRETO (Fase R)", qty: 100, price: 4.20, cat: "Elet", bought: false },
-            { id: 5, desc: "Cabo Prysmian 2,5mm² AZUL (Neutro)", qty: 100, price: 4.20, cat: "Elet", bought: false },
-            { id: 6, desc: "Cabo Prysmian 1,5mm² (Amarelo/Branco/Azul)", qty: 120, price: 2.80, cat: "Elet", bought: false },
-            { id: 7, desc: "IDR Schneider 4P 40A 30mA", qty: 1, price: 295.00, cat: "Elet", bought: false },
-            { id: 8, desc: "DPS Schneider 20kA 275V", qty: 3, price: 145.00, cat: "Elet", bought: false },
-            { id: 9, desc: "Disjuntor Bipolar 40A Schneider (Chuveiro)", qty: 1, price: 72.00, cat: "Elet", bought: false },
-            { id: 10, desc: "Módulo Tomada 10A Schneider Orion (x35)", qty: 35, price: 18.90, cat: "Elet", bought: false },
-            { id: 11, desc: "Caixa 4x4 Amarela Reforçada (x12)", qty: 12, price: 7.80, cat: "Infra", bought: true },
-            { id: 12, desc: "Caixa 4x2 Amarela Reforçada (x26)", qty: 26, price: 4.80, cat: "Infra", bought: true },
-            { id: 13, desc: "Torneira Cozinha Gourmet Docol", qty: 1, price: 920.00, cat: "Hidr", bought: false },
-            { id: 14, desc: "Conector Wago 221-612 (Original)", qty: 10, price: 8.50, cat: "Elet", bought: false },
-            { id: 15, desc: "Quadro Schneider 36 DIN Completo", qty: 1, price: 310.00, cat: "Infra", bought: false }
+        // LISTA DE COMPRAS DETALHADA ITEM POR ITEM
+        const defaultInventory = [
+            { id: 1, desc: "Cabo Prysmian Superastic Flex 6,0mm² 750V (Cores: Preto/Verm/Verde)", qty: 45, price: 9.80, cat: "Elet", bought: false },
+            { id: 2, desc: "Cabo Prysmian Superastic Flex 4,0mm² 750V (Cores: Verm/Branco/Verde)", qty: 36, price: 6.50, cat: "Elet", bought: false },
+            { id: 3, desc: "Cabo Prysmian 2,5mm² 750V VERDE (Proteção/Terra)", qty: 100, price: 4.50, cat: "Elet", bought: true },
+            { id: 4, desc: "Cabo Prysmian 2,5mm² 750V PRETO (Fase R)", qty: 100, price: 4.20, cat: "Elet", bought: false },
+            { id: 5, desc: "Cabo Prysmian 2,5mm² 750V AZUL (Neutro)", qty: 100, price: 4.20, cat: "Elet", bought: false },
+            { id: 6, desc: "Cabo Prysmian 1,5mm² (Amarelo/Branco/Azul) - Iluminação", qty: 120, price: 2.80, cat: "Elet", bought: false },
+            { id: 7, desc: "Interruptor Diferencial Residual (IDR) Schneider Easy9 4P 40A 30mA", qty: 1, price: 295.00, cat: "Elet", bought: false },
+            { id: 8, desc: "Dispositivo de Proteção Contra Surtos (DPS) Schneider 20kA 275V", qty: 3, price: 145.00, cat: "Elet", bought: false },
+            { id: 9, desc: "Disjuntor Bipolar 40A Schneider Easy9 (Curva B - Chuveiro)", qty: 1, price: 72.00, cat: "Elet", bought: false },
+            { id: 10, desc: "Módulo Tomada 2P+T 10A Schneider Orion Branco (x35 unidades)", qty: 35, price: 18.90, cat: "Elet", bought: false },
+            { id: 11, desc: "Caixa de Passagem 4x4 Amarela Reforçada (Instalação laser)", qty: 12, price: 7.80, cat: "Infra", bought: true },
+            { id: 12, desc: "Caixa de Passagem 4x2 Amarela Reforçada (Instalação laser)", qty: 26, price: 4.80, cat: "Infra", bought: true },
+            { id: 13, desc: "Torneira Cozinha Monocomando Docol Gourmet (Acabamento Cromado)", qty: 1, price: 920.00, cat: "Hidr", bought: false },
+            { id: 14, desc: "Conector de Emenda Wago 221-612 (Original - p/ cabos 6mm²)", qty: 10, price: 8.50, cat: "Elet", bought: false },
+            { id: 15, desc: "Quadro de Distribuição Schneider 36 Módulos DIN (Embutir)", qty: 1, price: 310.00, cat: "Infra", bought: false }
         ];
+
+        let inventory = JSON.parse(localStorage.getItem('ap2209_data')) || defaultInventory;
+
+        // FUNÇÃO DE SINCRONISMO: Gera um link com os dados atuais codificados
+        function syncData() {
+            const dataStr = btoa(JSON.stringify(inventory));
+            const syncUrl = window.location.origin + window.location.pathname + '?data=' + dataStr;
+            navigator.clipboard.writeText(syncUrl);
+            alert("LINK DE ATUALIZAÇÃO GERADO!\n\nEnvie este link para os outros celulares. Ao abrirem, os dados deles serão atualizados com os seus.");
+        }
+
+        // Verifica se há dados novos na URL ao abrir
+        function checkUrlUpdates() {
+            const params = new URLSearchParams(window.location.search);
+            const syncData = params.get('data');
+            if(syncData) {
+                if(confirm("Deseja atualizar este celular com os novos dados recebidos?")) {
+                    inventory = JSON.parse(atob(syncData));
+                    localStorage.setItem('ap2209_data', JSON.stringify(inventory));
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    render();
+                }
+            }
+        }
 
         function render() {
             const body = document.getElementById('inventory-body');
@@ -191,26 +152,22 @@
                 row.innerHTML = `
                     <td class="p-4 w-12 text-center"><input type="checkbox" ${item.bought?'checked':''} onchange="toggle(${item.id})" class="w-7 h-7 accent-blue-600"></td>
                     <td class="p-4">
-                        <div class="font-black text-[12px] uppercase text-slate-800 leading-tight">${item.desc}</div>
-                        <span class="text-blue-500 text-[7px] font-black uppercase tracking-widest">${item.cat}</span>
+                        <div class="font-black text-[10px] uppercase text-slate-800 leading-tight">${item.desc}</div>
+                        <span class="text-blue-500 text-[7px] font-black uppercase">${item.cat}</span>
                     </td>
                     <td class="p-4 text-center font-black text-slate-600 text-[11px]">${item.qty}</td>
                     <td class="p-4 text-right font-mono font-black text-blue-900 text-[11px]">R$ ${sub.toFixed(2)}</td>
-                    <td class="p-4 text-center"><button onclick="remove(${item.id})" class="text-slate-300 hover:text-red-500 font-black text-3xl px-2">✕</button></td>
                 `;
                 body.appendChild(row);
             });
             document.getElementById('total-geral').innerText = `R$ ${totalG.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
             document.getElementById('total-pago').innerText = `R$ ${totalP.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            localStorage.setItem('ap2209_data', JSON.stringify(inventory));
         }
 
-        function toggle(id) { const i = inventory.find(x => x.id === id); i.bought = !i.bought; render(); }
-        function remove(id) { if(confirm("Remover?")) { inventory = inventory.filter(x => x.id !== id); render(); } }
-        function addItem() {
-            const d = prompt("Material:"); if(!d) return;
-            const q = parseFloat(prompt("Qtd:", "1"));
-            const p = parseFloat(prompt("Preço:", "0"));
-            inventory = [{id: Date.now(), desc: d, qty: q, price: p, cat: "EXTRA", bought: false}, ...inventory];
+        function toggle(id) {
+            const i = inventory.find(x => x.id === id);
+            i.bought = !i.bought;
             render();
         }
 
@@ -219,20 +176,14 @@
                 document.getElementById('view-' + tab).classList.toggle('hidden', t !== tab);
                 document.getElementById('btn-' + tab).classList.toggle('tab-active', t === tab);
             });
-            window.scrollTo(0, 0);
-        }
-
-        function copyToClipboard() {
-            navigator.clipboard.writeText(window.location.href);
-            alert("✅ Link copiado! Envie agora para o WhatsApp.");
         }
 
         window.onload = function() {
+            checkUrlUpdates();
             new QRCode(document.getElementById("qrcode"), {
                 text: window.location.href,
                 width: 170, height: 170,
-                colorDark : "#0f172a", colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
+                colorDark : "#0f172a", colorLight : "#ffffff"
             });
             render();
         };
