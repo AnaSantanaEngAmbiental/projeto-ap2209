@@ -3,52 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MASTER PLAN AP 2209</title>
+    <title>AP 2209 - ENGENHARIA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; font-size: 10px; } /* Fonte reduzida */
+        body { font-family: 'Inter', sans-serif; font-size: 10px; }
         .tab-active { background-color: #1e40af !important; color: white !important; }
-        .row-purchased { opacity: 0.4; filter: grayscale(1); background-color: #f8fafc !important; }
-        .row-purchased td { text-decoration: line-through; }
-        input[type=number]::-webkit-inner-spin-button { display: none; }
-        @media print { .no-print { display: none !important; } }
+        .row-purchased { opacity: 0.4; filter: grayscale(1); background-color: #f8fafc !important; text-decoration: line-through; }
+        .card-memorial { border-left: 4px solid #1e40af; background: #f1f5f9; padding: 10px; border-radius: 8px; margin-bottom: 8px; }
     </style>
 </head>
 <body class="bg-slate-100 min-h-screen text-slate-800">
 
-    <div class="max-w-5xl mx-auto p-2 md:p-4">
-        <header class="bg-slate-900 text-white p-4 rounded-2xl shadow-xl mb-4 border-b-4 border-blue-700 flex justify-between items-center">
+    <div class="max-w-4xl mx-auto p-2">
+        <header class="bg-slate-900 text-white p-4 rounded-xl shadow-lg mb-2 flex justify-between items-center">
             <div>
-                <h1 class="text-xl font-black italic uppercase tracking-tighter text-blue-400 leading-none">AP 2209 MASTER</h1>
-                <p class="text-[7px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">Controle de Suprimentos 2026</p>
+                <h1 class="text-lg font-black italic text-blue-400 uppercase leading-none">AP 2209 DASH</h1>
+                <p class="text-[7px] font-bold text-slate-400 uppercase tracking-widest mt-1">Master Plan 2026</p>
             </div>
-            <div class="bg-slate-800 p-2 px-4 rounded-xl border border-slate-700 text-right">
-                <p class="text-[6px] font-black text-blue-400 uppercase">Investimento Total</p>
+            <div class="text-right">
+                <p class="text-[6px] font-black text-blue-400 uppercase">Total Orçado</p>
                 <p id="total-geral" class="text-sm font-mono font-bold text-white">R$ 0,00</p>
             </div>
         </header>
 
-        <div class="flex gap-2 mb-4 no-print">
-            <div class="flex bg-white p-1 rounded-xl shadow-sm flex-1 font-black text-[8px] uppercase tracking-widest">
-                <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 py-2 rounded-lg tab-active transition-all">Orçamento (15 Itens)</button>
-                <button onclick="switchTab('eletrica')" id="btn-eletrica" class="flex-1 py-2 rounded-lg text-slate-400 transition-all">Memorial Técnico</button>
-            </div>
-            <button onclick="addItem()" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-black text-[8px] uppercase shadow-lg hover:bg-blue-700 transition-all">+ Novo Item</button>
+        <div class="flex gap-1 mb-2">
+            <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 py-2 rounded-lg font-black text-[8px] uppercase tab-active">1. Orçamento</button>
+            <button onclick="switchTab('eletrica')" id="btn-eletrica" class="flex-1 py-2 rounded-lg font-black text-[8px] uppercase bg-white text-slate-400">2. Memorial Técnico</button>
+            <button onclick="addItem()" class="px-3 bg-blue-600 text-white rounded-lg font-black text-[12px] shadow-md">+</button>
         </div>
 
-        <div id="content" class="bg-white rounded-2xl shadow-xl p-3 md:p-6 border border-slate-200">
+        <div id="content" class="bg-white rounded-xl shadow-md p-2 border border-slate-200">
+            
             <div id="view-planilha">
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left border-separate border-spacing-y-1">
+                    <table class="w-full text-left">
                         <thead>
-                            <tr class="text-[7px] font-black uppercase text-slate-400 italic">
-                                <th class="px-2">OK</th>
-                                <th class="px-2">Especificação Técnica</th>
-                                <th class="px-2 text-center">Qtd</th>
-                                <th class="px-2 text-center">Unit R$</th>
-                                <th class="px-2 text-center text-blue-600">Total</th>
-                                <th class="px-2 text-center">Ação</th>
+                            <tr class="text-[7px] font-black uppercase text-slate-400 border-b">
+                                <th class="p-1">OK</th>
+                                <th class="p-1">Item / Especificação</th>
+                                <th class="p-1 text-center">Qtd</th>
+                                <th class="p-1 text-right text-blue-600">Total</th>
                             </tr>
                         </thead>
                         <tbody id="inventory-body"></tbody>
@@ -56,59 +51,70 @@
                 </div>
             </div>
 
-            <div id="view-eletrica" class="hidden space-y-4 p-4 text-[9px]">
-                <div class="bg-blue-600 text-white p-4 rounded-xl font-bold italic uppercase">
-                    Atenção: Uso mandatório de terminais ilhós e crimpagem hexagonal para cabos Prysmian.
+            <div id="view-eletrica" class="hidden space-y-3 p-2">
+                <h2 class="text-[10px] font-black uppercase border-b-2 border-blue-600 pb-1">Diretrizes de Engenharia</h2>
+                
+                <div class="card-memorial">
+                    <h3 class="font-black text-blue-700 uppercase mb-1">⚡ Elétrica: Padrão Prysmian</h3>
+                    <p class="leading-tight text-slate-600">Uso de cabos <strong>Prysmian Flex 750V</strong>. A identificação das fases é rigorosa:</p>
+                    <div class="grid grid-cols-2 gap-1 mt-2 text-[8px] font-bold uppercase">
+                        <div class="bg-black text-white p-1 rounded text-center">Fase R: Preto</div>
+                        <div class="bg-red-600 text-white p-1 rounded text-center">Fase S: Vermelho</div>
+                        <div class="bg-white border border-blue-600 text-blue-600 p-1 rounded text-center">Fase T: Branco</div>
+                        <div class="bg-blue-600 text-white p-1 rounded text-center">Neutro: Azul</div>
+                    </div>
                 </div>
-                <div class="grid grid-cols-3 gap-2 font-black text-center uppercase">
-                    <div class="p-2 border border-black rounded">Fase R: Preto</div>
-                    <div class="p-2 border border-red-600 text-red-600 rounded">Fase S: Vermelho</div>
-                    <div class="p-2 border-2 border-blue-600 text-blue-600 rounded underline">Fase T: Branco</div>
+
+                <div class="card-memorial" style="border-left-color: #000;">
+                    <h3 class="font-black uppercase mb-1">🛠️ Conectividade: Hexagonal</h3>
+                    <p class="leading-tight text-slate-600">Proibido emendas simples. Utilizar <strong>terminais ilhós tubulares</strong> com compressão <strong>Hexagonal</strong> em todos os bornes Schneider e Wago para garantir 100% de contato.</p>
+                    
+                </div>
+
+                <div class="card-memorial" style="border-left-color: #10b981;">
+                    <h3 class="font-black text-emerald-700 uppercase mb-1">🚰 Hidráulica: Padrão Docol</h3>
+                    <p class="leading-tight text-slate-600">Instalação de monocomandos <strong>Docol Gourmet</strong>. Verificar MCA (Pressão) antes do fechamento. Uso obrigatório de vedações cerâmicas originais para garantia vitalícia.</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // LISTA COMPLETA COM 15 ITENS
         let inventory = [
-            { id: 1, desc: "Cabo Prysmian Flex 2,5mm² BRANCO (Fase T)", qty: 100, price: 4.20, cat: "Elet" },
-            { id: 2, desc: "Cabo Prysmian Flex 2,5mm² PRETO (Fase R)", qty: 100, price: 4.20, cat: "Elet" },
-            { id: 3, desc: "Cabo Prysmian Flex 2,5mm² VERMELHO (Fase S)", qty: 100, price: 4.20, cat: "Elet" },
-            { id: 4, desc: "Cabo Prysmian Flex 2,5mm² AZUL (Neutro)", qty: 100, price: 4.20, cat: "Elet" },
-            { id: 5, desc: "Cabo Prysmian Flex 2,5mm² VERDE (Terra)", qty: 100, price: 4.20, cat: "Elet" },
+            { id: 1, desc: "Cabo Prysmian 2,5mm² BRANCO (Fase T)", qty: 100, price: 4.20, cat: "Elet" },
+            { id: 2, desc: "Cabo Prysmian 2,5mm² PRETO (Fase R)", qty: 100, price: 4.20, cat: "Elet" },
+            { id: 3, desc: "Cabo Prysmian 2,5mm² VERMELHO (Fase S)", qty: 100, price: 4.20, cat: "Elet" },
+            { id: 4, desc: "Cabo Prysmian 2,5mm² AZUL (Neutro)", qty: 100, price: 4.20, cat: "Elet" },
+            { id: 5, desc: "Cabo Prysmian 2,5mm² VERDE (Terra)", qty: 100, price: 4.20, cat: "Elet" },
             { id: 6, desc: "Torneira Cozinha Gourmet Docol", qty: 1, price: 980.00, cat: "Hidr" },
-            { id: 7, desc: "Caixa de Embutir 4x4 Reforçada Amarela", qty: 15, price: 6.80, cat: "Infra" },
-            { id: 8, desc: "Terminal Ilhós Tubular 2,5mm² (100un)", qty: 2, price: 25.00, cat: "Elet" },
+            { id: 7, desc: "Caixa 4x4 Reforçada Amarela", qty: 15, price: 6.80, cat: "Infra" },
+            { id: 8, desc: "Pack Terminal Ilhós 2,5mm²", qty: 2, price: 25.00, cat: "Elet" },
             { id: 9, desc: "Disjuntor Schneider Bipolar 32A", qty: 2, price: 85.00, cat: "Elet" },
-            { id: 10, desc: "Conector Wago 221-413 (50un)", qty: 1, price: 115.00, cat: "Elet" },
-            { id: 11, desc: "Quadro de Distribuição Schneider 36 DIN", qty: 1, price: 295.00, cat: "Infra" },
-            { id: 12, desc: "Misturador Banheiro Monocomando Docol", qty: 2, price: 450.00, cat: "Hidr" },
-            { id: 13, desc: "Eletroduto Corrugado 3/4 (50m)", qty: 1, price: 98.00, cat: "Infra" },
-            { id: 14, desc: "Placa 4x4 3 Postos Schneider Orion", qty: 12, price: 14.50, cat: "Elet" },
-            { id: 15, desc: "Válvula de Escoamento Docol Click", qty: 3, price: 85.00, cat: "Hidr" }
+            { id: 10, desc: "Conector Wago 221-413", qty: 1, price: 115.00, cat: "Elet" },
+            { id: 11, desc: "Quadro Schneider 36 DIN", qty: 1, price: 295.00, cat: "Infra" },
+            { id: 12, desc: "Misturador Banheiro Docol", qty: 2, price: 450.00, cat: "Hidr" },
+            { id: 13, desc: "Eletroduto Corrugado 3/4", qty: 1, price: 98.00, cat: "Infra" },
+            { id: 14, desc: "Placa 4x4 Schneider Orion", qty: 12, price: 14.50, cat: "Elet" },
+            { id: 15, desc: "Válvula Docol Click", qty: 3, price: 85.00, cat: "Hidr" }
         ].map(i => ({...i, bought: false}));
 
         function render() {
             const body = document.getElementById('inventory-body');
             body.innerHTML = '';
             let total = 0;
-
             inventory.forEach(item => {
                 const sub = item.qty * item.price;
                 total += sub;
                 const row = document.createElement('tr');
-                row.className = `transition-all border-b border-slate-50 ${item.bought ? 'row-purchased' : 'hover:bg-blue-50/30'}`;
+                row.className = `border-b border-slate-50 ${item.bought ? 'row-purchased' : ''}`;
                 row.innerHTML = `
-                    <td class="px-2 py-1"><input type="checkbox" ${item.bought?'checked':''} onchange="toggle(${item.id})" class="w-3 h-3 cursor-pointer"></td>
-                    <td class="px-2 py-1">
-                        <div class="font-bold text-[9px] uppercase italic text-slate-700">${item.desc}</div>
+                    <td class="p-2"><input type="checkbox" ${item.bought?'checked':''} onchange="toggle(${item.id})" class="w-4 h-4"></td>
+                    <td class="p-1">
+                        <div class="font-bold text-[9px] uppercase">${item.desc}</div>
                         <span class="text-[6px] font-black text-blue-500 uppercase">${item.cat}</span>
                     </td>
-                    <td class="px-2 py-1 text-center font-bold">${item.qty}</td>
-                    <td class="px-2 py-1 text-center">R$ ${item.price.toFixed(2)}</td>
-                    <td class="px-2 py-1 text-center font-mono font-black text-blue-700">R$ ${sub.toFixed(2)}</td>
-                    <td class="px-2 py-1 text-center"><button onclick="remove(${item.id})" class="text-slate-300 hover:text-red-500 font-black text-[9px]">✕</button></td>
+                    <td class="p-1 text-center font-bold">${item.qty}</td>
+                    <td class="p-1 text-right font-mono font-black text-blue-700 text-[10px]">R$ ${sub.toFixed(2)}</td>
                 `;
                 body.appendChild(row);
             });
@@ -116,8 +122,7 @@
         }
 
         function toggle(id) { const i = inventory.find(x => x.id === id); i.bought = !i.bought; render(); }
-        function remove(id) { inventory = inventory.filter(x => x.id !== id); render(); }
-        function addItem() { inventory = [{id: Date.now(), desc: "NOVO MATERIAL ADICIONADO", qty: 1, price: 0, cat: "Geral", bought: false}, ...inventory]; render(); }
+        function addItem() { inventory = [{id: Date.now(), desc: "NOVO ITEM", qty: 1, price: 0, cat: "Geral", bought: false}, ...inventory]; render(); }
         function switchTab(t) {
             document.getElementById('view-planilha').classList.toggle('hidden', t !== 'planilha');
             document.getElementById('view-eletrica').classList.toggle('hidden', t !== 'eletrica');
