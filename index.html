@@ -3,31 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AP 2209 - ENGENHARIA TRIFÁSICA</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AP 2209">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2942/2942544.png">
+    
+    <title>AP 2209 - ENGENHARIA TRIFÁSICA MASTER</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; font-size: 10px; }
-        .tab-active { background-color: #1e40af !important; color: white !important; }
-        .header-master { background: #0f172a; border-bottom: 4px solid #2563eb; }
-        .card-ponto { border-left: 4px solid #2563eb; border-radius: 12px; padding: 12px; background: white; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .row-purchased { opacity: 0.35; filter: grayscale(1); text-decoration: line-through; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; font-size: 10px; -webkit-tap-highlight-color: transparent; }
+        .tab-active { background-color: #1e40af !important; color: white !important; transform: scale(1.02); }
+        .header-master { background: #0f172a; border-bottom: 4px solid #2563eb; border-radius: 0 0 20px 20px; }
+        .card-ponto { border-left: 5px solid #2563eb; border-radius: 12px; padding: 14px; background: white; margin-bottom: 12px; shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+        .row-purchased { opacity: 0.3; filter: grayscale(1); text-decoration: line-through; }
         .memorial-section { border-left: 4px solid #1e40af; background: white; padding: 15px; border-radius: 12px; margin-bottom: 12px; }
-        .tag-cor { padding: 2px 6px; border-radius: 4px; color: white; font-weight: 900; font-size: 7px; text-transform: uppercase; }
+        .tag-cor { padding: 3px 7px; border-radius: 5px; color: white; font-weight: 900; font-size: 8px; text-transform: uppercase; border: 1px solid rgba(0,0,0,0.1); }
+        @media print { .no-print { display: none !important; } }
     </style>
 </head>
 <body class="pb-10">
 
-    <header class="header-master text-white p-6 mb-4">
+    <header class="header-master text-white p-6 mb-4 shadow-2xl">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <div>
-                <h1 class="text-2xl font-black italic tracking-tighter text-blue-400 uppercase">AP 2209 MASTER</h1>
-                <p class="text-[7px] font-bold uppercase tracking-[0.4em] opacity-60">Rede Trifásica 220V (F+F) • Suprimentos 2026</p>
+                <h1 class="text-2xl font-black italic tracking-tighter text-blue-400 uppercase leading-none">AP 2209 MASTER</h1>
+                <p class="text-[7px] font-bold uppercase tracking-[0.4em] opacity-60 mt-2">Engenharia Trifásica 220V (F+F) • 2026</p>
             </div>
             <div class="flex gap-4">
                 <div class="text-right border-r border-slate-700 pr-4">
                     <p class="text-[6px] font-black text-slate-400 uppercase">Investimento</p>
-                    <p id="total-geral" class="text-sm font-mono font-bold">R$ 0,00</p>
+                    <p id="total-geral" class="text-sm font-mono font-bold text-white">R$ 0,00</p>
                 </div>
                 <div class="text-right">
                     <p class="text-[6px] font-black text-emerald-400 uppercase">Comprado</p>
@@ -37,17 +46,18 @@
         </div>
     </header>
 
-    <div class="max-w-6xl mx-auto px-2">
-        <nav class="flex gap-1 mb-4 no-print overflow-x-auto">
-            <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 min-w-[100px] py-4 rounded-2xl font-black text-[8px] uppercase bg-white text-slate-400 shadow-sm tab-active">1. Orçamento (15 Itens)</button>
-            <button onclick="switchTab('eletrica')" id="btn-eletrica" class="flex-1 min-w-[100px] py-4 rounded-2xl font-black text-[8px] uppercase bg-white text-slate-400 shadow-sm">2. Memorial Técnico</button>
-            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 min-w-[100px] py-4 rounded-2xl font-black text-[8px] uppercase bg-white text-slate-400 shadow-sm">3. Mapa de Pontos 220V</button>
+    <div class="max-w-6xl mx-auto px-3">
+        
+        <nav class="flex gap-1 mb-5 no-print overflow-x-auto pb-1">
+            <button onclick="switchTab('planilha')" id="btn-planilha" class="flex-1 min-w-[110px] py-4 rounded-2xl font-black text-[8px] uppercase bg-white text-slate-400 shadow-sm tab-active transition-all">1. Orçamento Ativo</button>
+            <button onclick="switchTab('eletrica')" id="btn-eletrica" class="flex-1 min-w-[110px] py-4 rounded-2xl font-black text-[8px] uppercase bg-white text-slate-400 shadow-sm transition-all">2. Memorial Técnico</button>
+            <button onclick="switchTab('pontos')" id="btn-pontos" class="flex-1 min-w-[110px] py-4 rounded-2xl font-black text-[8px] uppercase bg-white text-slate-400 shadow-sm transition-all">3. Mapa de Pontos 220V</button>
         </nav>
 
         <div id="view-planilha" class="space-y-3">
-            <button onclick="addItem()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-black text-[9px] uppercase shadow-lg hover:bg-blue-700">+ Adicionar Item</button>
-            <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-slate-200 p-2">
-                <table class="w-full text-left">
+            <button onclick="addItem()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-[10px] uppercase shadow-lg active:scale-95 transition-transform">+ Adicionar Material à Obra</button>
+            <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-2 overflow-hidden">
+                <table class="w-full text-left border-separate border-spacing-y-2">
                     <tbody id="inventory-body"></tbody>
                 </table>
             </div>
@@ -55,67 +65,67 @@
 
         <div id="view-eletrica" class="hidden space-y-4">
             <div class="memorial-section">
-                <h3 class="font-black text-blue-700 mb-2 uppercase text-[9px]">⚡ Configuração Bifásica (220V)</h3>
-                <p class="text-[9px] text-slate-600 mb-2 italic">Aparelhos 220V utilizam duas fases de 127V. <strong>Sem Neutro (Azul) nestes circuitos.</strong></p>
-                <div class="grid grid-cols-2 gap-1 text-[8px] font-bold uppercase">
-                    <div class="bg-black text-white p-2 rounded text-center">Fase R: Preto</div>
-                    <div class="bg-red-600 text-white p-2 rounded text-center">Fase S: Vermelho</div>
-                    <div class="bg-white border border-blue-600 text-blue-600 p-2 rounded text-center">Fase T: Branco</div>
-                    <div class="bg-emerald-600 text-white p-2 rounded text-center col-span-2">Terra: Verde (Sempre presente)</div>
+                <h3 class="font-black text-blue-700 mb-3 uppercase text-[10px]">⚡ Padrão de Fases AP 2209</h3>
+                <p class="text-[9px] text-slate-600 mb-3 leading-tight">Configuração Trifásica: 127V (Fase-Neutro). Aparelhos 220V utilizam duas fases **(Sem Neutro)**.</p>
+                <div class="grid grid-cols-2 gap-2 text-[8px] font-bold uppercase">
+                    <div class="bg-black text-white p-3 rounded-lg text-center">Fase R: Preto</div>
+                    <div class="bg-red-600 text-white p-3 rounded-lg text-center">Fase S: Vermelho</div>
+                    <div class="bg-white border-2 border-blue-600 text-blue-600 p-3 rounded-lg text-center">Fase T: Branco</div>
+                    <div class="bg-blue-600 text-white p-3 rounded-lg text-center">Neutro: Azul</div>
+                    <div class="bg-emerald-600 text-white p-3 rounded-lg text-center col-span-2">Terra: Verde (Obrigatório em 100% dos pontos)</div>
                 </div>
             </div>
 
-            <div class="memorial-section" style="border-left-color: #000;">
-                <h3 class="font-black text-slate-900 mb-1 uppercase text-[9px]">🛠️ Conectividade & Crimpagem</h3>
-                <p class="text-[9px] text-slate-600 leading-tight">Uso obrigatório de <strong>Terminais Ilhós Tubulares</strong> com compressão <strong>Hexagonal</strong>. Emendas em chuveiro apenas com <strong>Wago 221-612</strong> (alta temperatura).</p>
-                
+            <div class="memorial-section" style="border-left-color: #dc2626;">
+                <h3 class="font-black text-red-700 mb-2 uppercase text-[10px]">🛡️ Proteção & Segurança</h3>
+                <p class="text-[9px] text-slate-600 leading-tight">Uso obrigatório de **IDR 30mA Schneider** (Proteção humana) e **DPS Classe II** (Proteção contra surtos). Crimpagem Hexagonal obrigatória em todos os bornes.</p>
             </div>
 
             <div class="memorial-section" style="border-left-color: #0ea5e9;">
-                <h3 class="font-black text-sky-700 mb-1 uppercase text-[9px]">🚰 Hidráulica Docol</h3>
-                <p class="text-[9px] text-slate-600 leading-tight">Monocomandos <strong>Docol Gourmet</strong>. Instalação com flexíveis originais. Garantia vitalícia Docol vinculada à limpeza prévia da rede.</p>
+                <h3 class="font-black text-sky-700 mb-2 uppercase text-[10px]">🚰 Hidráulica Docol</h3>
+                <p class="text-[9px] text-slate-600 leading-tight">Metais **Docol Gourmet**. Realizar limpeza de tubulação (expurgar ar e resíduos) antes da instalação dos cartuchos cerâmicos.</p>
             </div>
+            
         </div>
 
         <div id="view-pontos" class="hidden space-y-4">
-            <h2 class="text-xs font-black uppercase border-b-2 border-blue-600 pb-1 italic">Distribuição de Carga Trifásica</h2>
+            <h2 class="text-xs font-black uppercase border-b-4 border-blue-600 pb-1 mb-4 italic">Mapa de Carga e Metragem</h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div class="card-ponto">
-                    <p class="font-black text-[10px] text-red-600 uppercase border-b pb-1 mb-2">🚿 Chuveiro Master (220V - F+F)</p>
-                    <div class="space-y-1 text-[8px] font-bold">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="card-ponto" style="border-left-color: #ef4444;">
+                    <p class="font-black text-[11px] text-red-600 uppercase border-b pb-2 mb-2">🚿 Chuveiro Master (220V - F+F)</p>
+                    <div class="space-y-2 text-[9px] font-bold">
                         <div class="flex justify-between"><span><span class="tag-cor bg-black">Fase R (Preto)</span> 6mm²:</span> <span>15m</span></div>
                         <div class="flex justify-between"><span><span class="tag-cor bg-red-600">Fase S (Verm)</span> 6mm²:</span> <span>15m</span></div>
-                        <div class="flex justify-between border-t pt-1"><span><span class="tag-cor bg-emerald-600">Terra (Verde)</span> 6mm²:</span> <span>15m</span></div>
-                        <p class="text-red-600 mt-1 italic text-[7px] font-black">IMPORTANTE: Disjuntor Bipolar 40A Schneider</p>
+                        <div class="flex justify-between border-t pt-2"><span><span class="tag-cor bg-emerald-600">Terra (Verde)</span> 6mm²:</span> <span>15m</span></div>
+                        <p class="text-red-700 mt-2 font-black text-[7px] bg-red-50 p-2 rounded">Hardware: Disjuntor Bipolar 40A + Wago 221-612</p>
                     </div>
                 </div>
 
-                <div class="card-ponto">
-                    <p class="font-black text-[10px] text-orange-600 uppercase border-b pb-1 mb-2">🔥 Torre Quente (220V - F+F)</p>
-                    <div class="space-y-1 text-[8px] font-bold">
+                <div class="card-ponto" style="border-left-color: #f97316;">
+                    <p class="font-black text-[11px] text-orange-600 uppercase border-b pb-2 mb-2">🔥 Torre Quente (220V - F+F)</p>
+                    <div class="space-y-2 text-[9px] font-bold">
                         <div class="flex justify-between"><span><span class="tag-cor bg-red-600">Fase S (Verm)</span> 4mm²:</span> <span>12m</span></div>
                         <div class="flex justify-between"><span><span class="tag-cor border border-blue-600 text-blue-600">Fase T (Branco)</span> 4mm²:</span> <span>12m</span></div>
-                        <div class="flex justify-between border-t pt-1"><span><span class="tag-cor bg-emerald-600">Terra (Verde)</span> 4mm²:</span> <span>12m</span></div>
-                        <p class="text-orange-600 mt-1 italic text-[7px] font-black">Disjuntor Bipolar 25A Schneider</p>
+                        <div class="flex justify-between border-t pt-2"><span><span class="tag-cor bg-emerald-600">Terra (Verde)</span> 4mm²:</span> <span>12m</span></div>
                     </div>
                 </div>
 
-                <div class="card-ponto">
-                    <p class="font-black text-[10px] text-amber-500 uppercase border-b pb-1 mb-2">💡 Iluminação (127V - F+N)</p>
-                    <div class="space-y-1 text-[8px] font-bold">
+                <div class="card-ponto" style="border-left-color: #fbbf24;">
+                    <p class="font-black text-[11px] text-amber-500 uppercase border-b pb-2 mb-2">💡 Iluminação (127V - F+N)</p>
+                    <div class="space-y-2 text-[9px] font-bold">
                         <div class="flex justify-between"><span><span class="tag-cor border border-blue-600 text-blue-600">Fase T (Branco)</span> 1,5mm²:</span> <span>40m</span></div>
                         <div class="flex justify-between"><span><span class="tag-cor bg-blue-600">Neutro (Azul)</span> 1,5mm²:</span> <span>40m</span></div>
                         <div class="flex justify-between"><span><span class="tag-cor bg-yellow-400 text-black">Retorno (Amar)</span> 1,5mm²:</span> <span>40m</span></div>
                     </div>
                 </div>
 
-                <div class="card-ponto">
-                    <p class="font-black text-[10px] text-slate-700 uppercase border-b pb-1 mb-2">🔌 Tomadas Gerais (127V)</p>
-                    <div class="space-y-1 text-[8px] font-bold">
+                <div class="card-ponto" style="border-left-color: #64748b;">
+                    <p class="font-black text-[11px] text-slate-700 uppercase border-b pb-2 mb-2">🔌 Tomadas TUG (127V)</p>
+                    <div class="space-y-2 text-[9px] font-bold">
                         <div class="flex justify-between"><span><span class="tag-cor bg-black">Fase R (Preto)</span> 2,5mm²:</span> <span>60m</span></div>
                         <div class="flex justify-between"><span><span class="tag-cor bg-blue-600">Neutro (Azul)</span> 2,5mm²:</span> <span>60m</span></div>
-                        <div class="flex justify-between"><span><span class="tag-cor bg-emerald-600">Terra (Verde)</span> 2,5mm²:</span> <span>60m</span></div>
+                        <div class="flex justify-between border-t pt-2"><span><span class="tag-cor bg-emerald-600">Terra (Verde)</span> 2,5mm²:</span> <span>60m</span></div>
                     </div>
                 </div>
             </div>
@@ -124,16 +134,17 @@
     </div>
 
     <script>
+        // INVENTÁRIO COM 15 ITENS BASE
         let inventory = [
             { id: 1, desc: "Cabo Prysmian 6,0mm² (Preto/Verm/Verde)", qty: 45, price: 9.80, cat: "Elet", bought: false },
             { id: 2, desc: "Cabo Prysmian 4,0mm² (Verm/Branco/Verde)", qty: 36, price: 6.50, cat: "Elet", bought: false },
             { id: 3, desc: "Cabo Prysmian 2,5mm² VERDE (Terra)", qty: 100, price: 4.50, cat: "Elet", bought: true },
             { id: 4, desc: "Cabo Prysmian 2,5mm² PRETO (Fase R)", qty: 100, price: 4.20, cat: "Elet", bought: false },
             { id: 5, desc: "Cabo Prysmian 2,5mm² AZUL (Neutro)", qty: 100, price: 4.20, cat: "Elet", bought: false },
-            { id: 6, desc: "Cabo Prysmian 1,5mm² (Amarelo/Branco/Azul)", qty: 120, price: 2.80, cat: "Elet", bought: false },
+            { id: 6, desc: "Cabo Prysmian 1,5mm² (Amarelo/Branco)", qty: 120, price: 2.80, cat: "Elet", bought: false },
             { id: 7, desc: "IDR Schneider 4P 40A 30mA", qty: 1, price: 295.00, cat: "Elet", bought: false },
             { id: 8, desc: "DPS Schneider 20kA 275V", qty: 3, price: 145.00, cat: "Elet", bought: false },
-            { id: 9, desc: "Disjuntor Bipolar Schneider (220V)", qty: 3, price: 68.00, cat: "Elet", bought: false },
+            { id: 9, desc: "Disjuntor Bipolar 40A Schneider (220V)", qty: 1, price: 68.00, cat: "Elet", bought: false },
             { id: 10, desc: "Módulo Tomada 10A Schneider Orion", qty: 35, price: 18.90, cat: "Elet", bought: false },
             { id: 11, desc: "Caixa 4x4 Amarela Reforçada", qty: 12, price: 7.80, cat: "Infra", bought: true },
             { id: 12, desc: "Caixa 4x2 Amarela Reforçada", qty: 26, price: 4.80, cat: "Infra", bought: true },
@@ -152,11 +163,16 @@
                 const row = document.createElement('tr');
                 row.className = `border-b border-slate-100 ${item.bought ? 'row-purchased' : 'bg-white'}`;
                 row.innerHTML = `
-                    <td class="p-2"><input type="checkbox" ${item.bought?'checked':''} onchange="toggle(${item.id})" class="w-4 h-4"></td>
-                    <td class="p-2 font-black text-[9px] uppercase leading-tight">${item.desc}<br><span class="text-blue-500 text-[5px]">${item.cat}</span></td>
-                    <td class="p-2 text-center font-bold">${item.qty}</td>
-                    <td class="p-2 text-right font-mono font-bold">R$ ${sub.toFixed(2)}</td>
-                    <td class="p-2 text-center"><button onclick="remove(${item.id})" class="text-slate-300 hover:text-red-500 font-black">✕</button></td>
+                    <td class="p-4 w-10"><input type="checkbox" ${item.bought?'checked':''} onchange="toggle(${item.id})" class="w-5 h-5 accent-blue-600"></td>
+                    <td class="p-4">
+                        <div class="font-black text-[10px] uppercase leading-tight text-slate-800">${item.desc}</div>
+                        <span class="text-blue-500 text-[6px] font-black uppercase">${item.cat}</span>
+                    </td>
+                    <td class="p-4 text-center font-bold text-slate-600">${item.qty}</td>
+                    <td class="p-4 text-right font-mono font-bold text-blue-900">R$ ${sub.toFixed(2)}</td>
+                    <td class="p-4 text-center">
+                        <button onclick="remove(${item.id})" class="text-slate-300 hover:text-red-500 font-black text-xl px-2">✕</button>
+                    </td>
                 `;
                 body.appendChild(row);
             });
@@ -165,20 +181,22 @@
         }
 
         function addItem() {
-            const d = prompt("Material:"); if(!d) return;
-            const q = parseFloat(prompt("Qtd:","1"));
-            const p = parseFloat(prompt("Preço:","0"));
-            inventory = [{id: Date.now(), desc: d, qty: q, price: p, cat: "Extra", bought: false}, ...inventory];
+            const d = prompt("Nome do Material:"); if(!d) return;
+            const q = parseFloat(prompt("Quantidade:", "1"));
+            const p = parseFloat(prompt("Preço Unitário:", "0"));
+            inventory = [{id: Date.now(), desc: d, qty: q, price: p, cat: "ADICIONADO", bought: false}, ...inventory];
             render();
         }
 
-        function remove(id) { if(confirm("Remover?")) { inventory = inventory.filter(x => x.id !== id); render(); } }
+        function remove(id) { if(confirm("Deseja excluir este item do orçamento?")) { inventory = inventory.filter(x => x.id !== id); render(); } }
         function toggle(id) { const i = inventory.find(x => x.id === id); i.bought = !i.bought; render(); }
+        
         function switchTab(t) {
             ['planilha', 'eletrica', 'pontos'].forEach(tab => {
                 document.getElementById('view-' + tab).classList.toggle('hidden', t !== tab);
                 document.getElementById('btn-' + tab).classList.toggle('tab-active', t === tab);
             });
+            window.scrollTo(0, 0);
         }
         window.onload = render;
     </script>
